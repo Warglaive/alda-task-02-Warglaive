@@ -25,17 +25,24 @@ public class AppointmentDataTest {
 
     @Test
     void ctorTest() {
-        String description = "test";
-        //2 hrs duration
-        Duration duration = Duration.ofHours(2);
-        Priority priority = Priority.HIGH;
-
-        assertThat(new AppointmentDataImpl(description, duration, priority)).isExactlyInstanceOf(AppointmentDataImpl.class);
+        assertThat(this.appointmentData).isExactlyInstanceOf(AppointmentDataImpl.class);
     }
 
     @Test
     void getDurationTest() {
         Duration expectedDuration = Duration.ofHours(2);
         assertThat(this.appointmentData.getDuration()).isEqualTo(expectedDuration);
+    }
+
+    @Test
+    void getDescriptionTest() {
+        String expectedDesc = "test";
+        assertThat(this.appointmentData.getDescription()).isEqualTo(expectedDesc);
+    }
+
+    @Test
+    void getPriorityTest() {
+        Priority expectedPriority = Priority.HIGH;
+        assertThat(this.appointmentData.getPriority()).isEqualTo(expectedPriority);
     }
 }

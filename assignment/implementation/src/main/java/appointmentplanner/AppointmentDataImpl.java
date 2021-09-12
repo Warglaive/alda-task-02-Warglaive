@@ -23,11 +23,11 @@ public class AppointmentDataImpl implements AppointmentData {
 
     @Override
     public String getDescription() {
-        return null;
+        return this.description;
     }
 
     @Override
     public Priority getPriority() {
-        return null;
+        return this.priority;
     }
 }
