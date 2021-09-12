@@ -10,6 +10,12 @@ public class AppointmentDataImpl implements AppointmentData {
     private Duration duration;
     private Priority priority;
 
+    public AppointmentDataImpl(String description, Duration duration) {
+        this.description = description;
+        this.duration = duration;
+    }
+
+
     public AppointmentDataImpl(String description, Duration duration, Priority priority) {
         this.description = description;
         this.duration = duration;
