@@ -36,6 +36,6 @@ public class AppointmentDataTest {
     @Test
     void getDurationTest() {
         Duration expectedDuration = Duration.ofHours(2);
-        assertThat(this.appointmentData.getDuration()).isEqualTo(expectedDuration);
+         assertThat(this.appointmentData.getDuration()).isEqualTo(expectedDuration);
     }
 }
