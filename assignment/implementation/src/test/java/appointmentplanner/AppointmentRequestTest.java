@@ -1,13 +1,13 @@
 package appointmentplanner;
 
 import appointmentplanner.api.AppointmentData;
+import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.LocalTime;
+import java.time.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,7 +44,23 @@ public class AppointmentRequestTest {
     }
 
     @Test
-    void getStartTest() {
+    void getStartTimeTest() {
+        assertThat(this.appointmentRequest.getStartTime()).isEqualTo(LocalTime.of(14, 20));
+    }
 
+    @Test
+    void getAppDataTest() {
+        assertThat(this.appData).isEqualTo(this.appointmentRequest.getAppointmentData());
+    }
+
+    @Test
+    void getTimePreference() {
+        var expectedTimePreference = TimePreference.UNSPECIFIED;
+        assertThat(this.appointmentRequest.getTimePreference()).isEqualTo(expectedTimePreference);
+    }
+
+    @Test
+    void getDurationTest() {
+        assertThat(this.appData.getDuration()).isEqualTo(this.duration);
     }
 }

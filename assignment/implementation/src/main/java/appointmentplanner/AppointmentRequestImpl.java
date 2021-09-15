@@ -24,12 +24,12 @@ public class AppointmentRequestImpl implements AppointmentRequest {
 
     @Override
     public LocalTime getStartTime() {
-        return null;
+        return this.prefStart;
     }
 
     @Override
     public AppointmentData getAppointmentData() {
-        return null;
+        return this.appData;
     }
 
     @Override

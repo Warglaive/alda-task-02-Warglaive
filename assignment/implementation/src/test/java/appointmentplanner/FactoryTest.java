@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -25,6 +26,7 @@ public class FactoryTest {
     static void assumeFactory() {
         fac = ServiceFinder.getFactory();
     }
+
 
     @Test
     void factoryCreatesDayPlan() {
