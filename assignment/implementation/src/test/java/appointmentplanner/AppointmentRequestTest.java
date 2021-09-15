@@ -9,18 +9,20 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalTime;
 
-public class AppointmentRequestTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
+public class AppointmentRequestTest {
+    AppointmentRequestImpl appointmentRequest;
     /**
-     * AppointmentData arguments
+     * AppointmentData constructor arguments
      */
     private String description = "test";
     private Duration duration = Duration.ofHours(2);
     private Priority priority = Priority.HIGH;
     /**
-     * AppointmentRequest arguments
+     * AppointmentRequest constructor arguments
      */
-    //
+
     private APFactory factory;
     private AppointmentData appData;
     private LocalTime prefStart;
@@ -29,16 +31,16 @@ public class AppointmentRequestTest {
     @BeforeEach
     void setUp() {
         this.factory = new APFactory();
-
-        this.appData = this.factory.createAppointmentData(this.description, this.duration);
         this.prefStart = LocalTime.of(14, 20);
         this.fallBack = TimePreference.EARLIEST;
 
+        this.appData = this.factory.createAppointmentData(this.description, this.duration);
+        this.appointmentRequest = (AppointmentRequestImpl) factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
     }
 
     @Test
     void ctorTest() {
-        this.factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
+        assertThat(this.appointmentRequest).isExactlyInstanceOf(AppointmentRequestImpl.class);
     }
 
     @Test
