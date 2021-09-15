@@ -44,11 +44,11 @@ public class AppointmentRequestImpl implements AppointmentRequest {
 
     @Override
     public String getDescription() {
-        return null;
+        return this.appData.getDescription();
     }
 
     @Override
     public Priority getPriority() {
-        return null;
+        return this.appData.getPriority();
     }
 }

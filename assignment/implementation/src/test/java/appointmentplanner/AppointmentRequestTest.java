@@ -50,7 +50,7 @@ public class AppointmentRequestTest {
 
     @Test
     void getAppDataTest() {
-        assertThat(this.appData).isEqualTo(this.appointmentRequest.getAppointmentData());
+        assertThat(this.appointmentRequest.getAppointmentData()).isEqualTo(this.appointmentRequest.getAppointmentData());
     }
 
     @Test
@@ -61,6 +61,16 @@ public class AppointmentRequestTest {
 
     @Test
     void getDurationTest() {
-        assertThat(this.appData.getDuration()).isEqualTo(this.duration);
+        assertThat(this.appointmentRequest.getAppointmentData().getDuration()).isEqualTo(this.duration);
+    }
+
+    @Test
+    void getDescription() {
+        assertThat(this.appointmentRequest.getAppointmentData().getDescription()).isEqualTo(this.description);
+    }
+
+    @Test
+    void getPriorityNull() {
+        assertThat(this.appointmentRequest.getAppointmentData().getPriority()).isNull();
     }
 }
