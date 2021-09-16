@@ -1,17 +1,14 @@
 package appointmentplanner;
 
-import appointmentplanner.ServiceFinder;
 import appointmentplanner.api.AbstractAPFactory;
 import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.LocalDayPlan;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Example service invocation and factory test.
