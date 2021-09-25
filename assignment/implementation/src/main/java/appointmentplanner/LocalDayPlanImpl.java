@@ -9,13 +9,13 @@ import java.time.temporal.ChronoUnit;
 
 public class LocalDayPlanImpl implements LocalDayPlan {
 
-    private Instant instant = Instant.now(Clock.system(this.zone));
+    //  private Instant instant = Instant.now(Clock.system(this.zone));
     /**
      * start time
      * and end time, which default to 0:00 (inclusive) and 24:00 exclusive.
      */
-    private LocalDateTime defaultStartLt = LocalDateTime.ofInstant(instant.plus(0, ChronoUnit.DAYS), ZoneId.systemDefault());
-    private Instant defaultStartInstant = this.defaultStartLt.toInstant(ZoneOffset.of(this.zone.getId()));
+    // private LocalDateTime defaultStartLt = LocalDateTime.ofInstant(instant.plus(0, ChronoUnit.DAYS), ZoneId.systemDefault());
+    // private Instant defaultStartInstant = this.defaultStartLt.toInstant(ZoneOffset.of(this.zone.getId()));
     /**
      * first constructor arguments
      */
@@ -37,6 +37,8 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         this.timeline = timeline;
         //get day from Date
         this.day = new LocalDay(zone, date);
+        //get start Instant from LocalDay
+        this.start = this.day.ofLocalTime(date.);
     }
 
     public LocalDayPlanImpl(LocalDay day, Instant start, Instant end) {
