@@ -33,7 +33,7 @@ public class APFactory implements AbstractAPFactory {
     @Override
     public LocalDayPlan createLocalDayPlan(ZoneId zone, LocalDate date, Timeline timeline) {
         //TODO return proper instance
-        return null;
+        return new LocalDayPlanImpl(zone,date,timeline);
     }
 
     @Override

@@ -3,10 +3,13 @@ package appointmentplanner;
 import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Timeline;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class LocalDayPlanTest {
     private LocalDayPlanImpl localDayPlan;
@@ -43,5 +46,9 @@ public class LocalDayPlanTest {
         this.timeline = new TimelineImpl();
 
         this.localDayPlan = (LocalDayPlanImpl) this.factory.createLocalDayPlan(this.zoneId, this.date, this.timeline);
+    }
+    @Test
+    void getDay(){
+        assertThat(this.localDayPlan.getDay()).isEqualTo(this.day);
     }
 }
