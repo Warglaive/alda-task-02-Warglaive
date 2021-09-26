@@ -4,12 +4,15 @@ import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Timeline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.when;
 
 public class LocalDayPlanTest {
     private LocalDayPlanImpl localDayPlan;
@@ -47,8 +50,19 @@ public class LocalDayPlanTest {
 
         this.localDayPlan = (LocalDayPlanImpl) this.factory.createLocalDayPlan(this.zoneId, this.date, this.timeline);
     }
+
     @Test
-    void getDay(){
+    void getDay() {
         assertThat(this.localDayPlan.getDay()).isEqualTo(this.day);
+    }
+
+    @Test
+    void earliest() {
+        //TODO: Check, may be buggy cos of Instant string representation of time
+        String instantExpected = "2021-09-25T22:00:00Z";
+        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of(this.zoneId.getId()));
+        Instant expected = Instant.now(clock);
+        Instant actual = this.localDayPlan.earliest();
+        assertThat(actual).isEqualTo(expected);
     }
 }

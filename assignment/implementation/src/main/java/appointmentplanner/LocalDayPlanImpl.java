@@ -56,7 +56,7 @@ public class LocalDayPlanImpl implements LocalDayPlan {
 
     @Override
     public Instant earliest() {
-        return null;
+        return this.start;
     }
 
     @Override
