@@ -10,12 +10,15 @@ import java.time.Instant;
 
 public class AppointmentImpl implements Appointment {
 
+    private AppointmentRequest appointmentRequest;
 
-
-    public AppointmentImpl(){
-
+    public AppointmentImpl(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
     }
-
+    @Override
+    public AppointmentRequest getRequest() {
+        return this.appointmentRequest;
+    }
     @Override
     public Duration getDuration() {
         return null;
@@ -36,10 +39,7 @@ public class AppointmentImpl implements Appointment {
         return null;
     }
 
-    @Override
-    public AppointmentRequest getRequest() {
-        return null;
-    }
+
 
     @Override
     public Instant getStart() {
