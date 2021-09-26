@@ -5,17 +5,13 @@ import appointmentplanner.api.LocalDayPlan;
 import appointmentplanner.api.Timeline;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 
 public class LocalDayPlanImpl implements LocalDayPlan {
 
-    //  private Instant instant = Instant.now(Clock.system(this.zone));
     /**
      * start time
      * and end time, which default to 0:00 (inclusive) and 24:00 exclusive.
      */
-    // private LocalDateTime defaultStartLt = LocalDateTime.ofInstant(instant.plus(0, ChronoUnit.DAYS), ZoneId.systemDefault());
-    // private Instant defaultStartInstant = this.defaultStartLt.toInstant(ZoneOffset.of(this.zone.getId()));
     /**
      * first constructor arguments
      */
@@ -38,15 +34,14 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         //get day from Date
         this.day = new LocalDay(zone, date);
         //pass date and get start Instant from LocalDay
-        LocalTime time = date.atStartOfDay().toLocalTime();
-        this.start = this.day.ofLocalTime(time);
-    }
+        //get start time (00:00)
+        LocalTime startTime = date.atStartOfDay().toLocalTime();
+        //get end time (23:59) for current date
+        LocalDateTime now = LocalDateTime.now(); // 2015-11-19T19:42:19.224 - FORMAT EXAMPLE
+        LocalTime endTime = date.atTime(now.with(LocalTime.MAX).toLocalTime()).toLocalTime();
+        this.start = this.day.ofLocalTime(startTime);
 
-    public LocalDayPlanImpl(LocalDay day, Instant start, Instant end) {
-        this.day = day;
-        this.start = start;
-        this.end = end;
-        //call other constructor
+        this.end = this.day.ofLocalTime(endTime);
     }
 
     @Override
@@ -61,7 +56,7 @@ public class LocalDayPlanImpl implements LocalDayPlan {
 
     @Override
     public Instant tooLate() {
-        return null;
+        return this.end;
     }
 
     @Override

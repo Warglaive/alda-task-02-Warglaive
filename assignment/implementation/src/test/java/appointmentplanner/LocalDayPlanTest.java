@@ -65,4 +65,13 @@ public class LocalDayPlanTest {
         Instant actual = this.localDayPlan.earliest();
         assertThat(actual).isEqualTo(expected);
     }
+    @Test
+    void tooLate() {
+        //TODO: Check, may be buggy cos of Instant string representation of time
+        String instantExpected = "2021-09-26T21:59:59.999999999Z";
+        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of(this.zoneId.getId()));
+        Instant expected = Instant.now(clock);
+        Instant actual = this.localDayPlan.tooLate();
+        assertThat(actual).isEqualTo(expected);
+    }
 }
