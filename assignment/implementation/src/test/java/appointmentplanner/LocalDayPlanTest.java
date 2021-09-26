@@ -4,7 +4,6 @@ import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Timeline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.when;
 
 public class LocalDayPlanTest {
     private LocalDayPlanImpl localDayPlan;
