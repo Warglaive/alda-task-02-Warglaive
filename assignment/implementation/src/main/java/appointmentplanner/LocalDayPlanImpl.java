@@ -61,6 +61,6 @@ public class LocalDayPlanImpl implements LocalDayPlan {
 
     @Override
     public Timeline getTimeline() {
-        return null;
+        return this.timeline;
     }
 }

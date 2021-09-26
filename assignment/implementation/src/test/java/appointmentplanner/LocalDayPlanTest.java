@@ -65,6 +65,7 @@ public class LocalDayPlanTest {
         Instant actual = this.localDayPlan.earliest();
         assertThat(actual).isEqualTo(expected);
     }
+
     @Test
     void tooLate() {
         //TODO: Check, may be buggy cos of Instant string representation of time
@@ -73,5 +74,10 @@ public class LocalDayPlanTest {
         Instant expected = Instant.now(clock);
         Instant actual = this.localDayPlan.tooLate();
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void getTimeline() {
+        //TODO: Implement TimeLine
     }
 }
