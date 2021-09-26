@@ -37,8 +37,9 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         this.timeline = timeline;
         //get day from Date
         this.day = new LocalDay(zone, date);
-        //get start Instant from LocalDay
-        this.start = this.day.ofLocalTime(date.);
+        //pass date and get start Instant from LocalDay
+        LocalTime time = date.atStartOfDay().toLocalTime();
+        this.start = this.day.ofLocalTime(time);
     }
 
     public LocalDayPlanImpl(LocalDay day, Instant start, Instant end) {

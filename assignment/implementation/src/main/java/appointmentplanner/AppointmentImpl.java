@@ -15,10 +15,12 @@ public class AppointmentImpl implements Appointment {
     public AppointmentImpl(AppointmentRequest appointmentRequest) {
         this.appointmentRequest = appointmentRequest;
     }
+
     @Override
     public AppointmentRequest getRequest() {
         return this.appointmentRequest;
     }
+
     @Override
     public Duration getDuration() {
         return null;
@@ -38,7 +40,6 @@ public class AppointmentImpl implements Appointment {
     public AppointmentData getAppointmentData() {
         return null;
     }
-
 
 
     @Override
