@@ -1,13 +1,13 @@
 package appointmentplanner;
 
 import appointmentplanner.api.AppointmentData;
-import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
