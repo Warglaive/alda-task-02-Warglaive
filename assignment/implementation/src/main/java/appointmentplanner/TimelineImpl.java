@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class TimelineImpl implements Timeline {
+    private int nrOfAppointments;
 
     public TimelineImpl() {
 
@@ -19,6 +20,7 @@ public class TimelineImpl implements Timeline {
 
     @Override
     public int getNrOfAppointments() {
+        //get number of appointments from the LinkedList with help of stream and lambda
         return 0;
     }
 
