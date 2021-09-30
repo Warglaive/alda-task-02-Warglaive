@@ -13,6 +13,10 @@ public class Node<E> {
         this.next = next;
     }
 
+    void prev(Node<E> prev) {
+        this.prev = prev;
+    }
+
     /**
      * Getters for test purposes
      */
