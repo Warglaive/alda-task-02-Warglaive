@@ -25,7 +25,7 @@ public class NodeTest {
     }
 
     @Test
-    void getPrevNull() {
+    void getPrevNullTest() {
         Node<String> newValue = null;
         this.node.prev(newValue);
         Node<String> actual = this.node.getPrev();
@@ -34,11 +34,17 @@ public class NodeTest {
 
 
     @Test
-    void getPrevNotNull() {
+    void getPrevNotNullTest() {
         Node<String> newValue = new Node<>("newValue");
         this.node.prev(newValue);
         Node<String> actual = this.node.getPrev();
         Node<String> expected = new Node<>("newValue");
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void getDataTest() {
+        String expectedData = "test";
+        assertThat(this.node.getData()).isEqualTo(expectedData);
     }
 }
