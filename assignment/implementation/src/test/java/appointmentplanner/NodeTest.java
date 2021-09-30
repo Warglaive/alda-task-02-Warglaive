@@ -20,7 +20,7 @@ public class NodeTest {
         Node<String> newValue = new Node<>("newValue");
         this.node.next(newValue);
         Node<String> actual = this.node.getNext();
-        var expected = new Node<>("newValue");
+        Node<String> expected = new Node<>("newValue");
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
