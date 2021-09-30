@@ -3,7 +3,6 @@ package appointmentplanner;
 public class LinkedListImpl<E> {
     Node head;
     Node next;
-    
 
     E data;
 
