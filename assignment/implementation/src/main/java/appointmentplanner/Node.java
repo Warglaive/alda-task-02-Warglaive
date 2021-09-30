@@ -1,12 +1,15 @@
 package appointmentplanner;
 
 public class Node<E> {
-
-    private E data;
     Node prev;
+    private E data;
     Node next;
 
     public Node(E data) {
         this.data = data;
+    }
+
+    void next(Node next) {
+        this.next = next;
     }
 }
