@@ -1,8 +1,13 @@
 package appointmentplanner;
 
 public class LinkedListImpl<E> {
-    E data;
     Node head;
     Node next;
+    
 
+    E data;
+
+    public void head(E data) {
+        this.data = data;
+    }
 }
