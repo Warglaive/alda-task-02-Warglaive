@@ -1,4 +1,6 @@
 package appointmentplanner;
 
-public class NodeImpl {
+public class NodeImpl<E> {
+    private E item;
+    private Object next;
 }

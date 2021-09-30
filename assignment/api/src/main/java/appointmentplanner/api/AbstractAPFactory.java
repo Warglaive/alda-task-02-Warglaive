@@ -78,7 +78,7 @@ public interface AbstractAPFactory {
      * @return Appointment object.
      */
     default AppointmentData createAppointmentData(String description, Duration duration) {
-        return createAppointmentData(description, duration, Priority.LOW);
+            return createAppointmentData(description, duration, Priority.LOW);
     }
 
     /**
