@@ -6,39 +6,39 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class NodeTest {
-    private Node<String> node;
+    private LinkedListImpl.Node<String> node;
 
     @Test
     @BeforeEach
     void constructorTest() {
-        this.node = new Node<>("test");
-        assertThat(node).isExactlyInstanceOf(Node.class);
+        this.node = new LinkedListImpl.Node<>("test");
+        assertThat(node).isExactlyInstanceOf(LinkedListImpl.Node.class);
     }
 
     @Test
     void nextTest() {
-        Node<String> newValue = new Node<>("newValue");
+        LinkedListImpl.Node<String> newValue = new LinkedListImpl.Node<>("newValue");
         this.node.next(newValue);
-        Node<String> actual = this.node.getNext();
-        Node<String> expected = new Node<>("newValue");
+        LinkedListImpl.Node<String> actual = this.node.getNext();
+        LinkedListImpl.Node<String> expected = new LinkedListImpl.Node<>("newValue");
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
     void getPrevNullTest() {
-        Node<String> newValue = null;
+        LinkedListImpl.Node<String> newValue = null;
         this.node.prev(newValue);
-        Node<String> actual = this.node.getPrev();
+        LinkedListImpl.Node<String> actual = this.node.getPrev();
         assertThat(actual).usingRecursiveComparison().isNull();
     }
 
 
     @Test
     void getPrevNotNullTest() {
-        Node<String> newValue = new Node<>("newValue");
+        LinkedListImpl.Node<String> newValue = new LinkedListImpl.Node<>("newValue");
         this.node.prev(newValue);
-        Node<String> actual = this.node.getPrev();
-        Node<String> expected = new Node<>("newValue");
+        LinkedListImpl.Node<String> actual = this.node.getPrev();
+        LinkedListImpl.Node<String> expected = new LinkedListImpl.Node<>("newValue");
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
