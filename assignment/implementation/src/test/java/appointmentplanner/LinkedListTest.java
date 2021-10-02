@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class NodeTest {
+public class LinkedListTest {
     private LinkedListImpl.Node<String> node;
 
     @Test

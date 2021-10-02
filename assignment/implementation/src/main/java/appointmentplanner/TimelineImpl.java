@@ -11,10 +11,13 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class TimelineImpl implements Timeline {
+    LinkedListImpl<Appointment> appointments;
+
+
     private int nrOfAppointments;
 
     public TimelineImpl() {
-
+        this.appointments = new LinkedListImpl<>();
     }
 
 
