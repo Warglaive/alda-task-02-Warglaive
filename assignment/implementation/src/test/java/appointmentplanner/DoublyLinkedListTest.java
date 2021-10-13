@@ -23,12 +23,10 @@ public class DoublyLinkedListTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"0, 'test'", "2, 'xaxa'"})
+    @CsvSource({"0, 'test'"})
     void insertAtTest(int index, String value) {
         doublyLinkedList.insertAt(index, value);
-        var a = doublyLinkedList.getElementAt(index);
-        SoftAssertions.assertSoftly(s -> {
             assertThat(doublyLinkedList.getElementAt(index)).isEqualTo(value);
-        });
+        
     }
 }
