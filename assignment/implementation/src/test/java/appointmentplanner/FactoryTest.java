@@ -4,6 +4,7 @@ import appointmentplanner.api.AbstractAPFactory;
 import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.LocalDayPlan;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -25,6 +26,7 @@ public class FactoryTest {
     }
 
 
+    @Disabled
     @Test
     void factoryCreatesDayPlan() {
         LocalDay day = LocalDay.now();
