@@ -15,6 +15,9 @@ public class TimelineImpl implements Timeline {
 
     private int nrOfAppointments;
 
+
+
+
     public TimelineImpl() {
     }
 

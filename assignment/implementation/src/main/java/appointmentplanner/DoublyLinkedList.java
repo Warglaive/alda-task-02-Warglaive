@@ -62,7 +62,7 @@ public class DoublyLinkedList<T> {
             this.tail = this.head;
         } else if (index == 0) {
             insertFront(data);
-        } else {
+        } else if (this.size > 1) {
             ListNode<T> temp = this.head;
             for (int i = 1; i < index; i++) {
                 temp = temp.getNext();
@@ -70,6 +70,11 @@ public class DoublyLinkedList<T> {
             newNode.setPrev(temp);
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
+        } else {
+            ListNode<T> temp = this.head;
+            newNode.setPrev(temp);
+            this.head = newNode;
+            this.tail = temp;
         }
         this.size++;
     }
