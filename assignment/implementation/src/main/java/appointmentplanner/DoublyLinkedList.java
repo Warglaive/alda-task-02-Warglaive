@@ -56,23 +56,22 @@ public class DoublyLinkedList<T> {
      * @param data  element to insert.
      */
     public void insertAt(int index, T data) {
+        //0. check if insertFront is possible
+        if (index==0){
+            insertFront(data);
+        }
         //1. allocate node to new element
 
         ListNode<T> newNode = new ListNode.ListNodeBuilder().data(data).build();
         newNode.setData(data);
         newNode.setNext(null);
         newNode.setPrev(null);
-        //2. check if the index is < 0
-        if (index < 1) {
-            System.out.println("Index MUST be > 0");
-        }
+
         //3. if the position is 1, make new node as head
-        else if (index == 1) {
+        if (index == 1) {
             newNode.setNext(this.head);
             this.head = newNode;
-
             this.head.setPrev(newNode);
-
         }
         //4. Else, make a temp node and traverse to the
         //   node previous to the position
@@ -98,24 +97,7 @@ public class DoublyLinkedList<T> {
                 }
             }
         }
-
-
- /*       ListNode<T> newNode = new ListNode.ListNodeBuilder().data(data).build();
-        if (isEmpty()) {
-            this.head = newNode;
-            this.tail = this.head;
-        } else if (index == 0) {
-            insertFront(data);
-        } else {
-            ListNode<T> temp = this.head;
-            for (int i = 1; i < index; i++) {
-                temp = temp.getNext();
-            }
-            newNode.setPrev(temp);
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
-        }
-        this.size++;*/
+        this.size++;
     }
 
     /**

@@ -1,5 +1,6 @@
 package appointmentplanner;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,9 +23,12 @@ public class DoublyLinkedListTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"1, 'test'", "2, 'xaxa'"})
+    @CsvSource({"0, 'test'", "2, 'xaxa'"})
     void insertAtTest(int index, String value) {
-        int size = doublyLinkedList.getSize();
         doublyLinkedList.insertAt(index, value);
+        var a = doublyLinkedList.getElementAt(index);
+        SoftAssertions.assertSoftly(s -> {
+            assertThat(doublyLinkedList.getElementAt(index)).isEqualTo(value);
+        });
     }
 }
