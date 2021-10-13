@@ -26,7 +26,6 @@ public class DoublyLinkedListTest {
     @CsvSource({"0, 'test'"})
     void insertAtTest(int index, String value) {
         doublyLinkedList.insertAt(index, value);
-            assertThat(doublyLinkedList.getElementAt(index)).isEqualTo(value);
-        
+        assertThat(doublyLinkedList.getElementAt(index)).isEqualTo(value);
     }
 }
