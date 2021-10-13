@@ -25,7 +25,7 @@ public class DoublyLinkedListTest {
 
     @ParameterizedTest
     @CsvSource({"1, 'test'", "2, 'xaxa'"})
-    void insertAtTest(int index, String value) {
+    void insertFrontTest(int index, String value) {
         int size = doublyLinkedList.getSize();
         doublyLinkedList.insertAt(index, value);
     }
