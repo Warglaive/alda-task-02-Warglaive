@@ -56,7 +56,51 @@ public class DoublyLinkedList<T> {
      * @param data  element to insert.
      */
     public void insertAt(int index, T data) {
+        //1. allocate node to new element
+
         ListNode<T> newNode = new ListNode.ListNodeBuilder().data(data).build();
+        newNode.setData(data);
+        newNode.setNext(null);
+        newNode.setPrev(null);
+        //2. check if the index is < 0
+        if (index < 1) {
+            System.out.println("Index MUST be > 0");
+        }
+        //3. if the position is 1, make new node as head
+        else if (index == 1) {
+            newNode.setNext(this.head);
+            this.head = newNode;
+
+            this.head.setPrev(newNode);
+
+        }
+        //4. Else, make a temp node and traverse to the
+        //   node previous to the position
+        else {
+            ListNode<T> tempNode = new ListNode.ListNodeBuilder().build();
+            tempNode = this.head;
+            for (int i = 1; i < index - 1; i++) {
+                if (tempNode != null) {
+                    tempNode = tempNode.getNext();
+                }
+            }
+            //5. If the previous node is not null, adjust
+            //   the links
+            if (tempNode != null) {
+                newNode.setNext(tempNode.getNext());
+                newNode.setPrev(tempNode);
+                tempNode.setNext(newNode);
+                if (newNode.getNext() != null) {
+                    newNode.getNext().setPrev(newNode);
+                } else {
+                    //6. When the previous node is null
+                    System.out.print("\nThe previous node is null.");
+                }
+            }
+        }
+
+
+ /*       ListNode<T> newNode = new ListNode.ListNodeBuilder().data(data).build();
         if (isEmpty()) {
             this.head = newNode;
             this.tail = this.head;
@@ -71,7 +115,7 @@ public class DoublyLinkedList<T> {
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
         }
-        this.size++;
+        this.size++;*/
     }
 
     /**
