@@ -11,8 +11,9 @@ public class DoublyLinkedList<T> {
         AllocationNode<T> newNode = new AllocationNode<>(item);
         //if list is empty, head and tail points to newNode
         if (this.head == null) {
-            this.head = this.tail;
+            //this.head = this.tail = newNode;
             this.tail = newNode;
+            this.head = this.tail;
             //head's previous will be null
             this.head.previous = null;
             //tail's next will be null
@@ -29,4 +30,40 @@ public class DoublyLinkedList<T> {
         }
     }
 
+    //print all the nodes of the doubly linked list
+    public void printNodes() {
+        //Node current will point to head
+        AllocationNode<T> current = this.head;
+        if (this.head == null) {
+            System.out.println("Doubly linked list is empty");
+            return;
+        }
+        System.out.println("Nodes of doubly linked list: ");
+        while (current != null) {
+            //Print each node and then go to next.
+
+            System.out.println(current.item + " ");
+            current = current.next;
+        }
+    }
+
+}
+
+/**
+ * Test
+ */
+class Main {
+    public static void main(String[] args) {
+        //create a DoublyLinkedList object
+        DoublyLinkedList dl_List = new DoublyLinkedList();
+        //Add nodes to the list
+        dl_List.addNode(10);
+        dl_List.addNode(20);
+        dl_List.addNode(30);
+        dl_List.addNode(40);
+        dl_List.addNode(50);
+
+        //print the nodes of DoublyLinkedList
+        dl_List.printNodes();
+    }
 }
