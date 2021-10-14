@@ -30,7 +30,7 @@ public class DoublyLinkedList<T> {
         }
     }
 
-    //print all the nodes of the doubly linked list
+/*    //print all the nodes of the doubly linked list
     public void printNodes() {
         //Node current will point to head
         AllocationNode<T> current = this.head;
@@ -45,13 +45,13 @@ public class DoublyLinkedList<T> {
             System.out.println(current.item + " ");
             current = current.next;
         }
-    }
+    }*/
 
 }
 
 /**
  * Test
- */
+ *//*
 class Main {
     public static void main(String[] args) {
         //create a DoublyLinkedList object
@@ -66,4 +66,4 @@ class Main {
         //print the nodes of DoublyLinkedList
         dl_List.printNodes();
     }
-}
+}*/

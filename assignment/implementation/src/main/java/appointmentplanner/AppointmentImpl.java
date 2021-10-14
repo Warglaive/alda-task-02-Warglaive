@@ -1,9 +1,6 @@
 package appointmentplanner;
 
-import appointmentplanner.api.Appointment;
-import appointmentplanner.api.AppointmentData;
-import appointmentplanner.api.AppointmentRequest;
-import appointmentplanner.api.Priority;
+import appointmentplanner.api.*;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,30 +20,42 @@ public class AppointmentImpl implements Appointment {
 
     @Override
     public Duration getDuration() {
-        return null;
+        return this.appointmentRequest.getDuration();
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return this.appointmentRequest.getDescription();
     }
 
     @Override
     public Priority getPriority() {
-        return null;
+        return this.appointmentRequest.getPriority();
     }
 
     @Override
     public AppointmentData getAppointmentData() {
-        return null;
+        return this.appointmentRequest.getAppointmentData();
     }
 
-
+    /**
+     * TimeSlot
+     *
+     * @return
+     */
     @Override
     public Instant getStart() {
-        return null;
+        //Get start for appointment day and return as Instant
+        var localDay = new LocalDay();
+        var a = this.appointmentRequest.getStart(localDay);
+        return a;
     }
 
+    /**
+     * TimeSlot
+     *
+     * @return
+     */
     @Override
     public Instant getEnd() {
         return null;
