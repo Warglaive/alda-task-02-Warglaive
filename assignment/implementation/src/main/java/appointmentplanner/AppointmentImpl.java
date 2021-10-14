@@ -46,9 +46,10 @@ public class AppointmentImpl implements Appointment {
     @Override
     public Instant getStart() {
         //Get start for appointment day and return as Instant
-        var localDay = new LocalDay();
-        var a = this.appointmentRequest.getStart(localDay);
-        return a;
+        //Get LocalDay from LocalDayPlanImpl
+        /*var a = new LocalDayPlanImpl();
+        var a = this.appointmentRequest.getStart( );
+        return a;*/
     }
 
     /**
