@@ -17,8 +17,9 @@ public class TimelineImpl implements Timeline {
      * Doubly Linked List
      */
 
-    private Instant defaultStart = Instant.parse();
-    private double defaultEnd = 17.30;
+    private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(8, 30));
+    private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(17, 30));
+    
     private DoublyLinkedList<TimeSlot> timeLine;
     private Appointment appointment;
 
