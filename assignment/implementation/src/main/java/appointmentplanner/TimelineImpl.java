@@ -42,12 +42,12 @@ public class TimelineImpl implements Timeline {
 
     @Override
     public Instant start() {
-        return this.;
+        return this.defaultStart;
     }
 
     @Override
     public Instant end() {
-        return null;
+        return this.defaultEnd;
     }
 
     @Override

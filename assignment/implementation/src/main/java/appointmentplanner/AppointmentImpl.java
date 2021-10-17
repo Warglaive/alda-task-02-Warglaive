@@ -38,27 +38,18 @@ public class AppointmentImpl implements Appointment {
         return this.appointmentRequest.getAppointmentData();
     }
 
-    /**
-     * TimeSlot
-     *
-     * @return
-     */
     @Override
     public Instant getStart() {
-        //Get start for appointment day and return as Instant
-        //Get LocalDay from LocalDayPlanImpl
-        /*var a = new LocalDayPlanImpl();
-        var a = this.appointmentRequest.getStart( );
-        return a;*/
+        return this.appointmentRequest.getStart(LocalDay.now());
     }
 
-    /**
-     * TimeSlot
-     *
-     * @return
-     */
     @Override
     public Instant getEnd() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
