@@ -5,13 +5,13 @@ package appointmentplanner.api;
 
 /**
  * Appointment that can be scheduled using the appointment planner.
- *
+ * <p>
  * An appointment is a tupple of appointment data, day and start time.
- *
+ * <p>
  * Having an appointment implies that there has been a successful allocation on
  * a day at a time. The appointment is only valid when it is allocated on some
  * time line.
- *
+ * <p>
  * Hints to the implementer:
  * <ul><li>You should override toString(). toString() returns startTime,
  * endTime, description and priority like: "2019-09-12 14:00 - 15:55 ALDA Lesson

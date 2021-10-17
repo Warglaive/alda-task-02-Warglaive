@@ -2,6 +2,7 @@ package appointmentplanner;
 
 import appointmentplanner.api.*;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -15,12 +16,20 @@ public class TimelineImpl implements Timeline {
     /**
      * Doubly Linked List
      */
-    private DoublyLinkedList<Appointment> appointments;
+
+    private Instant defaultStart = Instant.parse();
+    private double defaultEnd = 17.30;
+    private DoublyLinkedList<TimeSlot> timeLine;
+    private Appointment appointment;
+
 
     private int nrOfAppointments;
 
+    /**
+     * Appoint Appointment on TimeLine
+     */
     public TimelineImpl() {
-        this.appointments = new DoublyLinkedList<>();
+        this.timeLine = new DoublyLinkedList<>();
     }
 
 
