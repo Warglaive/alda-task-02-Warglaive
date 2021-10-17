@@ -38,15 +38,8 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         this.timeline = timeline;
         //get day from Date
         this.day = new LocalDay(zone, date);
-        //pass date and get start Instant from LocalDay
-        //get start time (00:00) for date because hardcoding stuff is bad, no?
-        LocalTime startTime = date.atStartOfDay().toLocalTime();
-        //get end time (23:59) for date because hardcoding stuff is bad, no?
-        LocalDateTime now = LocalDateTime.now(); // 2015-11-19T19:42:19.224 - FORMAT EXAMPLE
-        LocalTime endTime = date.atTime(now.with(LocalTime.MAX).toLocalTime()).toLocalTime();
-        this.start = this.day.ofLocalTime(startTime);
-
-        this.end = this.day.ofLocalTime(endTime);
+        this.start = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
+        this.end = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
     }
 
     @Override
