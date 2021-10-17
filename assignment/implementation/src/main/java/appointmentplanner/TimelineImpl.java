@@ -19,7 +19,7 @@ public class TimelineImpl implements Timeline {
 
     private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(8, 30));
     private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(17, 30));
-    
+
     private DoublyLinkedList<TimeSlot> timeLine;
     private Appointment appointment;
 
@@ -42,7 +42,7 @@ public class TimelineImpl implements Timeline {
 
     @Override
     public Instant start() {
-        return null;
+        return this.;
     }
 
     @Override

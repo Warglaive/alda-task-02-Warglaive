@@ -26,6 +26,11 @@ public class LocalDayPlanImpl implements LocalDayPlan {
     private Instant start;
     private Instant end;
 
+    public LocalDayPlanImpl(LocalDay day, Instant start, Instant end) {
+        this.day = day;
+        this.start = start;
+        this.end = end;
+    }
 
     public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
         this.zone = zone;
