@@ -40,16 +40,25 @@ public class AppointmentImpl implements Appointment {
 
     @Override
     public Instant getStart() {
-        return this.appointmentRequest.getStart(LocalDay.now());
+        return LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime());
     }
 
     @Override
     public Instant getEnd() {
-        return null;
+        //TODO: FIX LOCALDAY.NOW
+        return LocalDay.now().ofLocalTime(this.appointmentRequest.ge());
+
     }
 
+    /**
+     * You should override toString(). toString() returns startTime,
+     * * endTime, description and priority like: "2019-09-12 14:00 - 15:55 ALDA Lesson
+     * * (HIGH)". This will make your testing and debugging live so much easier.
+     *
+     * @return
+     */
     @Override
     public String toString() {
-        return "";
+        return this.sta;
     }
 }
