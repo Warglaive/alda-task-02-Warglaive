@@ -46,7 +46,7 @@ public class AppointmentImpl implements Appointment {
     @Override
     public Instant getEnd() {
         //TODO: FIX LOCALDAY.NOW
-        return LocalDay.now().ofLocalTime(this.appointmentRequest.ge());
+        //return LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime());
 
     }
 
@@ -59,6 +59,6 @@ public class AppointmentImpl implements Appointment {
      */
     @Override
     public String toString() {
-        return this.sta;
+        return "";
     }
 }
