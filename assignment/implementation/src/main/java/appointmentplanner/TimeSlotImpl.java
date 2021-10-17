@@ -21,7 +21,7 @@ public class TimeSlotImpl extends AppointmentImpl {
     @Override
     public String toString() {
         //TODO: IMPLEMENT
-        return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + this.duration();
+        return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + this.getDuration();
     }
 
     @Override
