@@ -45,7 +45,6 @@ public class AppointmentImpl implements Appointment {
 
     @Override
     public Instant getEnd() {
-        //TODO: FIX LOCALDAY.NOW
         return LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime()).plus(this.appointmentRequest.getDuration());
     }
 
