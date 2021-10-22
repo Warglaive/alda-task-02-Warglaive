@@ -6,10 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -56,24 +53,18 @@ public class LocalDayPlanTest {
     }
 
 
-    @Disabled
+    //@Disabled
     @Test
     void earliest() {
-        //TODO: Check, may be buggy cos of Instant string representation of time
-        String instantExpected = "2021-09-25T22:00:00Z";
-        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of(this.zoneId.getId()));
-        Instant expected = Instant.now(clock);
+        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
         Instant actual = this.localDayPlan.earliest();
         assertThat(actual).isEqualTo(expected);
     }
 
-    @Disabled
+  //  @Disabled
     @Test
     void tooLate() {
-        //TODO: Check, may be buggy cos of Instant string representation of time
-        String instantExpected = "2021-09-26T21:59:59.999999999Z";
-        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of(this.zoneId.getId()));
-        Instant expected = Instant.now(clock);
+        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
         Instant actual = this.localDayPlan.tooLate();
         assertThat(actual).isEqualTo(expected);
     }
