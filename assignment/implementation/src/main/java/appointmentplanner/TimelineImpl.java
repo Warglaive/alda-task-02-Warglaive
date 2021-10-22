@@ -36,7 +36,8 @@ public class TimelineImpl implements Timeline {
     @Override
     public int getNrOfAppointments() {
         //get number of appointments from the LinkedListImpl with help of stream and lambda
-        return 0;
+        int nrOfAppointments;
+        return this.timeLineAllocations.x
     }
 
     /**
