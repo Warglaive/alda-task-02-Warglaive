@@ -9,7 +9,6 @@ public class TimeSlotImpl implements TimeSlot {
     private Appointment appointment;
 
     public TimeSlotImpl(Appointment appointment) {
-      //  super(appointment);
         this.appointment = appointment;
     }
 
@@ -21,7 +20,6 @@ public class TimeSlotImpl implements TimeSlot {
      */
     @Override
     public String toString() {
-        //TODO: IMPLEMENT
         return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + appointment.getDuration();
     }
 

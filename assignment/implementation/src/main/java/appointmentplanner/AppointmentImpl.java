@@ -57,6 +57,7 @@ public class AppointmentImpl implements Appointment {
      */
     @Override
     public String toString() {
-        return "";
+        //TODO: Implement
+        return "Start Time: " + this.getStart() + "End Time: " + "Description: " + this.getDescription() + "Priority: " + this.getPriority();
     }
 }
