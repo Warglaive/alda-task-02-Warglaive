@@ -53,7 +53,6 @@ public class LocalDayPlanTest {
     }
 
 
-    //@Disabled
     @Test
     void earliest() {
         Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
@@ -61,7 +60,6 @@ public class LocalDayPlanTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-  //  @Disabled
     @Test
     void tooLate() {
         Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
@@ -71,6 +69,6 @@ public class LocalDayPlanTest {
 
     @Test
     void getTimeline() {
-        //TODO: Implement TimeLine
+        assertThat(this.localDayPlan.getTimeline()).isExactlyInstanceOf(TimelineImpl.class);
     }
 }
