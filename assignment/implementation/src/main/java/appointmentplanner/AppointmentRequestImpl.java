@@ -34,7 +34,7 @@ public class AppointmentRequestImpl implements AppointmentRequest {
 
     @Override
     public TimePreference getTimePreference() {
-        return AppointmentRequest.super.getTimePreference();
+        return this.fallBack;
     }
 
     @Override

@@ -3,6 +3,7 @@ package appointmentplanner;
 import appointmentplanner.api.AppointmentData;
 import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,20 @@ public class AppointmentRequestTest {
     }
 
     @Test
-    void ctorTest() {
+    void fieldTest() {
+        SoftAssertions.assertSoftly(s -> {
+            assertThat(this.appointmentRequest).hasFieldOrProperty("description");
+            assertThat(this.appointmentRequest).hasFieldOrProperty("duration");
+            assertThat(this.appointmentRequest).hasFieldOrProperty("priority");
+
+            assertThat(this.appointmentRequest).hasFieldOrProperty("appData");
+            assertThat(this.appointmentRequest).hasFieldOrProperty("prefStart");
+            assertThat(this.appointmentRequest).hasFieldOrProperty("fallBack");
+        });
+    }
+
+    @Test
+    void constructorTest() {
         assertThat(this.appointmentRequest).isExactlyInstanceOf(AppointmentRequestImpl.class);
     }
 
@@ -55,7 +69,7 @@ public class AppointmentRequestTest {
 
     @Test
     void getTimePreference() {
-        var expectedTimePreference = TimePreference.UNSPECIFIED;
+        var expectedTimePreference = TimePreference.EARLIEST;
         assertThat(this.appointmentRequest.getTimePreference()).isEqualTo(expectedTimePreference);
     }
 
@@ -72,5 +86,12 @@ public class AppointmentRequestTest {
     @Test
     void getPriorityNull() {
         assertThat(this.appointmentRequest.getAppointmentData().getPriority()).isNull();
+    }
+
+    @Test
+    void getPriorityHigh() {
+        var expectedPriority = Priority.HIGH;
+        this.appData = this.factory.createAppointmentData(this.description, this.duration, this.priority);
+        assertThat(this.appData.getPriority()).isEqualTo(expectedPriority);
     }
 }
