@@ -1,6 +1,7 @@
 package appointmentplanner;
 
 import appointmentplanner.api.AppointmentData;
+import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
 import org.assertj.core.api.SoftAssertions;
@@ -55,6 +56,12 @@ public class AppointmentRequestTest {
     @Test
     void constructorTest() {
         assertThat(this.appointmentRequest).isExactlyInstanceOf(AppointmentRequestImpl.class);
+    }
+
+    @Test
+    void getStartOnDayTest() {
+        var expected = LocalDay.now().at(14, 20);
+        assertThat(this.appointmentRequest.getStart(LocalDay.now())).isEqualTo(expected);
     }
 
     @Test
