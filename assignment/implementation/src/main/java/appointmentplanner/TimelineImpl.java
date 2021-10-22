@@ -37,7 +37,7 @@ public class TimelineImpl implements Timeline {
     public int getNrOfAppointments() {
         //get number of appointments from the LinkedListImpl with help of stream and lambda
         int nrOfAppointments;
-        return this.timeLineAllocations.x
+        return this.timeLineAllocations.getSize();
     }
 
     /**

@@ -1,15 +1,16 @@
 package appointmentplanner;
 
-import appointmentplanner.api.AppointmentRequest;
+import appointmentplanner.api.Appointment;
+import appointmentplanner.api.TimeSlot;
 
 import java.time.Instant;
 
-public class TimeSlotImpl extends AppointmentImpl {
-    private AppointmentRequest appointmentRequest;
+public class TimeSlotImpl implements TimeSlot {
+    private Appointment appointment;
 
-    public TimeSlotImpl(AppointmentRequest appointmentRequest) {
-        super(appointmentRequest);
-        this.appointmentRequest = appointmentRequest;
+    public TimeSlotImpl(Appointment appointment) {
+      //  super(appointment);
+        this.appointment = appointment;
     }
 
     /**
@@ -21,16 +22,21 @@ public class TimeSlotImpl extends AppointmentImpl {
     @Override
     public String toString() {
         //TODO: IMPLEMENT
-        return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + this.getDuration();
+        return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + appointment.getDuration();
     }
 
     @Override
     public Instant getStart() {
-        return super.getStart();
+        if (this.appointment.getStart()!= null) {
+            return this.getStart();
+        }
+        throw new NullPointerException("TimeSlot.appointment.getStart() is Null, line 29");
     }
 
     @Override
     public Instant getEnd() {
-        return super.getEnd();
-    }
+        if (this.appointment.getEnd()!= null) {
+            return this.getEnd();
+        }
+        throw new NullPointerException("TimeSlot.appointment.getEnd() is Null, line 38");    }
 }

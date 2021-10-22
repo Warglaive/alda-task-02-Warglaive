@@ -4,6 +4,7 @@ public class DoublyLinkedList<T> {
     //Initially, head and tail is set to null
     AllocationNode<T> head = null;
     AllocationNode<T> tail = null;
+    private int size;
 
     //add a node to the list
     public void addNode(T item) {
@@ -28,26 +29,31 @@ public class DoublyLinkedList<T> {
             //tail's next points to null
             this.tail.next = null;
         }
+        this.size++;
     }
 
-/*    //print all the nodes of the doubly linked list
-    public void printNodes() {
-        //Node current will point to head
-        AllocationNode<T> current = this.head;
-        if (this.head == null) {
-            System.out.println("Doubly linked list is empty");
-            return;
-        }
-        System.out.println("Nodes of doubly linked list: ");
-        while (current != null) {
-            //Print each node and then go to next.
-
-            System.out.println(current.item + " ");
-            current = current.next;
-        }
-    }*/
-
+    public int getSize() {
+        return size;
+    }
 }
+
+    /*    //print all the nodes of the doubly linked list
+        public void printNodes() {
+            //Node current will point to head
+            AllocationNode<T> current = this.head;
+            if (this.head == null) {
+                System.out.println("Doubly linked list is empty");
+                return;
+            }
+            System.out.println("Nodes of doubly linked list: ");
+            while (current != null) {
+                //Print each node and then go to next.
+
+                System.out.println(current.item + " ");
+                current = current.next;
+            }
+        }*/
+
 
 /**
  * Test
