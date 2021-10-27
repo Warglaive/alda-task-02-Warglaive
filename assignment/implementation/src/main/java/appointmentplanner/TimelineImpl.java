@@ -20,7 +20,6 @@ public class TimelineImpl implements Timeline {
     private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(17, 30));
 
     private DoublyLinkedList<Appointment> timeLineAllocations;
-    private Appointment appointment;
 
 
     private int nrOfAppointments;
