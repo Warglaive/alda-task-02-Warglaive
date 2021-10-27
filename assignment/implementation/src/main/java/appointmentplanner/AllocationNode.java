@@ -7,8 +7,8 @@ package appointmentplanner;
  */
 public class AllocationNode<T> {
     T item;
-    AllocationNode<T> previous;
-    AllocationNode<T> next;
+    public AllocationNode<T> previous;
+    public AllocationNode<T> next;
 
     public AllocationNode(T item) {
         this.item = item;
