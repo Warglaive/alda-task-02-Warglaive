@@ -42,7 +42,7 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         //get day from Date
         this.day = new LocalDay(zone, date);
         this.start = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
-        this.end = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
+        this.end = LocalDay.now().ofLocalTime(LocalTime.of(23, 59));
     }
 
     @Override
