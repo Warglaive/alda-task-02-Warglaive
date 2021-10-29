@@ -7,7 +7,7 @@ import java.time.Instant;
 
 public class AppointmentImpl implements Appointment {
 
-    private AppointmentRequest appointmentRequest;
+    private final AppointmentRequest appointmentRequest;
 
     public AppointmentImpl(AppointmentRequest appointmentRequest) {
         this.appointmentRequest = appointmentRequest;
