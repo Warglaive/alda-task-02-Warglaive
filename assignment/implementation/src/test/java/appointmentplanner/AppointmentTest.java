@@ -3,7 +3,6 @@ package appointmentplanner;
 import appointmentplanner.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.Duration;
@@ -23,16 +22,28 @@ public class AppointmentTest {
     /**
      * AppointmentRequest constructor arguments
      */
+    private AppointmentData appData;
+    private LocalTime prefStart;
+    private TimePreference fallBack;
 
+    /**
+     *
+     */
+    private APFactory factory;
     private AppointmentRequest appointmentRequest;
-    private AppointmentData appointmentData;
 
     @BeforeEach
     void setUp() {
-        this.appointmentData = Mockito.mock(AppointmentData.class);
-        this.appointmentRequest = Mockito.mock(AppointmentRequest.class);
+        this.factory = new APFactory();
 
+        this.prefStart = LocalTime.of(14, 20);
+        this.fallBack = TimePreference.EARLIEST;
+        this.appData = this.factory.createAppointmentData(this.description, this.duration);
+        this.appointmentRequest = factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
         this.appointment = new AppointmentImpl(this.appointmentRequest);
+
+
+
     }
 
     @Test
