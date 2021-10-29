@@ -9,10 +9,12 @@ public class AppointmentDataImpl implements AppointmentData {
     private String description;
     private Duration duration;
     private Priority priority;
+    private final Priority defaultPriority = Priority.LOW;
 
     public AppointmentDataImpl(String description, Duration duration) {
         this.description = description;
         this.duration = duration;
+        this.priority = this.defaultPriority;
     }
 
 
