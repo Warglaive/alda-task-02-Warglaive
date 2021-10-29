@@ -38,4 +38,14 @@ public class AppointmentDataImpl implements AppointmentData {
     public Priority getPriority() {
         return this.priority;
     }
+
+    @Override
+    public String toString() {
+        return "AppointmentDataImpl{" +
+                "description='" + description + '\'' +
+                ", duration=" + duration +
+                ", priority=" + priority +
+                ", defaultPriority=" + defaultPriority +
+                '}';
+    }
 }

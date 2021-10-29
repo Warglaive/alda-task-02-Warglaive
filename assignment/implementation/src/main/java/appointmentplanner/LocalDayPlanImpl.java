@@ -16,8 +16,8 @@ public class LocalDayPlanImpl implements LocalDayPlan {
      * first constructor arguments
      */
 
-  /*  private ZoneId zone;
-    private LocalDate date;*/
+    private ZoneId zone;
+    private LocalDate date;
     private Timeline timeline;
     /**
      * second constructor arguments
@@ -33,15 +33,17 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         this.timeline = new TimelineImpl();
     }
 
-    /*   public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
-     *//*   this.zone = zone;
-        this.date = date;*//*
+
+    //TODO: DELETE
+       public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
+        this.zone = zone;
+        this.date = date;
         this.timeline = timeline;
         //get day from Date
         this.day = new LocalDay(zone, date);
         this.start = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
         this.end = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
-    }*/
+    }
 
     @Override
     public LocalDay getDay() {

@@ -1,19 +1,19 @@
 package appointmentplanner;
 
-import appointmentplanner.api.Appointment;
-import appointmentplanner.api.AppointmentData;
-import appointmentplanner.api.Priority;
-import appointmentplanner.api.TimePreference;
+import appointmentplanner.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.time.Duration;
 import java.time.LocalTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AppointmentTest {
 
     AppointmentImpl appointment;
-    AppointmentRequestImpl appointmentRequest;
     /**
      * AppointmentData constructor arguments
      */
@@ -24,15 +24,27 @@ public class AppointmentTest {
      * AppointmentRequest constructor arguments
      */
 
-    private APFactory factory;
-    private AppointmentData appData;
-    private LocalTime prefStart;
-    private TimePreference fallBack;
-    
+    private AppointmentRequest appointmentRequest;
+    private AppointmentData appointmentData;
 
     @BeforeEach
     void setUp() {
-        this.factory = new APFactory();
+        this.appointmentData = Mockito.mock(AppointmentData.class);
+        this.appointmentRequest = Mockito.mock(AppointmentRequest.class);
+
         this.appointment = new AppointmentImpl(this.appointmentRequest);
     }
+
+    @Test
+    void constructorTest() {
+        assertThat(this.appointment).isExactlyInstanceOf(AppointmentImpl.class);
+    }
+
+    @Test
+    void getRequestTest() {
+
+
+    }
+
+
 }
