@@ -41,9 +41,6 @@ public class AppointmentTest {
         this.appData = this.factory.createAppointmentData(this.description, this.duration);
         this.appointmentRequest = factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
         this.appointment = new AppointmentImpl(this.appointmentRequest);
-
-
-
     }
 
     @Test
@@ -53,9 +50,41 @@ public class AppointmentTest {
 
     @Test
     void getRequestTest() {
-
-
+        var expected = new AppointmentRequestImpl(this.appData, this.prefStart, this.fallBack);
+        assertThat(this.appointment.getRequest()).usingRecursiveComparison().isEqualTo(expected);
     }
 
+    @Test
+    void getDurationTest() {
+        assertThat(this.appointment.getDuration()).isEqualTo(this.duration);
+    }
 
+    @Test
+    void getDescriptionTest() {
+        assertThat(this.appointment.getDescription()).isEqualTo(this.description);
+    }
+
+    @Test
+    void getPriorityTest() {
+        assertThat(this.appointment.getPriority()).isEqualTo(this.priority);
+    }
+
+    @Test
+    void getAppointmentDataTest() {
+        assertThat(this.appointment.getAppointmentData()).isEqualTo(this.appData);
+    }
+
+    @Test
+    void getStartTest() {
+        var expected = LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime());
+        assertThat(this.appointment.getStart()).isEqualTo(expected);
+    }
+
+    @Test
+    void getEndTest() {
+        var expected = LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime()
+                .plus(this.appointmentRequest.getDuration()));
+        
+        assertThat(this.appointment.getEnd()).isEqualTo(expected);
+    }
 }
