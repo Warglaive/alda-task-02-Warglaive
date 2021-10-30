@@ -28,8 +28,8 @@ public class TimelineImpl implements Timeline {
     /**
      * Defaults
      */
-    private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(8, 30));
-    private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(17, 30));
+    private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
+    private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
     /**
      * Doubly Linked List
      */
@@ -92,6 +92,7 @@ public class TimelineImpl implements Timeline {
                 //TODO: WHere
                 //Add current timeslot to the Timeline
                 this.timeLineAllocations.addNode(timeslot);
+                //TODO: Add appointment and return...blbalbal
                 return Optional.of(timeslot);
             }
         }
