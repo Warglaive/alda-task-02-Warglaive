@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -13,22 +14,36 @@ import java.util.stream.Stream;
 public class TimelineImpl implements Timeline {
 
     /**
-     * Doubly Linked List
+     * Start and End Instants of Timeline
      */
-
+    private Instant start;
+    private Instant end;
+    /**
+     * Defaults
+     */
     private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(8, 30));
     private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(17, 30));
+    /**
+     * Doubly Linked List
+     */
 
     private DoublyLinkedList<TimeSlot> timeLineAllocations;
 
 
     private int nrOfAppointments;
 
+    public TimelineImpl(Instant start, Instant end) {
+        this.timeLineAllocations = new DoublyLinkedList<>();
+        this.start = start;
+        this.end = end;
+    }
+
     /**
-     * Appoint Appointment on TimeLine
+     * If Start and End are not specified -> use defaults
      */
     public TimelineImpl() {
-        this.timeLineAllocations = new DoublyLinkedList<>();
+        this.start = this.defaultStart;
+        this.end = this.defaultEnd;
     }
 
 

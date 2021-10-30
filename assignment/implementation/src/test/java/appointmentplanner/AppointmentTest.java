@@ -84,7 +84,7 @@ public class AppointmentTest {
     void getEndTest() {
         var expected = LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime()
                 .plus(this.appointmentRequest.getDuration()));
-        
+
         assertThat(this.appointment.getEnd()).isEqualTo(expected);
     }
 }
