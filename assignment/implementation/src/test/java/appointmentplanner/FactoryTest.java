@@ -25,8 +25,6 @@ public class FactoryTest {
         fac = ServiceFinder.getFactory();
     }
 
-
-    @Disabled
     @Test
     void factoryCreatesDayPlan() {
         LocalDay day = LocalDay.now();
