@@ -89,9 +89,10 @@ public class TimelineImpl implements Timeline {
                 LocalTime timeslotStartLocalTime = LocalDay.now().timeOfInstant(this.timeslotStartTime);
                 LocalTime timeslotEndLocalTime = LocalDay.now().timeOfInstant(this.timeslotEndTime);
                 var timeslot = this.factory.between(forDay, timeslotStartLocalTime, timeslotEndLocalTime);
-
+                //TODO: WHere
                 //Add current timeslot to the Timeline
                 this.timeLineAllocations.addNode(timeslot);
+                return Optional.of(timeslot);
             }
         }
         return Optional.empty();
