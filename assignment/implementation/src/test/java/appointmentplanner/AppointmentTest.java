@@ -66,7 +66,7 @@ public class AppointmentTest {
 
     @Test
     void getPriorityTest() {
-        assertThat(this.appointment.getPriority()).isEqualTo(this.priority);
+        assertThat(this.appointment.getPriority()).isEqualTo(Priority.LOW);
     }
 
     @Test

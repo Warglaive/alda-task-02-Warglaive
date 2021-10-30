@@ -62,7 +62,7 @@ public class LocalDayPlanTest {
 
     @Test
     void tooLate() {
-        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(23, 0));
+        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(23, 59));
         Instant actual = this.localDayPlan.tooLate();
         assertThat(actual).isEqualTo(expected);
     }

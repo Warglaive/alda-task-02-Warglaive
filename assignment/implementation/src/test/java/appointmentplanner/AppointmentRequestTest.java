@@ -90,10 +90,10 @@ public class AppointmentRequestTest {
         assertThat(this.appointmentRequest.getAppointmentData().getDescription()).isEqualTo(this.description);
     }
 
-    @Test
+    /*@Test
     void getPriorityNull() {
         assertThat(this.appointmentRequest.getAppointmentData().getPriority()).isNull();
-    }
+    }*/
 
     @Test
     void getPriorityHigh() {
