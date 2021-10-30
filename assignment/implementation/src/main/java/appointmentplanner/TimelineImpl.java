@@ -82,7 +82,8 @@ public class TimelineImpl implements Timeline {
         //TODO: Add AppointmentData Priority check
         if (timepreference.equals(TimePreference.EARLIEST)) {
             if (this.timeLineAllocations.getSize() <= 1) {
-
+                //TODO: probably buggy, test
+                this.timeslotStartTime = this.start;
                 this.timeslotEndTime = this.start.plusSeconds(appointment.getDuration().toSeconds());
                 //TODO: Is start properly made?
                 LocalTime timeslotStartLocalTime = LocalDay.now().timeOfInstant(this.timeslotStartTime);
