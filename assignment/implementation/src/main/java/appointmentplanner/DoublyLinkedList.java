@@ -55,9 +55,7 @@ public class DoublyLinkedList<T> {
         }*/
 
 
-/**
- * Test
- *//*
+/*
 class Main {
     public static void main(String[] args) {
         //create a DoublyLinkedList object

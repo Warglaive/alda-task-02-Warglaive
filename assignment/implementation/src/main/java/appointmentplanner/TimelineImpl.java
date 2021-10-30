@@ -12,6 +12,10 @@ import java.util.stream.Stream;
 
 public class TimelineImpl implements Timeline {
     /**
+     * Factory to create Timeslot
+     */
+    private AbstractAPFactory factory;
+    /**
      * maintains a 'record' of both the allocated time slots and the (remaining) free time slots.
      */
     private int allocatedTimeSlots;
@@ -36,6 +40,7 @@ public class TimelineImpl implements Timeline {
     private int nrOfAppointments;
 
     public TimelineImpl(Instant start, Instant end) {
+        this.factory = new APFactory();
         this.timeLineAllocations = new DoublyLinkedList<>();
         this.start = start;
         this.end = end;
@@ -66,9 +71,29 @@ public class TimelineImpl implements Timeline {
         return this.end;
     }
 
+    /**
+     * fields for timeSlot to ease usage
+     */
+    private Instant timeslotStartTime;
+    private Instant timeslotEndTime;
+
     @Override
     public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, TimePreference timepreference) {
+        //TODO: Add AppointmentData Priority check
+        if (timepreference.equals(TimePreference.EARLIEST)) {
+            if (this.timeLineAllocations.getSize() <= 1) {
+
+                this.timeslotEndTime = this.start.plusSeconds(appointment.getDuration().toSeconds());
+                //TODO: Is start properly made?
+                LocalTime timeslotStartLocalTime = LocalDay.now().timeOfInstant(this.timeslotStartTime);
+                LocalTime timeslotEndLocalTime = LocalDay.now().timeOfInstant(this.timeslotEndTime);
+                var timeslot = this.factory.between(forDay, timeslotStartLocalTime, timeslotEndLocalTime);
+
+                this.timeLineAllocations.addNode(timeslot);
+            }
+        }
         return Optional.empty();
+
     }
 
     @Override
