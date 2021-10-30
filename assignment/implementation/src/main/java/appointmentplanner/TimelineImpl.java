@@ -6,13 +6,16 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class TimelineImpl implements Timeline {
-
+    /**
+     * maintains a 'record' of both the allocated time slots and the (remaining) free time slots.
+     */
+    private int allocatedTimeSlots;
+    private int remainingFreeSlots;
     /**
      * Start and End Instants of Timeline
      */
@@ -53,24 +56,14 @@ public class TimelineImpl implements Timeline {
         return 0;
     }
 
-    /**
-     * get very first Appointment's start time
-     *
-     * @return
-     */
     @Override
     public Instant start() {
-        return this.defaultStart;
+        return this.start;
     }
 
-    /**
-     * get very first Appointment's end time
-     *
-     * @return
-     */
     @Override
     public Instant end() {
-        return this.defaultEnd;
+        return this.end;
     }
 
     @Override
