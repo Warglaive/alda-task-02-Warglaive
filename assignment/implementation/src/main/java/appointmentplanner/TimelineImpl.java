@@ -29,7 +29,7 @@ public class TimelineImpl implements Timeline {
      * Defaults
      */
     private Instant defaultStart = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
-    private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
+    private Instant defaultEnd = LocalDay.now().ofLocalTime(LocalTime.of(23, 59));
     /**
      * Doubly Linked List
      */

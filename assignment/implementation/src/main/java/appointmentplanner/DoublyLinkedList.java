@@ -1,11 +1,40 @@
 package appointmentplanner;
 
 public class DoublyLinkedList<T> {
-    //Initially, head and tail is set to null
-    AllocationNode<T> head = null;
-    AllocationNode<T> tail = null;
+    AllocationNode<T> head;
+    AllocationNode<T> tail;
     private int size;
 
+
+    /**
+     * Initially, head and tail is set to null
+     */
+    public DoublyLinkedList() {
+        this.head = new AllocationNode<>(null);
+        this.tail = new AllocationNode<>(null);
+
+        this.head.next = this.tail;
+        this.tail.previous = this.head;
+
+        this.head.previous = null;
+        this.tail.next = null;
+        this.size = 0;
+    }
+
+    public AllocationNode<T> getHead() {
+        return this.head;
+    }
+
+    public AllocationNode<T> getTail() {
+        return this.tail;
+    }
+
+
+    /**
+     * OLD CRAP
+     *
+     * @param item
+     */
     //add a node to the list
     public void addNode(T item) {
         //Create a new node containing the item
