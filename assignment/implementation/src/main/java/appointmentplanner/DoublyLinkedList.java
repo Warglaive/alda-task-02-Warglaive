@@ -1,10 +1,11 @@
 package appointmentplanner;
 
+import java.util.Objects;
+
 public class DoublyLinkedList<T> {
     AllocationNode<T> head;
     AllocationNode<T> tail;
     private int size;
-
 
     /**
      * Initially, head and tail is set to null
@@ -48,6 +49,25 @@ public class DoublyLinkedList<T> {
     }
 
     /**
+     * find item and add nextItem after it in the LinkedList
+     *
+     * @param item
+     * @param nextItem
+     */
+    private void addBefore(T item, T nextItem) {
+        AllocationNode<T> nextNode = searchItemNode(nextItem);
+        addBefore(item, nextNode);
+    }
+
+    public void addBefore(T item, AllocationNode nextNode) {
+        if (Objects.nonNull(nextNode) && Objects.nonNull(item)) {
+            AllocationNode newNode = new AllocationNode(item);
+
+            newNode.setNext(nextNode);
+        }
+    }
+
+    /**
      * @param item
      * @return
      */
@@ -63,17 +83,5 @@ public class DoublyLinkedList<T> {
         return null;
     }
 
-    /**
-     * find item and add nextItem after it in the LinkedList
-     *
-     * @param item
-     * @param nextItem
-     */
-    private void addBefore(T item, T nextItem) {
-        var nextNode = searchItemNode(nextItem);
-        addBefore(item, nextNode);
-    }
 
-    public void addBefore(T item, AllocationNode nextNode) {
-    }
 }
