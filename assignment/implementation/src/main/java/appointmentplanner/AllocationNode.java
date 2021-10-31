@@ -15,6 +15,26 @@ public class AllocationNode<T> {
     }
 
     public T getItem() {
-        return this.item;
+        return item;
+    }
+
+    public void setItem(T item) {
+        this.item = item;
+    }
+
+    public AllocationNode<T> getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(AllocationNode<T> previous) {
+        this.previous = previous;
+    }
+
+    public AllocationNode<T> getNext() {
+        return next;
+    }
+
+    public void setNext(AllocationNode<T> next) {
+        this.next = next;
     }
 }
