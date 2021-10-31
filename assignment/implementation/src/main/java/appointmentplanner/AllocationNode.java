@@ -6,9 +6,9 @@ package appointmentplanner;
  * @param <T>
  */
 public class AllocationNode<T> {
-    T item;
-    public AllocationNode<T> previous;
-    public AllocationNode<T> next;
+    protected T item;
+    protected AllocationNode<T> previous;
+    protected AllocationNode<T> next;
 
     public AllocationNode(T item) {
         this.item = item;
