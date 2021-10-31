@@ -29,42 +29,79 @@ public class DoublyLinkedList<T> {
         return this.tail;
     }
 
-
     /**
-     * OLD CRAP
+     * add item at start of the LinkedList
      *
      * @param item
      */
-    //add a node to the list
-    public void addNode(T item) {
-        //Create a new node containing the item
-        AllocationNode<T> newNode = new AllocationNode<>(item);
-        //if list is empty, head and tail points to newNode
-        if (this.head == null) {
-            //this.head = this.tail = newNode;
-            this.tail = newNode;
-            this.head = this.tail;
-            //head's previous will be null
-            this.head.previous = null;
-            //tail's next will be null
-            this.tail.next = null;
-        } else {
-            //add newNode to the end of list. tail->next set to newNode
-            this.tail.next = newNode;
-            //newNode->previous set to tail
-            newNode.previous = this.tail;
-            //newNode becomes new tail
-            this.tail = newNode;
-            //tail's next points to null
-            this.tail.next = null;
-        }
-        this.size++;
+    public void addHead(T item) {
+        addBefore(item, this.head);
     }
 
-    public int getSize() {
-        return size;
+    /**
+     * add item at the end of the LinkedList
+     *
+     * @param item
+     */
+    public void addTail(T item) {
+        addBefore(item, this.tail);
     }
+
+    /**
+     * find item and add nextItem after it in the LinkedList
+     *
+     * @param item
+     * @param nextItem
+     */
+
+
+    private DoublyLinkedList<T> searchItemNode(T nextItem) {
+    }
+    
+    private void addBefore(T item, T nextItem) {
+        var nextNode = searchItemNode(nextItem);
+        addBefore(item, nextNode);
+    }
+    public void addBefore(T item, AllocationNode nextNode) {
+    }
+
+
 }
+/**
+ * OLD CRAP
+ *
+ * @param item
+ */
+      /*  //add a node to the list
+        public void addNode (T item){
+            //Create a new node containing the item
+            AllocationNode<T> newNode = new AllocationNode<>(item);
+            //if list is empty, head and tail points to newNode
+            if (this.head == null) {
+                //this.head = this.tail = newNode;
+                this.tail = newNode;
+                this.head = this.tail;
+                //head's previous will be null
+                this.head.previous = null;
+                //tail's next will be null
+                this.tail.next = null;
+            } else {
+                //add newNode to the end of list. tail->next set to newNode
+                this.tail.next = newNode;
+                //newNode->previous set to tail
+                newNode.previous = this.tail;
+                //newNode becomes new tail
+                this.tail = newNode;
+                //tail's next points to null
+                this.tail.next = null;
+            }
+            this.size++;
+        }
+
+        public int getSize () {
+            return size;
+        }
+    }*/
 
     /*    //print all the nodes of the doubly linked list
         public void printNodes() {
