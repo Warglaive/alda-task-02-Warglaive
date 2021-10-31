@@ -13,4 +13,8 @@ public class AllocationNode<T> {
     public AllocationNode(T item) {
         this.item = item;
     }
+
+    public T getItem() {
+        return this.item;
+    }
 }
