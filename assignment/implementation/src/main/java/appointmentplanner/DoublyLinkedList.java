@@ -49,7 +49,7 @@ public class DoublyLinkedList<T> {
     }
 
     /**
-     * find item and add nextItem after it in the LinkedList
+     * find an item and add nextItem before it in the LinkedList
      *
      * @param item
      * @param nextItem
@@ -59,12 +59,38 @@ public class DoublyLinkedList<T> {
         addBefore(item, nextNode);
     }
 
+    /**
+     * Create new node from with item and set newNode.next to nextNode.
+     *
+     * @param item
+     * @param nextNode
+     */
     public void addBefore(T item, AllocationNode nextNode) {
         if (Objects.nonNull(nextNode) && Objects.nonNull(item)) {
             AllocationNode newNode = new AllocationNode(item);
 
             newNode.setNext(nextNode);
         }
+    }
+
+    /**
+     * get previous item from node.
+     * addAfter previous node
+     * @param item
+     * @param previousItem
+     */
+    public void addAfter(T item, T previousItem) {
+        var previousNode = searchItemNode(previousItem);
+
+        if (previousNode != null) {
+            addAfter(item, previousNode);
+        }
+        throw new NullPointerException("AddAfter Node is null");
+    }
+
+
+    public void addAfter(T item, AllocationNode<T> beforeNode) {
+        addBefore(item, beforeNode.next);
     }
 
     /**
