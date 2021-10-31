@@ -1,5 +1,6 @@
 package appointmentplanner;
 
+import java.util.List;
 import java.util.Objects;
 
 public class DoublyLinkedList<T> {
@@ -89,11 +90,17 @@ public class DoublyLinkedList<T> {
     }
 
 
+    /**
+     * add item in previous node's next pointer.
+     * @param item
+     * @param beforeNode
+     */
     public void addAfter(T item, AllocationNode<T> beforeNode) {
         addBefore(item, beforeNode.next);
     }
 
     /**
+     * Find Node which contains needed item
      * @param item
      * @return
      */
@@ -108,6 +115,6 @@ public class DoublyLinkedList<T> {
         }
         return null;
     }
-
+public List<T>
 
 }
