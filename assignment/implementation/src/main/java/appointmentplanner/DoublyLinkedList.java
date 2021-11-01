@@ -179,7 +179,7 @@ public class DoublyLinkedList<T> {
         node.getNext().setPrevious(node);
         nextNode.setNext(null);
         node.setItem(newItem);
-        return nextNode;
+        return node;
     }
 
 }
