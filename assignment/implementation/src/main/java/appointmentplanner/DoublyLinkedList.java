@@ -148,6 +148,22 @@ public class DoublyLinkedList<T> {
             this.size--;
         }
     }
-    
+
+    /**
+     *
+     * 
+     * @param node
+     * @param previousNode
+     * @param newItem
+     * @return
+     */
+    public AllocationNode<T> mergeNodesPrevious(AllocationNode node, AllocationNode previousNode, T newItem) {
+        previousNode.setNext(null);
+        node.setPrevious(previousNode.getPrevious());
+        node.getPrevious().setNext(node);
+        previousNode.setPrevious(null);
+        node.setItem(newItem);
+        return previousNode;
+    }
 
 }
