@@ -32,6 +32,14 @@ public class DoublyLinkedList<T> {
         return this.tail;
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
+    public boolean isEmpty() {
+        return this.size == 0;
+    }
+
     /**
      * add item at start of the LinkedList
      *
@@ -168,10 +176,11 @@ public class DoublyLinkedList<T> {
 
     /**
      * make node same as nextNode and set item to node. Also make sure nextNode is empty(null).
+     *
      * @param node
      * @param nextNode
      * @param newItem
-     * @return
+     * @return merged current node
      */
     public AllocationNode<T> mergeNodesNext(AllocationNode node, AllocationNode nextNode, T newItem) {
         nextNode.setPrevious(null);
@@ -181,5 +190,4 @@ public class DoublyLinkedList<T> {
         node.setItem(newItem);
         return node;
     }
-
 }
