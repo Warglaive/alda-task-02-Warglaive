@@ -91,9 +91,14 @@ public class TimelineImpl implements Timeline {
                 var timeslot = this.factory.between(forDay, timeslotStartLocalTime, timeslotEndLocalTime);
                 //TODO: WHere
                 //Add current timeslot to the Timeline
+/*
                 this.timeLineAllocations.addNode(timeslot);
+*/
                 //TODO: Add appointment and return...blbalbal
+/*
                 return Optional.of(timeslot);
+*/
+                return Optional.empty();
             }
         }
         return Optional.empty();

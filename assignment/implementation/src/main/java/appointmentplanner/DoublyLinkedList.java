@@ -14,8 +14,8 @@ public class DoublyLinkedList<T> implements Iterable<T>{
      * Initially, head and tail is set to null
      */
     public DoublyLinkedList() {
-        this.head = new AllocationNode<>(null);
-        this.tail = new AllocationNode<>(null);
+        this.head = new AllocationNode<T>(null);
+        this.tail = new AllocationNode<T>(null);
 
         this.head.next = this.tail;
         this.tail.previous = this.head;
@@ -195,5 +195,39 @@ public class DoublyLinkedList<T> implements Iterable<T>{
     @Override
     public Iterator<T> iterator() {
         return new appointmentplanner.LLIterator<T>(this.head, this.tail);
+    }
+
+    class AllocationNode<T> {
+        public T item;
+        public AllocationNode<T> previous;
+        public AllocationNode<T> next;
+
+        public AllocationNode(T item) {
+            this.item = item;
+        }
+
+        public T getItem() {
+            return item;
+        }
+
+        public void setItem(T item) {
+            this.item = item;
+        }
+
+        public AllocationNode<T> getPrevious() {
+            return previous;
+        }
+
+        public void setPrevious(AllocationNode<T> previous) {
+            this.previous = previous;
+        }
+
+        public AllocationNode<T> getNext() {
+            return next;
+        }
+
+        public void setNext(AllocationNode<T> next) {
+            this.next = next;
+        }
     }
 }

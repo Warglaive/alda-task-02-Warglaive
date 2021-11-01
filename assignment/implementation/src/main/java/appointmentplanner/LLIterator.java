@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 public class LLIterator<T> implements Iterator<T> {
 
-    private AllocationNode<T> currentNode;
-    private AllocationNode<T> tail;
+    private DoublyLinkedList.AllocationNode currentNode;
+    private DoublyLinkedList.AllocationNode tail;
 
-    public LLIterator(AllocationNode<T> head, AllocationNode<T> tail) {
+    public LLIterator(DoublyLinkedList.AllocationNode head, DoublyLinkedList.AllocationNode tail) {
         this.currentNode = head;
         this.tail = tail;
     }

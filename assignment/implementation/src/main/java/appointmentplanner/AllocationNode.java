@@ -1,40 +1,11 @@
+/*
 package appointmentplanner;
 
+*/
 /**
  * A node class for doubly linked list
  *
  * @param <T>
- */
-public class AllocationNode<T> {
-    protected T item;
-    protected AllocationNode<T> previous;
-    protected AllocationNode<T> next;
+ *//*
 
-    public AllocationNode(T item) {
-        this.item = item;
-    }
-
-    public T getItem() {
-        return item;
-    }
-
-    public void setItem(T item) {
-        this.item = item;
-    }
-
-    public AllocationNode<T> getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(AllocationNode<T> previous) {
-        this.previous = previous;
-    }
-
-    public AllocationNode<T> getNext() {
-        return next;
-    }
-
-    public void setNext(AllocationNode<T> next) {
-        this.next = next;
-    }
-}
+public*/
