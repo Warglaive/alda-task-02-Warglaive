@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,9 +16,9 @@ public class LLIteratorTest {
     @Mock
     TimeSlot secondTimeSlot;
     @Mock
-    TimeSlot entry3;
+    TimeSlot third;
     @Mock
-    TimeSlot entry4;
+    TimeSlot fourth;
 
 
     private DoublyLinkedList<TimeSlot> doublyLinkedList;
@@ -26,14 +27,17 @@ public class LLIteratorTest {
     @BeforeEach
     private void setUp() {
         //TODO
-        this.secondTimeSlot =Mockito.mock(TimeSlot.class);
-        doublyLinkedList = new DoublyLinkedList<>();
-        doublyLinkedList.addHead(entry4);
-        doublyLinkedList.addHead(entry3);
-        doublyLinkedList.addHead(secondTimeSlot);
-        doublyLinkedList.addHead(firstTimeSlot);
 
-        iterator = new LLIterator(doublyLinkedList.getHead(), doublyLinkedList.getTail());
+        this.secondTimeSlot = Mockito.mock(TimeSlot.class);
+
+        //MockitoAnnotations.initMocks(this);
+        this.doublyLinkedList = new DoublyLinkedList<>();
+        this.doublyLinkedList.addHead(this.fourth);
+        this.doublyLinkedList.addHead(this.third);
+        this.doublyLinkedList.addHead(this.secondTimeSlot);
+        this.doublyLinkedList.addHead(this.firstTimeSlot);
+
+        this.iterator = new LLIterator(this.doublyLinkedList.getHead(), this.doublyLinkedList.getTail());
     }
 
     @Test
@@ -56,10 +60,7 @@ public class LLIteratorTest {
     @Test
     public void hasNextFalse() {
         //TODO
-        iterator.next();
-        iterator.next();
-        iterator.next();
-        iterator.next();
+       var a=  iterator.next();
         assertThat(iterator.hasNext()).isFalse();
     }
 }

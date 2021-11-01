@@ -3,38 +3,46 @@ package appointmentplanner;
 import appointmentplanner.api.TimeSlot;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class TimeSlotImpl implements TimeSlot {
-    private Instant start;
-    private Instant end;
+    private Instant startTime;
+    private Instant endTime;
 
-    public TimeSlotImpl(Instant start, Instant end) {
-        this.start = start;
-        this.end = end;
-    }
+    public TimeSlotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException {
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException("Null values are not being accepted!");
+        }
+        if (endTime.isBefore(startTime) /*|| startTime.equals(endTime)*/) {
+            throw new IllegalArgumentException("End must lie after start");
+        }
 
-    public void setStart(Instant start) {
-        this.start = start;
-    }
-
-    public void setEnd(Instant end) {
-        this.end = end;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     @Override
     public Instant getStart() {
-        if (this.start != null) {
-            return this.getStart();
-        }
-        throw new NullPointerException("TimeSlot.appointment.getStart() is Null, line 29");
+        return this.startTime;
     }
 
     @Override
     public Instant getEnd() {
-        if (this.end != null) {
-            return this.getEnd();
-        }
-        throw new NullPointerException("TimeSlot.appointment.getEnd() is Null, line 38");
+        return this.endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeSlotImpl timeslot = (TimeSlotImpl) o;
+        return startTime.equals(timeslot.startTime) &&
+                endTime.equals(timeslot.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startTime, endTime);
     }
 
     /**
@@ -47,5 +55,4 @@ public class TimeSlotImpl implements TimeSlot {
     public String toString() {
         return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + this.duration();
     }
-
 }
