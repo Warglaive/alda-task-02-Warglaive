@@ -1,10 +1,11 @@
 package appointmentplanner;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class DoublyLinkedList<T> {
+public class DoublyLinkedList<T> implements Iterable<T>{
     AllocationNode<T> head;
     AllocationNode<T> tail;
     private int size;
@@ -189,5 +190,10 @@ public class DoublyLinkedList<T> {
         nextNode.setNext(null);
         node.setItem(newItem);
         return node;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new appointmentplanner.LLIterator<T>(this.head, this.tail);
     }
 }
