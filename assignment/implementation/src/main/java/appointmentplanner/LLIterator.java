@@ -14,14 +14,12 @@ public class LLIterator<T> implements Iterator {
 
     @Override
     public boolean hasNext() {
-        //TODO: Check later with test
         return this.currentNode.getNext().equals(this.tail);
     }
 
     @Override
     public Object next() {
         this.currentNode = currentNode.getNext();
-        //TODO: May be buggy
         return this.currentNode;
     }
 }
