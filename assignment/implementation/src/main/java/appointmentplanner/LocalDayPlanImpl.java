@@ -8,41 +8,21 @@ import java.time.*;
 
 public class LocalDayPlanImpl implements LocalDayPlan {
 
-    /**
-     * start time
-     * and end time, which default to 0:00 (inclusive) and 24:00 exclusive.
-     */
-    /**
-     * first constructor arguments
-     */
-
-    private ZoneId zone;
-    private LocalDate date;
     private Timeline timeline;
-    /**
-     * second constructor arguments
-     */
     private LocalDay day;
-    private Instant start;
-    private Instant end;
 
-    public LocalDayPlanImpl(LocalDay day, Instant start, Instant end) {
-        this.day = day;
-        this.start = start;
-        this.end = end;
-        this.timeline = new TimelineImpl();
+    public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
+        this.timeline = timeline;
+        this.day = new LocalDay(zone, date);
     }
 
+    public LocalDayPlanImpl(LocalDay localDay, Instant start, Instant end) {
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("'Start' can not be after 'End'");
+        }
 
-    //TODO: DELETE
-       public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
-        this.zone = zone;
-        this.date = date;
-        this.timeline = timeline;
-        //get day from Date
-        this.day = new LocalDay(zone, date);
-        this.start = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
-        this.end = LocalDay.now().ofLocalTime(LocalTime.of(23, 59));
+        this.day = localDay;
+        this.timeline = new TimelineImpl(start, end);
     }
 
     @Override
@@ -52,12 +32,12 @@ public class LocalDayPlanImpl implements LocalDayPlan {
 
     @Override
     public Instant earliest() {
-        return this.start;
+        return this.timeline.start();
     }
 
     @Override
     public Instant tooLate() {
-        return this.end;
+        return this.timeline.end();
     }
 
     @Override
