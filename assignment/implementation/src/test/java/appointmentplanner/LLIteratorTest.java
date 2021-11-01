@@ -5,13 +5,19 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LLIteratorTest {
     @Mock
-    TimeSlot entry1, entry2, entry3, entry4;
+    TimeSlot firstTimeSlot;
+    @Mock
+    TimeSlot secondTimeSlot;
+    @Mock
+    TimeSlot entry3;
+    @Mock
+    TimeSlot entry4;
 
 
     private DoublyLinkedList<TimeSlot> doublyLinkedList;
@@ -20,12 +26,12 @@ public class LLIteratorTest {
     @BeforeEach
     private void setUp() {
         //TODO
-        MockitoAnnotations.initMocks(this);
-        doublyLinkedList = new DoublyLinkedList<TimeSlot>();
+        this.secondTimeSlot =Mockito.mock(TimeSlot.class);
+        doublyLinkedList = new DoublyLinkedList<>();
         doublyLinkedList.addHead(entry4);
         doublyLinkedList.addHead(entry3);
-        doublyLinkedList.addHead(entry2);
-        doublyLinkedList.addHead(entry1);
+        doublyLinkedList.addHead(secondTimeSlot);
+        doublyLinkedList.addHead(firstTimeSlot);
 
         iterator = new LLIterator(doublyLinkedList.getHead(), doublyLinkedList.getTail());
     }
@@ -39,10 +45,10 @@ public class LLIteratorTest {
     public void next() {
         //TODO
         var returnedNode = (DoublyLinkedList.AllocationNode) iterator.next();
-       // var secondReturnedNode = (DoublyLinkedList.AllocationNode) iterator.next();
+        var secondReturnedNode = (DoublyLinkedList.AllocationNode) iterator.next();
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(returnedNode.getItem()).isEqualTo(entry1);
-           // softly.assertThat(secondReturnedNode.getItem()).isEqualTo(entry2);
+            softly.assertThat(returnedNode.getItem()).isEqualTo(firstTimeSlot);
+            softly.assertThat(secondReturnedNode).isNull();
         });
     }
 
@@ -50,5 +56,10 @@ public class LLIteratorTest {
     @Test
     public void hasNextFalse() {
         //TODO
+        iterator.next();
+        iterator.next();
+        iterator.next();
+        iterator.next();
+        assertThat(iterator.hasNext()).isFalse();
     }
 }

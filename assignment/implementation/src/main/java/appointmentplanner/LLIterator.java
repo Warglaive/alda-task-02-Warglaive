@@ -2,7 +2,7 @@ package appointmentplanner;
 
 import java.util.Iterator;
 
-public class LLIterator<T> implements Iterator<T> {
+public class LLIterator<T> implements Iterator {
 
     private DoublyLinkedList.AllocationNode currentNode;
     private DoublyLinkedList.AllocationNode tail;
@@ -15,13 +15,13 @@ public class LLIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         //TODO: Check later with test
-        return !this.currentNode.getNext().equals(this.tail);
+        return this.currentNode.getNext().equals(this.tail);
     }
 
     @Override
-    public T next() {
+    public Object next() {
         this.currentNode = currentNode.getNext();
         //TODO: May be buggy
-        return (T) this.currentNode;
+        return this.currentNode;
     }
 }
