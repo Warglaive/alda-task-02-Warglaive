@@ -20,7 +20,8 @@ public class LLIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
-        currentNode = currentNode.getNext();
-        return currentNode;
+        this.currentNode = currentNode.getNext();
+        //TODO: May be buggy
+        return (T) this.currentNode;
     }
 }
