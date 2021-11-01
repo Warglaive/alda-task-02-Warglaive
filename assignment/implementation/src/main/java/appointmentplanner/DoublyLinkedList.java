@@ -150,8 +150,8 @@ public class DoublyLinkedList<T> {
     }
 
     /**
+     * make node same as previous node and set item to node. Also make sure previousNode is empty(null).
      *
-     * 
      * @param node
      * @param previousNode
      * @param newItem
