@@ -1,5 +1,6 @@
 package appointmentplanner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +78,7 @@ public class DoublyLinkedList<T> {
     /**
      * get previous item from node.
      * addAfter previous node
+     *
      * @param item
      * @param previousItem
      */
@@ -92,6 +94,7 @@ public class DoublyLinkedList<T> {
 
     /**
      * add item in previous node's next pointer.
+     *
      * @param item
      * @param beforeNode
      */
@@ -101,6 +104,7 @@ public class DoublyLinkedList<T> {
 
     /**
      * Find Node which contains needed item
+     *
      * @param item
      * @return
      */
@@ -115,6 +119,22 @@ public class DoublyLinkedList<T> {
         }
         return null;
     }
-public List<T>
+
+    /**
+     * search for same class items in the node and add them to a list
+     *
+     * @return itemList of exact class instances
+     */
+    public List<T> searchExactInstancesOf(Class item) {
+        ArrayList itemList = new ArrayList<>();
+        AllocationNode currentNode = this.head;
+        for (int i = 0; i < this.size; i++) {
+            currentNode = currentNode.next;
+            if (currentNode.getItem().getClass().equals(item)) {
+                itemList.add(currentNode.getItem());
+            }
+        }
+        return itemList;
+    }
 
 }
