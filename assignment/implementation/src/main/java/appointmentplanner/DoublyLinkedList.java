@@ -155,7 +155,7 @@ public class DoublyLinkedList<T> {
      * @param node
      * @param previousNode
      * @param newItem
-     * @return
+     * @return previousNode (merged)
      */
     public AllocationNode<T> mergeNodesPrevious(AllocationNode node, AllocationNode previousNode, T newItem) {
         previousNode.setNext(null);
@@ -164,6 +164,22 @@ public class DoublyLinkedList<T> {
         previousNode.setPrevious(null);
         node.setItem(newItem);
         return previousNode;
+    }
+
+    /**
+     * make node same as nextNode and set item to node. Also make sure nextNode is empty(null).
+     * @param node
+     * @param nextNode
+     * @param newItem
+     * @return
+     */
+    public AllocationNode<T> mergeNodesNext(AllocationNode node, AllocationNode nextNode, T newItem) {
+        nextNode.setPrevious(null);
+        node.setNext(nextNode.getNext());
+        node.getNext().setPrevious(node);
+        nextNode.setNext(null);
+        node.setItem(newItem);
+        return nextNode;
     }
 
 }
