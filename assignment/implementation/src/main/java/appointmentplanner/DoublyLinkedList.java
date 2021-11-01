@@ -137,4 +137,17 @@ public class DoublyLinkedList<T> {
         return itemList;
     }
 
+    /**
+     * remove an item from the node(Timeline)
+     */
+    public void remove(T item) {
+        AllocationNode currentNode = searchItemNode(item);
+        if (Objects.nonNull(currentNode)) {
+            currentNode.previous.setNext(currentNode.next);
+            currentNode.next.setPrevious(currentNode.previous);
+            this.size--;
+        }
+    }
+    
+
 }
