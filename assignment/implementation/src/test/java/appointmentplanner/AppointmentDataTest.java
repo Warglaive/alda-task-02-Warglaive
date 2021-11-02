@@ -1,55 +1,92 @@
 package appointmentplanner;
 
+import appointmentplanner.api.AppointmentData;
 import appointmentplanner.api.Priority;
 import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class AppointmentDataTest {
-    private String description = "test";
-    private Duration duration = Duration.ofHours(2);
-    private Priority priority = Priority.HIGH;
+    @ParameterizedTest
+    @CsvSource({
+            "200, blablacar, LOW",
+            "2000, blablacar, MEDIUM",
+            "20000, blablacar, HIGH",
+    })
+    public void constructorAssignsCorrect(int durationMinutes, String description, Priority priority) {
+        Duration duration = Duration.ofMinutes(durationMinutes);
+        AppointmentData appointmentData = new AppointmentDataImpl(duration, description, priority);
 
-
-    APFactory factory;
-    AppointmentDataImpl appointmentDataWithPriority;
-    AppointmentDataImpl appointmentData;
-
-
-    @BeforeEach
-    void setUp() {
-        this.factory = new APFactory();
-        this.appointmentDataWithPriority = (AppointmentDataImpl) this.factory.createAppointmentData(this.description, this.duration, this.priority);
-        this.appointmentData = (AppointmentDataImpl) this.factory.createAppointmentData(this.description, this.duration);
-    }
-
-    @Test
-    void ctorPriorityTest() {
-        SoftAssertions.assertSoftly(x -> {
-            assertThat(this.appointmentDataWithPriority).isExactlyInstanceOf(AppointmentDataImpl.class);
-            assertThat(this.appointmentData).isExactlyInstanceOf(AppointmentDataImpl.class);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointmentData.getDuration()).isEqualTo(duration);
+            softly.assertThat(appointmentData.getDescription()).isEqualTo(description);
+            softly.assertThat(appointmentData.getPriority()).isEqualTo(priority);
         });
     }
 
     @Test
-    void getDurationTest() {
-        Duration expectedDuration = Duration.ofHours(2);
-        assertThat(this.appointmentDataWithPriority.getDuration()).isEqualTo(expectedDuration);
+    public void constructorDefaultDescription() {
+        Duration duration = Duration.ofMinutes(200);
+        Priority priority = Priority.HIGH;
+
+        AppointmentData appointmentData = new AppointmentDataImpl(duration, priority);
+
+        assertThat(appointmentData.getDescription()).isEqualTo("No description");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "-10, blablacar, LOW, 'Invalid duration, please give a positive value!'",
+            ", blablacar, LOW, Null values are not being accepted!",
+            "10, , LOW, Null values are not being accepted!",
+            "10, blablacar, ,Null values are not being accepted!",
+            "10, ' ', LOW, Null values are not being accepted!"
+    })
+    public void constructorThrowsIAException(Integer durationMinutes, String description, Priority priority, String exceptionMessage) {
+        Duration duration;
+
+        if (durationMinutes != null) {
+            duration = Duration.ofMinutes(durationMinutes);
+        } else {
+            duration = null;
+        }
+
+        ThrowableAssert.ThrowingCallable constructorCall = () -> new AppointmentDataImpl(duration, description, priority);
+        assertThatCode(constructorCall)
+                .hasMessage(exceptionMessage)
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void getDescriptionTest() {
-        String expectedDesc = "test";
-        assertThat(this.appointmentDataWithPriority.getDescription()).isEqualTo(expectedDesc);
+    public void constructorDurationDescription() {
+        AppointmentData actual = new AppointmentDataImpl( "mock Description",Duration.ofMinutes(100));
+
+        AppointmentData expected = new AppointmentDataImpl(
+                Duration.ofMinutes(100), "mock Description", Priority.LOW
+        );
+
+        assertThat(actual).usingRecursiveComparison()..isEqualTo(expected);
     }
 
     @Test
-    void getPriorityTest() {
-        Priority expectedPriority = Priority.HIGH;
-        assertThat(this.appointmentDataWithPriority.getPriority()).isEqualTo(expectedPriority);
+    public void testEqualsAndHashCode() {
+        Duration mockedDuration = Duration.ofSeconds(10);
+        String mockDescription = "mock";
+        Priority refPriority = Priority.HIGH;
+
+        var ref = new AppointmentDataImpl(mockedDuration, mockDescription, refPriority);
+        var equal = new AppointmentDataImpl(mockedDuration, mockDescription, refPriority);
+        var unEqualDuration = new AppointmentDataImpl(Duration.ofSeconds(12), mockDescription, refPriority);
+        var unEqualDescription = new AppointmentDataImpl(mockedDuration, "falseMock", refPriority);
+        var unEqualPriority = new AppointmentDataImpl(mockedDuration, mockDescription, Priority.LOW);
+        TestUtils.verifyEqualsAndHashCode(ref,equal,unEqualDuration,unEqualDescription,unEqualPriority);
     }
 }
