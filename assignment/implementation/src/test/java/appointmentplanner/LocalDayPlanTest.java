@@ -2,75 +2,73 @@ package appointmentplanner;
 
 import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.Timeline;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.mock;
 
 public class LocalDayPlanTest {
-    private LocalDayPlanImpl localDayPlan;
-    private APFactory factory;
-
     /**
-     * LocalDayPlan first constructor arguments
+     * tests for different constructors
      */
-    private LocalDay day;
-    private Instant start;
-    private Instant end;
+    @Test
+    public void constructorTest() {
+        var timeline = mock(Timeline.class);
+        var localDate = LocalDate.now();
+        var zoneId = mock(ZoneId.class);
+        var localDay = new LocalDay(zoneId, localDate);
 
-    /**
-     * LocalDayPLan second constructor arguments
-     */
-    private ZoneId zoneId;
-    private LocalDate date;
-    //TODO: IMPLEMENT
-    private Timeline timeline;
+        var localDayPlan = new LocalDayPlanImpl(zoneId, localDate, timeline);
 
-    @BeforeEach
-    void setUp() {
-        this.factory = new APFactory();
-        //init FIRST constructor arguments
-        this.day = new LocalDay();
-        //current local time NOW
-        this.start = Instant.now();
-        //15 mins
-        int secsToMins = 900;
-        this.end = Instant.now().plusSeconds(secsToMins);
-        //init SECOND constructor arguments
-        this.zoneId = this.day.getZone();
-        this.date = this.day.getDate();
-        this.timeline = new TimelineImpl();
-
-        this.localDayPlan = (LocalDayPlanImpl) this.factory.createLocalDayPlan(this.zoneId, this.date, this.timeline);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(localDayPlan.getTimeline()).isEqualTo(timeline);
+            softly.assertThat(localDayPlan.getDay()).isEqualTo(localDay);
+        });
     }
 
     @Test
-    void getDay() {
-        assertThat(this.localDayPlan.getDay()).isEqualTo(this.day);
+    public void SpecifiedTimeTest() {
+        var localDay = LocalDay.now();
+        var start = localDay.ofLocalTime(LocalTime.parse("01:00"));
+        var end = localDay.ofLocalTime(LocalTime.parse("02:00"));
+
+        var localDayPlan = new LocalDayPlanImpl(localDay, start, end);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(localDayPlan.getDay()).isEqualTo(localDay);
+            softly.assertThat(localDayPlan.earliest()).isEqualTo(start);
+            softly.assertThat(localDayPlan.tooLate()).isEqualTo(end);
+        });
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "00:01, 00:00",
+    })
+    public void ExceptionTest(String startTime, String endTime) {
+        var localDay = LocalDay.now();
+        Instant start = localDay.ofLocalTime(LocalTime.parse(startTime));
+        Instant end = localDay.ofLocalTime(LocalTime.parse(endTime));
 
-    @Test
-    void earliest() {
-        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(0, 0));
-        Instant actual = this.localDayPlan.earliest();
-        assertThat(actual).isEqualTo(expected);
-    }
+        ThrowableAssert.ThrowingCallable exceptionCode = () -> {
+            new LocalDayPlanImpl(
+                    localDay,
+                    start,
+                    end
+            );
+        };
 
-    @Test
-    void tooLate() {
-        Instant expected = LocalDay.now().ofLocalTime(LocalTime.of(23, 59));
-        Instant actual = this.localDayPlan.tooLate();
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
-    void getTimeline() {
-        assertThat(this.localDayPlan.getTimeline()).isExactlyInstanceOf(TimelineImpl.class);
+        assertThatCode(exceptionCode)
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("'Start' can not be after 'End'");
     }
 }
