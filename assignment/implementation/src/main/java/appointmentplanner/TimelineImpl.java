@@ -138,7 +138,20 @@ public class TimelineImpl implements Timeline {
     }
 
     private Map<String, Optional<TimeSlot>> findFirstFittingTimeSlot(Duration appointmentDuration) {
+        var gapsFitting = this.getGapsFitting(appointmentDuration);
 
+        Function<TimeSlot, TimeSlot> appointmentMapper = (timeSlot) ->
+                new TimeslotImpl(timeSlot.getStart(), timeSlot.getStart()
+                        .plusSeconds(appointmentDuration.toSeconds()));
+
+        Function<TimeSlot, TimeSlot> timeSlotMapper = (timeSlot) -> {
+            var appointmentTimeSlot = new TimeslotImpl(timeSlot.getStart(), timeSlot.getStart()
+                    .plusSeconds(appointmentDuration
+                            .toSeconds()));
+            return new TimeslotImpl(appointmentTimeSlot.getEnd(), timeSlot.getEnd());
+        };
+
+        return this.findFittingTimeSlot(gapsFitting, appointmentMapper, timeSlotMapper, false);
     }
 
     private Map<String, Optional<TimeSlot>> findLastFittingTimeSlot(Duration appointmentDuration) {
