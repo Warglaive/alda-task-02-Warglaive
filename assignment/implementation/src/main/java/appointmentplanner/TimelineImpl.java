@@ -5,10 +5,7 @@ import appointmentplanner.api.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -106,6 +103,44 @@ public class TimelineImpl implements Timeline {
 
     }
 
+    private void putAppointment(Map<String, TimeSlot> timeSlotMap) {
+        var currentNode = this.appointments.searchItemNode(timeSlotMap.get("OriginalTimeSlot"));
+        var nextTimeSlot = timeSlotMap.get("NextTimeSlot");
+        TimeSlot previousTimeSlot = null;
+        if (timeSlotMap.containsKey("PreviousTimeSlot")) {
+            previousTimeSlot = timeSlotMap.get("PreviousTimeSlot");
+        }
+        var appointment = timeSlotMap.get("AppointmentSlot");
+        if (appointment != null) {
+            if (nextTimeSlot == null) {
+                if (previousTimeSlot != null) {
+                    currentNode.setItem(previousTimeSlot);
+                    this.appointments.addAfter((Appointment) appointment, previousTimeSlot);
+                    if (previousTimeSlot.getStart().equals(previousTimeSlot.getEnd())) {
+                        var appointmentNode = appointments.searchItemNode(appointment);
+                        appointments.mergeNodesPrevious(appointmentNode, currentNode, appointment);
+                    }
+                } else {
+                    currentNode.setItem(appointment);
+                }
+            } else {
+                currentNode.setItem(nextTimeSlot);
+                this.appointments.addBefore(appointment, nextTimeSlot);
+                if (previousTimeSlot != null) {
+                    this.appointments.addBefore(previousTimeSlot, appointment);
+                }
+                var appointmentNode = appointments.searchItemNode(appointment);
+                if (nextTimeSlot.getStart().equals(nextTimeSlot.getEnd())) {
+                    appointments.mergeNodesNext(appointmentNode, currentNode, appointment);
+                }
+            }
+        }
+    }
+
+    private Map<String, Optional<TimeSlot>> findFirstFittingTimeSlot(Duration appointmentDuration) {
+
+    }
+
     private Map<String, Optional<TimeSlot>> findLastFittingTimeSlot(Duration appointmentDuration) {
         var gapsFitting = this.getGapsFittingReversed(appointmentDuration);
         Function<TimeSlot, TimeSlot> appointmentMapper = (timeSlot) ->
@@ -119,10 +154,104 @@ public class TimelineImpl implements Timeline {
         return this.findFittingTimeSlot(gapsFitting, appointmentMapper, timeSlotMapper, true);
     }
 
-    private Map<String, Optional<TimeSlot>> findFittingTimeSlot(List<TimeSlot> gapsFitting, Function<TimeSlot, TimeSlot> appointmentMapper, Function<TimeSlot, TimeSlot> timeSlotMapper, boolean b) {
+    private Map<String, Optional<TimeSlot>> findFittingTimeSlot(List<TimeSlot> gapsFitting, Function<TimeSlot, TimeSlot> appointmentMapper, Function<TimeSlot, TimeSlot> timeSlotMapper, boolean last) {
+
+        var returnMap = new HashMap();
+
+        var appointmentSlot = gapsFitting.stream()
+                .findFirst()
+                .stream()
+                .map(appointmentMapper)
+                .map(TimeSlot.class::cast)
+                .findFirst();
+
+        returnMap.put("AppointmentSlot", appointmentSlot);
+
+        var newTimeSlot = gapsFitting.stream()
+                .findFirst()
+                .stream()
+                .map(timeSlotMapper)
+                .map(TimeSlot.class::cast)
+                .findFirst();
+
+        if (last) {
+            returnMap.put("PreviousTimeSlot", newTimeSlot);
+        } else {
+            returnMap.put("NextTimeSlot", newTimeSlot);
+        }
+
+        Optional<TimeSlot> originalTimeSlot = gapsFitting.stream()
+                .findFirst();
+
+        returnMap.put("OriginalTimeSlot", originalTimeSlot);
+
+        return returnMap;
     }
 
-    private HashMap<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime startTime, TimePreference fallback, TimePreference fallback1) {
+
+    private HashMap<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime preferredTime, LocalDay localDay, TimePreference timePreference) {
+        var gapsFittingList = new ArrayList<TimeSlot>();
+
+        this.getGapsFitting(appointmentDuration).stream()
+                .filter(timeSlot -> timeSlot.fits(appointmentDuration))
+                .forEach(gapsFittingList::add);
+
+        var preferredSlot = gapsFittingList.stream()
+                .filter(timeSlot -> {
+                    var startTime = timeSlot.getStartTime(localDay);
+                    var endTime = timeSlot.getEndTime(localDay);
+                    var endTimeAppointment = preferredTime.plusMinutes(appointmentDuration.toMinutes());
+                    return (startTime.isBefore(preferredTime) || startTime.equals(preferredTime)) &&
+                            (endTime.isAfter(endTimeAppointment) || endTime.equals(endTimeAppointment));
+                })
+                .map(timeSlot -> new TimeslotImpl(localDay.ofLocalTime(preferredTime), localDay.ofLocalTime(preferredTime.plusMinutes(appointmentDuration.toMinutes()))))
+                .map(TimeSlot.class::cast)
+                .findAny();
+
+        if (preferredSlot.isEmpty()) {
+            if (timePreference == TimePreference.EARLIEST_AFTER) {
+                preferredSlot = gapsFittingList.stream()
+                        .filter(timeSlot ->
+                                timeSlot.getEndTime(localDay).minusMinutes(appointmentDuration.toMinutes()).isAfter(preferredTime)
+                        )
+                        .map(timeSlot -> new TimeslotImpl(timeSlot.getStart(), timeSlot.getStart().plusSeconds(appointmentDuration.toSeconds())))
+                        .map(TimeSlot.class::cast)
+                        .findFirst();
+
+            } else if (timePreference == TimePreference.LATEST_BEFORE) {
+                preferredSlot = gapsFittingList.stream()
+                        .filter(timeSlot ->
+                                timeSlot.getStartTime(localDay).plusMinutes(appointmentDuration.toMinutes()).isBefore(preferredTime)
+                        )
+                        .map(timeSlot -> new TimeslotImpl(timeSlot.getEnd().minusSeconds(appointmentDuration.toSeconds()), timeSlot.getEnd()))
+                        .map(TimeSlot.class::cast)
+                        .reduce((val1, val2) -> val2);
+
+            }
+        }
+        if (!preferredSlot.isEmpty()) {
+            var appointmentSlot = preferredSlot;
+            var returnMap = new HashMap<String, Optional<TimeSlot>>();
+            returnMap.put("AppointmentSlot", preferredSlot);
+            returnMap.put("OriginalTimeSlot", gapsFittingList.stream()
+                    .filter(timeSlot -> (timeSlot.fits(appointmentSlot.get())))
+                    .findAny());
+
+            var nextStart = preferredSlot.get().getEnd();
+            var nextEnd = returnMap.get("OriginalTimeSlot").get().getEnd();
+            if (!(nextStart.isAfter(nextEnd) || nextStart.equals(nextEnd))) {
+                returnMap.put("NextTimeSlot", Optional.of(new TimeslotImpl(nextStart, nextEnd)));
+            }
+
+            var previousStart = returnMap.get("OriginalTimeSlot").get().getStart();
+            var previousEnd = preferredSlot.get().getStart();
+            if (!(previousStart.isAfter(previousEnd) || previousStart.equals(previousEnd))) {
+                returnMap.put("PreviousTimeSlot", Optional.of(new TimeslotImpl(previousStart, previousEnd)));
+            }
+
+            return returnMap;
+        }
+        return null;
     }
 
     @Override
