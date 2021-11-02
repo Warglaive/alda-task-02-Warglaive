@@ -32,27 +32,27 @@ public class TimelineImpl implements Timeline {
 
     @Override
     public int getNrOfAppointments() {
-        return 0;
+        return (int) appointmentStream().count();
     }
 
     @Override
     public Instant start() {
-        return null;
+        return this.start;
     }
 
     @Override
     public Instant end() {
-        return null;
+        return this.end;
     }
 
     @Override
     public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, TimePreference timepreference) {
-        return Optional.empty();
+        return addAppointment(forDay, appointment, null, timepreference);
     }
 
     @Override
     public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, LocalTime startTime) {
-        return Optional.empty();
+        return addAppointment(forDay, appointment, startTime, null);
     }
 
     @Override
