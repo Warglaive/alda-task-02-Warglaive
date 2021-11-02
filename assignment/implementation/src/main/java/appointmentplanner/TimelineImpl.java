@@ -5,10 +5,14 @@ import appointmentplanner.api.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static appointmentplanner.api.TimePreference.LATEST;
 
 public class TimelineImpl implements Timeline {
     private Instant start;
@@ -57,7 +61,54 @@ public class TimelineImpl implements Timeline {
 
     @Override
     public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, LocalTime startTime, TimePreference fallback) {
+        if (appointment == null) {
+            throw new NullPointerException("appointment can NOT be null");
+        }
+        var appointmentDuration = appointment.getDuration();
+        Map<String, Optional<TimeSlot>> timeSlotOptMap = new HashMap();
+
+        if (startTime != null) {
+            timeSlotOptMap = this.findPreferredTimeSlot(appointmentDuration, startTime, forDay, fallback);
+        }
+        if (fallback == null) {
+            fallback = TimePreference.UNSPECIFIED;
+        }
+
+        if (startTime == null || timeSlotOptMap == null) {
+            switch (fallback) {
+                case LATEST:
+                    timeSlotOptMap = findLastFittingTimeSlot(appointmentDuration);
+                    break;
+                default:
+                    timeSlotOptMap = findFirstFittingTimeSlot(appointmentDuration);
+
+            }
+        }
+
+
+        var timeSlotMap = optionalToTimeSlot(timeSlotOptMap);
+        if (timeSlotOptMap.containsKey("AppointmentSlot")) {
+            if (timeSlotOptMap.get("AppointmentSlot").isEmpty() == false) {
+
+                timeSlotMap.replace("AppointmentSlot", buildAppointment(
+                        appointmentData,
+                        LocalTime.ofInstant(timeSlotMap.get("AppointmentSlot").getStart(), localDay.getZone()),
+                        timePreference,
+                        timeSlotOptMap.get("AppointmentSlot").get()).get());
+
+                putAppointment(timeSlotMap);
+                return Optional.of((Appointment) timeSlotMap.get("AppointmentSlot"));
+            }
+        }
         return Optional.empty();
+
+
+    }
+
+    private Map<String, Optional<TimeSlot>> findLastFittingTimeSlot(Duration appointmentDuration) {
+    }
+
+    private HashMap<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime startTime, TimePreference fallback, TimePreference fallback1) {
     }
 
     @Override
