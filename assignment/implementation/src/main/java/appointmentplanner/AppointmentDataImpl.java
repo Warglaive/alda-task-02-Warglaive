@@ -37,7 +37,7 @@ public class AppointmentDataImpl implements AppointmentData {
     public AppointmentDataImpl(String description, Duration duration) {
         this.description = description;
         this.duration = duration;
-        this.priority=Priority.LOW;
+        this.priority = Priority.LOW;
     }
 
     public AppointmentDataImpl(String description, Duration duration, Priority priority) {

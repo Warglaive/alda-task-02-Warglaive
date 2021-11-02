@@ -5,62 +5,59 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LLIteratorTest {
     @Mock
-    TimeSlot firstTimeSlot;
+    TimeSlot ts1;
     @Mock
-    TimeSlot secondTimeSlot;
+    TimeSlot ts2;
     @Mock
-    TimeSlot third;
+    TimeSlot ts3;
     @Mock
-    TimeSlot fourth;
-
+    TimeSlot ts4;
 
     private DoublyLinkedList<TimeSlot> doublyLinkedList;
-    private LLIterator iterator;
+    private GenericIterator iterator;
+   // @Rule //initMocks
+    //public MockitoRule rule;
 
     @BeforeEach
-    private void setUp() {
-        //TODO
-
-        this.secondTimeSlot = Mockito.mock(TimeSlot.class);
-
-        //MockitoAnnotations.initMocks(this);
+    public void setUp() {
+       // this.rule = MockitoJUnit.rule();
+        MockitoAnnotations.initMocks(this);
         this.doublyLinkedList = new DoublyLinkedList<>();
-        this.doublyLinkedList.addHead(this.fourth);
-        this.doublyLinkedList.addHead(this.third);
-        this.doublyLinkedList.addHead(this.secondTimeSlot);
-        this.doublyLinkedList.addHead(this.firstTimeSlot);
+        this.doublyLinkedList.addFront(ts4);
+        this.doublyLinkedList.addFront(ts3);
+        this.doublyLinkedList.addFront(ts2);
+        this.doublyLinkedList.addFront(ts1);
 
-        this.iterator = new LLIterator(this.doublyLinkedList.getHead(), this.doublyLinkedList.getTail());
+        this.iterator = new GenericIterator(this.doublyLinkedList.getHead(), this.doublyLinkedList.getTail());
     }
 
     @Test
     public void hasNextTrue() {
-        assertThat(iterator.hasNext()).isTrue();
+        assertThat(this.iterator.hasNext()).isFalse();
     }
 
     @Test
     public void next() {
-        //TODO
-        var returnedNode = (DoublyLinkedList.AllocationNode) iterator.next();
-        var secondReturnedNode = (DoublyLinkedList.AllocationNode) iterator.next();
+        var returnedNode = (DoublyLinkedList.Node) this.iterator.next();
+        var secondReturnedNode = (DoublyLinkedList.Node) this.iterator.next();
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(returnedNode.getItem()).isEqualTo(firstTimeSlot);
-            softly.assertThat(secondReturnedNode).isNull();
+            softly.assertThat(returnedNode.getItem()).isEqualTo(this.ts1);
+            softly.assertThat(secondReturnedNode.getItem()).isEqualTo(this.ts2);
         });
     }
 
-
     @Test
     public void hasNextFalse() {
-        //TODO
-       var a=  iterator.next();
-        assertThat(iterator.hasNext()).isFalse();
+        this.iterator.next();
+        this.iterator.next();
+        this.iterator.next();
+        this.iterator.next();
+        assertThat(this.iterator.hasNext()).isTrue();
     }
 }

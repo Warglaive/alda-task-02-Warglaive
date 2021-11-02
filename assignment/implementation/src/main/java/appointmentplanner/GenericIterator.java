@@ -2,12 +2,12 @@ package appointmentplanner;
 
 import java.util.Iterator;
 
-public class LLIterator<T> implements Iterator {
+public class GenericIterator<T> implements Iterator {
 
-    private DoublyLinkedList.AllocationNode currentNode;
-    private DoublyLinkedList.AllocationNode tail;
+    private DoublyLinkedList.Node currentNode;
+    private DoublyLinkedList.Node tail;
 
-    public LLIterator(DoublyLinkedList.AllocationNode head, DoublyLinkedList.AllocationNode tail) {
+    public GenericIterator(DoublyLinkedList.Node head, DoublyLinkedList.Node tail) {
         this.currentNode = head;
         this.tail = tail;
     }

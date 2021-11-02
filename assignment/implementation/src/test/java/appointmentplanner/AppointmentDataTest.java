@@ -4,7 +4,6 @@ import appointmentplanner.api.AppointmentData;
 import appointmentplanner.api.Priority;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.ThrowableAssert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -17,9 +16,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 public class AppointmentDataTest {
     @ParameterizedTest
     @CsvSource({
-            "200, blablacar, LOW",
-            "2000, blablacar, MEDIUM",
-            "20000, blablacar, HIGH",
+            "200, asd, LOW",
+            "2000, asd, MEDIUM",
+            "20000, asd, HIGH",
     })
     public void constructorAssignsCorrect(int durationMinutes, String description, Priority priority) {
         Duration duration = Duration.ofMinutes(durationMinutes);

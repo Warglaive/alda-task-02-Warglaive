@@ -66,6 +66,6 @@ public class APFactory implements AbstractAPFactory {
     @Override
     public TimeSlot between(Instant start, Instant end) {
         //TODO return proper instance
-        return null;
+        return new TimeslotImpl(start, end);
     }
 }

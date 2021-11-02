@@ -5,11 +5,11 @@ import appointmentplanner.api.TimeSlot;
 import java.time.Instant;
 import java.util.Objects;
 
-public class TimeSlotImpl implements TimeSlot {
+public class TimeslotImpl implements TimeSlot {
     private Instant startTime;
     private Instant endTime;
 
-    public TimeSlotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException {
+    public TimeslotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException {
         if (Objects.isNull(startTime) || Objects.isNull(endTime)) {
             throw new IllegalArgumentException("Start time or End time can NOT be null.");
         }
@@ -35,7 +35,7 @@ public class TimeSlotImpl implements TimeSlot {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TimeSlotImpl timeslot = (TimeSlotImpl) o;
+        TimeslotImpl timeslot = (TimeslotImpl) o;
         return startTime.equals(timeslot.startTime) &&
                 endTime.equals(timeslot.endTime);
     }

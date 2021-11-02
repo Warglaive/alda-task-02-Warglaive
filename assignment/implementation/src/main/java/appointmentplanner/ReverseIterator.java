@@ -2,11 +2,11 @@ package appointmentplanner;
 
 import java.util.Iterator;
 
-public class LLReverseIterator<T> implements Iterator {
-    private DoublyLinkedList.AllocationNode currentNode;
-    private DoublyLinkedList.AllocationNode head;
+public class ReverseIterator<T> implements Iterator {
+    private DoublyLinkedList.Node currentNode;
+    private DoublyLinkedList.Node head;
 
-    public LLReverseIterator(DoublyLinkedList.AllocationNode head, DoublyLinkedList.AllocationNode tail) {
+    public ReverseIterator(DoublyLinkedList.Node head, DoublyLinkedList.Node tail) {
         this.head = head;
         this.currentNode = tail;
     }
