@@ -73,7 +73,7 @@ public class AppointmentDataTest {
                 Duration.ofMinutes(100), "mock Description", Priority.LOW
         );
 
-        assertThat(actual).usingRecursiveComparison()..isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
