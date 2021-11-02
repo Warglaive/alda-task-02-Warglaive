@@ -4,60 +4,72 @@ import appointmentplanner.api.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 public class AppointmentImpl implements Appointment {
 
-    private final AppointmentRequest appointmentRequest;
+    private AppointmentData appointmentData;
+    private AppointmentRequest appointmentRequest;
+    private TimeSlot timeSlot;
 
-    public AppointmentImpl(AppointmentRequest appointmentRequest) {
+    public AppointmentImpl(AppointmentData appointmentData,
+                           AppointmentRequest appointmentRequest,
+                           TimeSlot timeSlot) throws IllegalArgumentException {
+        if (appointmentData == null || appointmentRequest == null || timeSlot == null) {
+            throw new IllegalArgumentException("Constructor args can NOT be NULL!");
+        }
+        this.appointmentData = appointmentData;
         this.appointmentRequest = appointmentRequest;
-    }
-
-    @Override
-    public AppointmentRequest getRequest() {
-        return this.appointmentRequest;
+        this.timeSlot = timeSlot;
     }
 
     @Override
     public Duration getDuration() {
-        return this.appointmentRequest.getDuration();
+        return appointmentData.getDuration();
     }
 
     @Override
     public String getDescription() {
-        return this.appointmentRequest.getDescription();
+        return appointmentData.getDescription();
     }
 
     @Override
     public Priority getPriority() {
-        return this.appointmentRequest.getPriority();
+        return appointmentData.getPriority();
     }
 
     @Override
     public AppointmentData getAppointmentData() {
-        return this.appointmentRequest.getAppointmentData();
+        return appointmentData;
+    }
+
+    @Override
+    public AppointmentRequest getRequest() {
+        return appointmentRequest;
     }
 
     @Override
     public Instant getStart() {
-        return LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime());
+        return timeSlot.getStart();
     }
 
     @Override
     public Instant getEnd() {
-        return LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime()).plus(this.appointmentRequest.getDuration());
+        return timeSlot.getEnd();
     }
 
-    /**
-     * You should override toString(). toString() returns startTime,
-     * * endTime, description and priority like: "2019-09-12 14:00 - 15:55 ALDA Lesson
-     * * (HIGH)". This will make your testing and debugging live so much easier.
-     *
-     * @return
-     */
     @Override
-    public String toString() {
-        //TODO: Implement
-        return "Start Time: " + this.getStart() + "End Time: " + "Description: " + this.getDescription() + "Priority: " + this.getPriority();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppointmentImpl that = (AppointmentImpl) o;
+        return appointmentData.equals(that.appointmentData) &&
+                appointmentRequest.equals(that.appointmentRequest) &&
+                timeSlot.equals(that.timeSlot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appointmentData, appointmentRequest, timeSlot);
     }
 }

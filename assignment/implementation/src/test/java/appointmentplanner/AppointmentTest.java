@@ -1,90 +1,87 @@
 package appointmentplanner;
 
 import appointmentplanner.api.*;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.Instant;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AppointmentTest {
+    @Test
+    public void testConstructorCorrectValues() {
+        var mockedData = mock(AppointmentData.class);
+        var mockedRequest = mock(AppointmentRequest.class);
+        var mockedSlot = mock(TimeSlot.class);
 
-    AppointmentImpl appointment;
-    /**
-     * AppointmentData constructor arguments
-     */
-    private String description = "test";
-    private Duration duration = Duration.ofHours(2);
-    private Priority priority = Priority.HIGH;
-    /**
-     * AppointmentRequest constructor arguments
-     */
-    private AppointmentData appData;
-    private LocalTime prefStart;
-    private TimePreference fallBack;
+        when(mockedSlot.getStart()).thenReturn(Instant.now());
+        when(mockedSlot.getEnd()).thenReturn(Instant.now());
 
-    /**
-     *
-     */
-    private APFactory factory;
-    private AppointmentRequest appointmentRequest;
+        var appointment = new AppointmentImpl(
+                mockedData, mockedRequest, mockedSlot
+        );
 
-    @BeforeEach
-    void setUp() {
-        this.factory = new APFactory();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointment.getAppointmentData()).isSameAs(mockedData);
+            softly.assertThat(appointment.getRequest()).isSameAs(mockedRequest);
+            softly.assertThat(appointment.getStart()).isEqualTo(mockedSlot.getStart());
+            softly.assertThat(appointment.getEnd()).isEqualTo(mockedSlot.getEnd());
+        });
+    }
 
-        this.prefStart = LocalTime.of(14, 20);
-        this.fallBack = TimePreference.EARLIEST;
-        this.appData = this.factory.createAppointmentData(this.description, this.duration);
-        this.appointmentRequest = factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
-        this.appointment = new AppointmentImpl(this.appointmentRequest);
+    @ParameterizedTest
+    @CsvSource({
+            "true, false, false",
+            "false, true, false",
+            "false, false, true"
+    })
+    public void constructorThrowsIAException(boolean dataNull, boolean requestNull, boolean slotNull) {
+        AppointmentData mockedData;
+        AppointmentRequest mockedRequest;
+        TimeSlot mockedSlot;
+
+        if (dataNull) mockedData = null;
+        else mockedData = mock(AppointmentData.class);
+
+        if (requestNull) mockedRequest = null;
+        else mockedRequest = mock(AppointmentRequest.class);
+
+        if (slotNull) mockedSlot = null;
+        else mockedSlot = mock(TimeSlot.class);
+
+        ThrowableAssert.ThrowingCallable constructorCall =
+                () -> new AppointmentImpl(mockedData, mockedRequest, mockedSlot);
+
+        assertThatCode(constructorCall)
+                .hasMessage("Constructor args can NOT be NULL!")
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void constructorTest() {
-        assertThat(this.appointment).isExactlyInstanceOf(AppointmentImpl.class);
-    }
+    public void testAppointmentDataGetters() {
+        var mockedData = mock(AppointmentData.class);
+        var mockedRequest = mock(AppointmentRequest.class);
+        var mockedSlot = mock(TimeSlot.class);
 
-    @Test
-    void getRequestTest() {
-        var expected = new AppointmentRequestImpl(this.appData, this.prefStart, this.fallBack);
-        assertThat(this.appointment.getRequest()).usingRecursiveComparison().isEqualTo(expected);
-    }
+        when(mockedData.getDuration()).thenReturn(Duration.ofMinutes(10));
+        when(mockedData.getPriority()).thenReturn(Priority.LOW);
+        when(mockedData.getDescription()).thenReturn("mock Description");
 
-    @Test
-    void getDurationTest() {
-        assertThat(this.appointment.getDuration()).isEqualTo(this.duration);
-    }
+        var appointment = new AppointmentImpl(
+                mockedData, mockedRequest, mockedSlot
+        );
 
-    @Test
-    void getDescriptionTest() {
-        assertThat(this.appointment.getDescription()).isEqualTo(this.description);
-    }
-
-    @Test
-    void getPriorityTest() {
-        assertThat(this.appointment.getPriority()).isEqualTo(Priority.LOW);
-    }
-
-    @Test
-    void getAppointmentDataTest() {
-        assertThat(this.appointment.getAppointmentData()).isEqualTo(this.appData);
-    }
-
-    @Test
-    void getStartTest() {
-        var expected = LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime());
-        assertThat(this.appointment.getStart()).isEqualTo(expected);
-    }
-
-    @Test
-    void getEndTest() {
-        var expected = LocalDay.now().ofLocalTime(this.appointmentRequest.getStartTime()
-                .plus(this.appointmentRequest.getDuration()));
-
-        assertThat(this.appointment.getEnd()).isEqualTo(expected);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointment.getPriority()).isEqualTo(mockedData.getPriority());
+            softly.assertThat(appointment.getDescription()).isEqualTo(mockedData.getDescription());
+            softly.assertThat(appointment.getDuration()).isEqualTo(mockedData.getDuration());
+        });
     }
 }
