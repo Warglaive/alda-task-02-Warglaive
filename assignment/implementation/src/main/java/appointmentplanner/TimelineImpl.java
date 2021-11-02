@@ -267,8 +267,19 @@ public class TimelineImpl implements Timeline {
         return null;
     }
 
+    /**
+     * find equal appointment (via predicate arg) and remove it
+     *
+     * @param appointment to remove
+     * @return
+     */
     @Override
     public AppointmentRequest removeAppointment(Appointment appointment) {
+        Predicate<Appointment> equalsPredicate = app -> app.equals(appointment);
+        var appointments = removeAppointments(equalsPredicate);
+        if (appointments.size() > 0) {
+            return appointments.get(0);
+        }
         return null;
     }
 
