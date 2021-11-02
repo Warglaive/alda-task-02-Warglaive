@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -106,6 +107,19 @@ public class TimelineImpl implements Timeline {
     }
 
     private Map<String, Optional<TimeSlot>> findLastFittingTimeSlot(Duration appointmentDuration) {
+        var gapsFitting = this.getGapsFittingReversed(appointmentDuration);
+        Function<TimeSlot, TimeSlot> appointmentMapper = (timeSlot) ->
+                new TimeslotImpl(timeSlot.getEnd().minusSeconds(appointmentDuration.toSeconds()), timeSlot.getEnd());
+
+        Function<TimeSlot, TimeSlot> timeSlotMapper = (timeSlot) -> {
+            var appointmentTimeSlot = new TimeslotImpl(timeSlot.getEnd().minusSeconds(appointmentDuration.toSeconds()), timeSlot.getEnd());
+            return new TimeslotImpl(timeSlot.getStart(), appointmentTimeSlot.getStart());
+        };
+
+        return this.findFittingTimeSlot(gapsFitting, appointmentMapper, timeSlotMapper, true);
+    }
+
+    private Map<String, Optional<TimeSlot>> findFittingTimeSlot(List<TimeSlot> gapsFitting, Function<TimeSlot, TimeSlot> appointmentMapper, Function<TimeSlot, TimeSlot> timeSlotMapper, boolean b) {
     }
 
     private HashMap<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime startTime, TimePreference fallback, TimePreference fallback1) {
