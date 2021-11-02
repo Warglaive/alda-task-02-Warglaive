@@ -22,7 +22,7 @@ public class LocalDayPlanImpl implements LocalDayPlan {
         }
 
         this.day = localDay;
-        this.timeline = new TimelineImpl(start, end);
+        this.timeline = new TimeLineImpl(start, end);
     }
 
     @Override
