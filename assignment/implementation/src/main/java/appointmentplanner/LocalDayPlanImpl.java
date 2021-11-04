@@ -7,27 +7,26 @@ import appointmentplanner.api.Timeline;
 import java.time.*;
 
 public class LocalDayPlanImpl implements LocalDayPlan {
-
     private Timeline timeline;
-    private LocalDay day;
+    private LocalDay localDay;
 
     public LocalDayPlanImpl(ZoneId zone, LocalDate date, Timeline timeline) {
         this.timeline = timeline;
-        this.day = new LocalDay(zone, date);
+        this.localDay = new LocalDay(zone, date);
     }
 
     public LocalDayPlanImpl(LocalDay localDay, Instant start, Instant end) {
         if (start.isAfter(end)) {
-            throw new IllegalArgumentException("'Start' can not be after 'End'");
+            throw new IllegalArgumentException("Start has to be before end and positive. End has to be after start and positive. End has to be before 24.");
         }
 
-        this.day = localDay;
+        this.localDay = localDay;
         this.timeline = new TimeLineImpl(start, end);
     }
 
     @Override
     public LocalDay getDay() {
-        return this.day;
+        return this.localDay;
     }
 
     @Override

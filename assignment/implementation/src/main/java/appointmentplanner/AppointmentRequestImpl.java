@@ -1,9 +1,10 @@
 package appointmentplanner;
 
-import appointmentplanner.api.*;
+import appointmentplanner.api.AppointmentData;
+import appointmentplanner.api.AppointmentRequest;
+import appointmentplanner.api.Priority;
+import appointmentplanner.api.TimePreference;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -12,9 +13,9 @@ public class AppointmentRequestImpl implements AppointmentRequest {
     private AppointmentData appointmentData;
     private TimePreference timePreference;
 
-    public AppointmentRequestImpl(AppointmentData appointmentData,LocalTime startTime, TimePreference timePreference)
+    public AppointmentRequestImpl(AppointmentData appointmentData, LocalTime startTime, TimePreference timePreference)
             throws IllegalArgumentException {
-        if (/*startTime == null ||*/ appointmentData == null) {
+        if (appointmentData == null) {
             throw new IllegalArgumentException("Null values are not being accepted!");
         }
         if (timePreference == null) {
