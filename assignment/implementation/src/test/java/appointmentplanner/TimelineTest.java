@@ -109,4 +109,25 @@ public class TimelineTest {
             assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(end);
         });
     }
+
+    @Test
+    public void getGapsFittingSimpleReversed() {
+        var requiredDuration = Duration.ofMinutes(60);
+        var fittingTimeslots = instantiatedTimeline.getGapsFittingReversed(requiredDuration);
+
+        SoftAssertions.assertSoftly(softly -> {
+            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(start);
+            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(end);
+        });
+    }
+
+    @Test
+    public void getGapsFittingSimpleFalse() {
+        var requiredDuration = Duration.ofHours(24);
+        var fittingTimeslots = instantiatedTimeline.getGapsFitting(requiredDuration);
+
+        SoftAssertions.assertSoftly(softly -> {
+            assertThat(fittingTimeslots.isEmpty()).isTrue();
+        });
+    }
 }
