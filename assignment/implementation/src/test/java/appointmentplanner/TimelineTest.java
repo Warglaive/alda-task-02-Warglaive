@@ -265,4 +265,30 @@ public class TimelineTest {
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getEnd().equals(this.end)));
         });
     }
+    @Test
+    public void removeAppointmentAppointmentItemAppointmentAfter() {
+        var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var returnedAppointmentNotRemoved = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        this.instantiatedTimeline.removeAppointment(returnedAppointment);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(this.instantiatedTimeline.appointmentStream().anyMatch(timeSlot -> timeSlot.equals(returnedAppointment))).isFalse();
+            softly.assertThat(this.instantiatedTimeline.appointmentStream().anyMatch(timeSlot -> timeSlot.equals(returnedAppointmentNotRemoved))).isTrue();
+            softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getStart().equals(this.start) && timeSlot.getEnd().equals(returnedAppointmentNotRemoved.getStart())));
+            softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getEnd().equals(this.end) && timeSlot.getStart().equals(returnedAppointmentNotRemoved.getEnd())));
+        });
+    }
+
+    @Test
+    public void removeAppointmentAppointmentItemAppointmentBefore() {
+        var returnedAppointmentNotRemoved = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        this.instantiatedTimeline.removeAppointment(returnedAppointment);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(this.instantiatedTimeline.appointmentStream().anyMatch(timeSlot -> timeSlot.equals(returnedAppointment))).isFalse();
+            softly.assertThat(this.instantiatedTimeline.appointmentStream().anyMatch(timeSlot -> timeSlot.equals(returnedAppointmentNotRemoved))).isTrue();
+            softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getEnd().equals(this.end) && timeSlot.getStart().equals(returnedAppointmentNotRemoved.getEnd())));
+        });
+    }
 }
