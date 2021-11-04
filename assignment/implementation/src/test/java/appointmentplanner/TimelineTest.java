@@ -43,7 +43,7 @@ public class TimelineTest {
         this.start = LocalDay.now().ofLocalTime(LocalTime.parse("08:00"));
         this.end = LocalDay.now().ofLocalTime(LocalTime.parse("18:00"));
 
-        this.illegalInstantiatedTimeline = new TimeLineImpl(start,end,appointments);
+        this.illegalInstantiatedTimeline = new TimeLineImpl(start, end, appointments);
 
         this.mockedAppointmentData = mock(Appointment.class);
         this.mockedAppointmentRequest = mock(AppointmentRequest.class);
@@ -63,9 +63,10 @@ public class TimelineTest {
 
         illegalAppointmentStream = illegalInstantiatedTimeline.appointmentStream();
 
-        this.instantiatedTimeline = new TimeLineImpl(start,end);
+        this.instantiatedTimeline = new TimeLineImpl(start, end);
 
     }
+
     @Test
     public void getNrOfAppointments() {
         assertThat(illegalInstantiatedTimeline.getNrOfAppointments()).isEqualTo(1);
@@ -88,6 +89,7 @@ public class TimelineTest {
         var contains = illegalInstantiatedTimeline.contains(appointment);
         assertThat(contains).isTrue();
     }
+
     @Test
     public void containsFalse() {
         var contains = illegalInstantiatedTimeline.contains(new AppointmentImpl(
@@ -132,8 +134,6 @@ public class TimelineTest {
     }
 
 
-
-
     @Test
     public void canAddAppointmentOfDuration() {
         var fits = instantiatedTimeline.canAddAppointmentOfDuration(Duration.ofMinutes(60));
@@ -161,6 +161,7 @@ public class TimelineTest {
             assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(timeSlot)))).isTrue();
         });
     }
+
     @Test
     public void putAppointmentNullAppointment() {
         var factory = new APFactory();
@@ -181,4 +182,27 @@ public class TimelineTest {
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(originalTimeSlot)))).isTrue();
         });
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "13,00",
+            "15,00",
+            "8,00"
+    })
+    public void addAppointmentLocalTime(int hours, int minutes) {
+        var localTime = LocalTime.of(hours, minutes);
+        var localDay = LocalDay.now();
+
+        var appointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, TimePreference.EARLIEST_AFTER).get();
+        assertThat(this.instantiatedTimeline.findAppointments((val1 -> val1.equals(appointment))).get(0)).isEqualTo(appointment);
+    }
+
+    @Test
+    public void getGapsMultipleGaps() {
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(9, 0));
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(12, 0));
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(15, 0));
+        assertThat(instantiatedTimeline.getGapsFitting(Duration.ofMinutes(60)).size()).isEqualTo(4);
+    }
+    
 }
