@@ -231,6 +231,7 @@ public class TimelineTest {
             softly.assertThat(this.instantiatedTimeline.appointmentStream().findFirst().get().getRequest().getStartTime()).isEqualTo(LocalTime.ofInstant(start, localDay.getZone()));
         });
     }
+
     @ParameterizedTest
     @CsvSource({
             "true",
@@ -254,6 +255,7 @@ public class TimelineTest {
                     .isEqualTo(LocalTime.ofInstant(end.minusSeconds(mockedAppointmentData.getDuration().toSeconds()), localDay.getZone()));
         });
     }
+
     @Test
     public void removeAppointmentAppointmentItem() {
         var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
@@ -265,6 +267,7 @@ public class TimelineTest {
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getEnd().equals(this.end)));
         });
     }
+
     @Test
     public void removeAppointmentAppointmentItemAppointmentAfter() {
         var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
@@ -290,5 +293,54 @@ public class TimelineTest {
             softly.assertThat(this.instantiatedTimeline.appointmentStream().anyMatch(timeSlot -> timeSlot.equals(returnedAppointmentNotRemoved))).isTrue();
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch(timeSlot -> timeSlot.getEnd().equals(this.end) && timeSlot.getStart().equals(returnedAppointmentNotRemoved.getEnd())));
         });
+    }
+
+
+    @Test
+    public void removeAppointmentBackMultiple() {
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+
+        instantiatedTimeline.removeAppointment(app1);
+        instantiatedTimeline.removeAppointment(app2);
+
+        assertThat(instantiatedTimeline.getGapsFitting(mockedAppointmentData.getDuration()).size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testGapCountAfterRemovingSomeAppsInFullDay() {
+        var secondTimeLine = new TimeLineImpl(localDay.ofLocalTime(LocalTime.parse("08:30")), localDay.ofLocalTime(LocalTime.parse("17:30")));
+
+        var mockedAppointmentData50 = mock(AppointmentData.class);
+        when(mockedAppointmentData50.getDuration()).thenReturn(Duration.ofMinutes(50));
+        when(mockedAppointmentData50.getDescription()).thenReturn("Appointment");
+
+        var mockedGapAppointmentData60 = mock(AppointmentData.class);
+        when(mockedGapAppointmentData60.getDuration()).thenReturn(Duration.ofMinutes(60));
+        when(mockedGapAppointmentData60.getDescription()).thenReturn("gap");
+
+        var mockedGapAppointmentData10 = mock(AppointmentData.class);
+        when(mockedGapAppointmentData10.getDuration()).thenReturn(Duration.ofMinutes(10));
+        when(mockedGapAppointmentData10.getDescription()).thenReturn("gap");
+
+        var mockedAppointmentData60 = mock(AppointmentData.class);
+        when(mockedAppointmentData60.getDuration()).thenReturn(Duration.ofMinutes(60));
+        when(mockedAppointmentData60.getDescription()).thenReturn("Appointment");
+
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData50, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedGapAppointmentData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedGapAppointmentData60, LocalTime.of(9, 30));
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
+
+        secondTimeLine.removeAppointments((val1) -> val1.getDescription().contains("gap"));
+
+        assertThat(secondTimeLine.getGapsFitting(Duration.ZERO).size()).isEqualTo(1);
     }
 }
