@@ -436,5 +436,29 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(0);
     }
+    @Test
+    public void matchingFreeSlotsOfDuration0DurationGap() {
+        var mockedAppointmentData300Duration = mock(AppointmentData.class);
+        when(mockedAppointmentData300Duration.getDuration()).thenReturn(Duration.ofMinutes(300));
+
+        var secondTimeLine = new TimeLineImpl(start, end);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData300Duration, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData300Duration, TimePreference.EARLIEST);
+
+        var start0 = localDay.ofLocalTime(LocalTime.parse("18:00"));
+        var timeSlot = new TimeslotImpl(start0, start0);
+        var tempList = new ArrayList<>();
+        var secondTimeLineList = secondTimeLine.getList();
+        secondTimeLineList.addEnd(timeSlot);
+        var instantiatedTimeLineList = instantiatedTimeline.getList();
+        instantiatedTimeLineList.addEnd(timeSlot);
+        var timeLineList = new ArrayList();
+
+        timeLineList.add(secondTimeLine);
+
+        List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(0), timeLineList);
+
+        assertThat(list.size()).isEqualTo(1);
+    }
 
 }
