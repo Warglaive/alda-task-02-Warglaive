@@ -471,5 +471,55 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(0);
     }
-    
+    @Test
+    public void matchingFreeSlotsOfDurationNoCommonGapsMultipleGaps() {
+        var secondTimeLine = new TimeLineImpl(start, end);
+
+        var gapData10 = mock(AppointmentData.class);
+        when(gapData10.getDuration()).thenReturn(Duration.ofMinutes(10));
+        when(gapData10.getDescription()).thenReturn("gap");
+        var gapData30 = mock(AppointmentData.class);
+        when(gapData30.getDuration()).thenReturn(Duration.ofMinutes(30));
+        when(gapData30.getDescription()).thenReturn("gap");
+        var gapData60 = mock(AppointmentData.class);
+        when(gapData60.getDuration()).thenReturn(Duration.ofMinutes(60));
+        when(gapData60.getDescription()).thenReturn("gap");
+
+        var appointmentData5 = mock(AppointmentData.class);
+        when(appointmentData5.getDuration()).thenReturn(Duration.ofMinutes(5));
+        when(appointmentData5.getDescription()).thenReturn("App");
+        var appointmentData10 = mock(AppointmentData.class);
+        when(appointmentData10.getDuration()).thenReturn(Duration.ofMinutes(10));
+        when(appointmentData10.getDescription()).thenReturn("App");
+        var appointmentData30 = mock(AppointmentData.class);
+        when(appointmentData30.getDuration()).thenReturn(Duration.ofMinutes(30));
+        when(appointmentData30.getDescription()).thenReturn("App");
+
+        secondTimeLine.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, appointmentData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, appointmentData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, appointmentData5, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, appointmentData5, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, gapData60, TimePreference.EARLIEST);
+
+        instantiatedTimeline.addAppointment(localDay, appointmentData30, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, gapData30, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, appointmentData10, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, appointmentData10, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, gapData10, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, appointmentData30, TimePreference.EARLIEST);
+
+        secondTimeLine.removeAppointments((val1) -> val1.getDescription().equals("gap"));
+        instantiatedTimeline.removeAppointments((val1) -> val1.getDescription().equals("gap"));
+        var timeLineList = new ArrayList();
+        timeLineList.add(secondTimeLine);
+
+        List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(10), timeLineList);
+
+        assertThat(list.size()).isEqualTo(4);
+    }
 }
