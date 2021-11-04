@@ -66,4 +66,26 @@ public class TimelineTest {
         this.instantiatedTimeline = new TimeLineImpl(start,end);
 
     }
+    @Test
+    public void getNrOfAppointments() {
+        assertThat(illegalInstantiatedTimeline.getNrOfAppointments()).isEqualTo(1);
+    }
+
+    @Test
+    public void appointmentStream() {
+        assertThat(illegalAppointmentStream
+                .allMatch(timeSlot -> timeSlot instanceof Appointment)
+        ).isTrue();
+    }
+
+    @Test
+    public void appointmentStreamCount() {
+        assertThat(illegalAppointmentStream.count()).isEqualTo(1);
+    }
+
+    @Test
+    public void contains() {
+        var contains = illegalInstantiatedTimeline.contains(appointment);
+        assertThat(contains).isTrue();
+    }
 }
