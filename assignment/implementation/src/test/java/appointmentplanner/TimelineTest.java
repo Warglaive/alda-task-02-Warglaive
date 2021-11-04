@@ -522,4 +522,17 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(4);
     }
+    @Test
+    public void noCommonFree3() {
+        var fac = new APFactory();
+        var T08_30 = LocalTime.of(8, 30);
+        LocalDayPlan sd1 = new LocalDayPlanImpl(localDay, localDay.ofLocalTime(LocalTime.parse("08:30")), localDay.ofLocalTime(LocalTime.parse("17:30")));
+        LocalDayPlan sd2 = new LocalDayPlanImpl(localDay, localDay.ofLocalTime(LocalTime.parse("08:30")), localDay.ofLocalTime(LocalTime.parse("17:30")));
+        sd1.addAppointment(fac.createAppointmentData("all day", Duration.ofHours(9), Priority.LOW), T08_30);
+        sd2.addAppointment(fac.createAppointmentData("all afternoon", Duration.ofHours(6), Priority.LOW), LocalTime.of(11, 30));
+        List<TimeSlot> matchingFreeSlotsOfDuration = sd2.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(15), List.of(sd1));
+        assertThat(matchingFreeSlotsOfDuration)
+                .as("dayplans <%s> and <%s> should have no common gaps", sd1, sd2)
+                .isEmpty();
+    }
 }
