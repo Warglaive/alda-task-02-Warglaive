@@ -362,4 +362,30 @@ public class TimelineTest {
 
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    public void getGapsFittingSmallestFirst() {
+        var mockedAppointmentData60Duration = mock(AppointmentData.class);
+        when(mockedAppointmentData60Duration.getDuration()).thenReturn(Duration.ofMinutes(60));
+        var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app3 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app4 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app5 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app6 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app1.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app2.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app4.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app6.getEnd()));
+
+        var orderList = instantiatedTimeline.getGapsFittingSmallestFirst(Duration.ofMinutes(120));
+
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(orderList.get(0).duration()).isEqualTo(Duration.ofMinutes(120));
+            softly.assertThat(orderList.get(1).duration()).isEqualTo(Duration.ofMinutes(180));
+            softly.assertThat(orderList.get(2).duration()).isEqualTo(Duration.ofMinutes(180));
+        });
+    }
 }
