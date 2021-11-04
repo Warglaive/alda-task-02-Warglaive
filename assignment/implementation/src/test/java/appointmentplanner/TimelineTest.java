@@ -368,11 +368,11 @@ public class TimelineTest {
         var mockedAppointmentData60Duration = mock(AppointmentData.class);
         when(mockedAppointmentData60Duration.getDuration()).thenReturn(Duration.ofMinutes(60));
         var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
-        var app2 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app3 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app4 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
-        var app5 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app6 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app3 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app4 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app5 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app6 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
 
         instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app1.getEnd()));
         instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app2.getEnd()));
@@ -386,6 +386,38 @@ public class TimelineTest {
             softly.assertThat(orderList.get(0).duration()).isEqualTo(Duration.ofMinutes(120));
             softly.assertThat(orderList.get(1).duration()).isEqualTo(Duration.ofMinutes(180));
             softly.assertThat(orderList.get(2).duration()).isEqualTo(Duration.ofMinutes(180));
+        });
+    }
+
+    @Test
+    public void matchingFreeSlotsOfDuration() {
+        var mockedAppointmentData60Duration = mock(AppointmentData.class);
+        when(mockedAppointmentData60Duration.getDuration()).thenReturn(Duration.ofMinutes(60));
+
+        var secondTimeLine = new TimeLineImpl(start, end);
+        var app1 = secondTimeLine.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.EARLIEST);
+        var app2 = secondTimeLine.addAppointment(localDay, mockedAppointmentData, TimePreference.EARLIEST);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData, TimePreference.LATEST);
+        secondTimeLine.removeAppointment(app1.get());
+        secondTimeLine.removeAppointment(app2.get());
+
+        app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.EARLIEST);
+        app2 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.EARLIEST);
+
+        instantiatedTimeline.removeAppointment(app1.get());
+        instantiatedTimeline.removeAppointment(app2.get());
+
+        var timeLineList = new ArrayList();
+        timeLineList.add(secondTimeLine);
+
+        List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(120), timeLineList);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(list.get(0).getStartTime(localDay)).isEqualTo(LocalTime.of(10, 0));
+            softly.assertThat(list.get(0).getEndTime(localDay)).isEqualTo(LocalTime.of(16, 0));
+
         });
     }
 }
