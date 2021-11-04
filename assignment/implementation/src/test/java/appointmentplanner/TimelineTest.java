@@ -39,6 +39,31 @@ public class TimelineTest {
     public void setUp() {
         var factory = new APFactory();
         this.localDay = LocalDay.now();
+        this.appointments = new DoublyLinkedList<TimeSlot>();
+        this.start = LocalDay.now().ofLocalTime(LocalTime.parse("08:00"));
+        this.end = LocalDay.now().ofLocalTime(LocalTime.parse("18:00"));
+
+        this.illegalInstantiatedTimeline = new TimeLineImpl(start,end,appointments);
+
+        this.mockedAppointmentData = mock(Appointment.class);
+        this.mockedAppointmentRequest = mock(AppointmentRequest.class);
+        this.mockedTimeSlot = mock(TimeSlot.class);
+
+        when(mockedAppointmentData.getDuration()).thenReturn(Duration.ofMinutes(120));
+
+        appointment = new AppointmentImpl(
+                mock(AppointmentData.class),
+                mock(AppointmentRequest.class),
+                mock(TimeSlot.class));
+
+        timeSlot = new TimeslotImpl(start, end);
+
+        this.appointments.addFront(appointment);
+        this.appointments.addFront(this.timeSlot);
+
+        illegalAppointmentStream = illegalInstantiatedTimeline.appointmentStream();
+
+        this.instantiatedTimeline = new TimeLineImpl(start,end);
 
     }
 }
