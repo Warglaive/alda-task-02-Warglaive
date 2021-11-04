@@ -343,4 +343,15 @@ public class TimelineTest {
 
         assertThat(secondTimeLine.getGapsFitting(Duration.ZERO).size()).isEqualTo(1);
     }
+    @Test
+    public void removeAppointmentPredicateItem() {
+        var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        Predicate<Appointment> predicate = (val1) -> (val1.getEnd().equals(returnedAppointment.getEnd()));
+
+        var appointmentList = this.instantiatedTimeline.removeAppointments(predicate);
+        var appointmentStream = this.instantiatedTimeline.appointmentStream();
+
+        assertThat(appointmentStream.anyMatch(appointment -> appointmentList.contains(appointment))).isFalse();
+    }
+
 }
