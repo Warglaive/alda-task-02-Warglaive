@@ -343,6 +343,7 @@ public class TimelineTest {
 
         assertThat(secondTimeLine.getGapsFitting(Duration.ZERO).size()).isEqualTo(1);
     }
+
     @Test
     public void removeAppointmentPredicateItem() {
         var returnedAppointment = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
@@ -354,4 +355,11 @@ public class TimelineTest {
         assertThat(appointmentStream.anyMatch(appointment -> appointmentList.contains(appointment))).isFalse();
     }
 
+    @Test
+    public void findAppointments() {
+        var expected = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var actual = this.instantiatedTimeline.findAppointments(val1 -> val1.equals(expected)).get(0);
+
+        assertThat(actual).isEqualTo(expected);
+    }
 }
