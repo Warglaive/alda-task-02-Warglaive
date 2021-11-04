@@ -460,5 +460,16 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(1);
     }
+    @Test
+    public void matchingFreeSlotsOfDurationEdging0Gap() {
+        var start0 = localDay.ofLocalTime(LocalTime.parse("18:00"));
+        var secondTimeLine = new TimeLineImpl(start0, start0);
 
+        var timeLineList = new ArrayList();
+        timeLineList.add(secondTimeLine);
+        List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ZERO, timeLineList);
+
+        assertThat(list.size()).isEqualTo(0);
+    }
+    
 }
