@@ -88,4 +88,25 @@ public class TimelineTest {
         var contains = illegalInstantiatedTimeline.contains(appointment);
         assertThat(contains).isTrue();
     }
+    @Test
+    public void containsFalse() {
+        var contains = illegalInstantiatedTimeline.contains(new AppointmentImpl(
+                mock(AppointmentData.class),
+                mock(AppointmentRequest.class),
+                new TimeslotImpl(start, end)
+        ));
+
+        assertThat(contains).isFalse();
+    }
+
+    @Test
+    public void getGapsFittingSimple() {
+        var requiredDuration = Duration.ofMinutes(60);
+        var fittingTimeslots = instantiatedTimeline.getGapsFitting(requiredDuration);
+
+        SoftAssertions.assertSoftly(softly -> {
+            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(start);
+            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(end);
+        });
+    }
 }
