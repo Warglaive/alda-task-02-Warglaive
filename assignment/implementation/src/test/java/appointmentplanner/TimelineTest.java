@@ -204,31 +204,5 @@ public class TimelineTest {
         instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(15, 0));
         assertThat(instantiatedTimeline.getGapsFitting(Duration.ofMinutes(60)).size()).isEqualTo(4);
     }
-
-    @ParameterizedTest
-    @CsvSource({
-            "UNSPECIFIED, true",
-            "EARLIEST, true",
-            "UNSPECIFIED, false",
-            "EARLIEST, false"
-    })
-    public void addAppointmentTimePreferenceUnspecifiedFirst(TimePreference timePreference, boolean fullParams) {
-        var localDay = LocalDay.now();
-        when(mockedAppointmentData.getDuration()).thenReturn(Duration.ofMinutes(120));
-
-        Appointment returnedAppointment;
-        if (fullParams) {
-            returnedAppointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, null, timePreference).get();
-            this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, null, null).get();
-        } else {
-            returnedAppointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, timePreference).get();
-            this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, (TimePreference) null).get();
-        }
-        SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(returnedAppointment.getAppointmentData()).isEqualTo(mockedAppointmentData);
-            softly.assertThat(this.instantiatedTimeline.appointmentStream().findFirst().get().getAppointmentData()).isEqualTo(mockedAppointmentData);
-            softly.assertThat(this.instantiatedTimeline.appointmentStream().count()).isEqualTo(2);
-            softly.assertThat(this.instantiatedTimeline.appointmentStream().findFirst().get().getRequest().getStartTime()).isEqualTo(LocalTime.ofInstant(start, localDay.getZone()));
-        });
-    }
+    
 }
