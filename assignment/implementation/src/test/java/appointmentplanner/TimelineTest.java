@@ -130,4 +130,55 @@ public class TimelineTest {
             assertThat(fittingTimeslots.isEmpty()).isTrue();
         });
     }
+
+
+
+
+    @Test
+    public void canAddAppointmentOfDuration() {
+        var fits = instantiatedTimeline.canAddAppointmentOfDuration(Duration.ofMinutes(60));
+
+        assertThat(fits).isTrue();
+    }
+
+    @Test
+    public void putAppointment() {
+        var factory = new APFactory();
+        var originalTimeSlot = factory.between(start, end);
+        var appointmentDuration = Duration.ofMinutes(120);
+        var timeSlot = factory.between(start.plusSeconds(appointmentDuration.toSeconds()), end);
+
+        var paramMap = new HashMap();
+        paramMap.put("OriginalTimeSlot", originalTimeSlot);
+        paramMap.put("AppointmentSlot", appointment);
+        paramMap.put("NextTimeSlot", timeSlot);
+
+        this.instantiatedTimeline.putAppointment(paramMap);
+
+        SoftAssertions.assertSoftly(softly -> {
+            assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(originalTimeSlot)))).isFalse();
+            assertThat(this.instantiatedTimeline.contains(appointment)).isTrue();
+            assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(timeSlot)))).isTrue();
+        });
+    }
+    @Test
+    public void putAppointmentNullAppointment() {
+        var factory = new APFactory();
+        var originalTimeSlot = factory.between(start, end);
+        var appointmentDuration = Duration.ofMinutes(120);
+        var timeSlot = factory.between(start.plusSeconds(appointmentDuration.toSeconds()), end);
+        var paramMap = new HashMap();
+
+        paramMap.put("OriginalTimeSlot", originalTimeSlot);
+        paramMap.put("AppointmentSlot", null);
+        paramMap.put("TimeSlot", timeSlot);
+
+        this.instantiatedTimeline.putAppointment(paramMap);
+        var test = this.instantiatedTimeline.gapStream().peek(System.out::println).count();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(this.instantiatedTimeline.contains(appointment)).isFalse();
+            softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(timeSlot)))).isFalse();
+            softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(originalTimeSlot)))).isTrue();
+        });
+    }
 }
