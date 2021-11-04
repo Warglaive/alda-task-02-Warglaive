@@ -420,4 +420,21 @@ public class TimelineTest {
 
         });
     }
+    @Test
+    public void matchingFreeSlotsOfDurationNoCommonGapsOneGap() {
+        var mockedAppointmentData300Duration = mock(AppointmentData.class);
+        when(mockedAppointmentData300Duration.getDuration()).thenReturn(Duration.ofMinutes(300));
+
+        var secondTimeLine = new TimeLineImpl(start, end);
+        secondTimeLine.addAppointment(localDay, mockedAppointmentData300Duration, TimePreference.EARLIEST);
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData300Duration, TimePreference.LATEST);
+
+        var timeLineList = new ArrayList();
+        timeLineList.add(secondTimeLine);
+
+        List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(120), timeLineList);
+
+        assertThat(list.size()).isEqualTo(0);
+    }
+
 }
