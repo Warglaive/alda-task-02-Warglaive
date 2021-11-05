@@ -14,7 +14,7 @@ public class TestDoublyLinkedList {
 
     @BeforeEach
     private void setUp() {
-        doublyLinkedList = new DoublyLinkedList<TimeSlot>();
+        doublyLinkedList = new DoublyLinkedList<>();
     }
 
     @Test

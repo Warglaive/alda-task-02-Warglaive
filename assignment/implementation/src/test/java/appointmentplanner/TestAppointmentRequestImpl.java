@@ -69,14 +69,11 @@ public class TestAppointmentRequestImpl {
 
     @ParameterizedTest
     @CsvSource({
-//            "true, false, false, Null values are not being accepted!",
             "false, true, false, Null values are not being accepted!",
-//            "false, false, true, Null values are not being accepted!"
     })
     public void constructorThrowsIAException(boolean startTimeNull, boolean appointDataNull,
                                              boolean timePreferenceNull, String exceptionMessage) {
         ThrowableAssert.ThrowingCallable constructorCall;
-        AppointmentRequest appointmentRequest;
 
         if (startTimeNull) {
             constructorCall = () -> new AppointmentRequestImpl(

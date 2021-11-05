@@ -45,7 +45,6 @@ public class TestAppointmentDataImpl {
     @ParameterizedTest
     @CsvSource({
             "-10, blablacar, LOW, 'Invalid duration, please give a positive value!'",
-//            "0, blablacar, LOW, 'Invalid duration, please give a positive value!'",
             ", blablacar, LOW, Null values are not being accepted!",
             "10, , LOW, Null values are not being accepted!",
             "10, blablacar, ,Null values are not being accepted!",
@@ -78,29 +77,6 @@ public class TestAppointmentDataImpl {
 
         assertThat(actual).isEqualTo(expected);
     }
-
-    /*@Test
-    public void verifyEqualsAndHashCode() {
-        Duration mockedDuration = mock(Duration.class);
-        String mockDescription = "mock";
-        Priority refPriority = Priority.HIGH;
-
-        AppointmentData ref = new AppointmentDataImpl(mockedDuration, mockDescription, refPriority);
-        AppointmentData equal = new AppointmentDataImpl(mockedDuration, mockDescription, refPriority);
-        AppointmentData unEqual = new AppointmentDataImpl(mockedDuration, "falseMock", refPriority);
-                                assertThat(ref.equals(ref)).isTrue();
-        assertThat(ref.equals(null)).isFalse();
-        assertThat(ref.equals("test")).isFalse();
-        assertThat(ref.equals(equal)).isTrue();
-        for (var i = 0; i < unEqual.length; i++) {
-            T ueq = unEqual[i];
-            assertThat(ref).isNotEqualTo(ueq);
-        }
-        assertThat(ref.hashCode()).isEqualTo(equal.hashCode());
-    }*/
-
-
-
 
     @Test
     public void testEqualsAndHashCode() {

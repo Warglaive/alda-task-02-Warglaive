@@ -18,8 +18,9 @@ public class TestIterator {
 
     @BeforeEach
     private void setUp() {
-        MockitoAnnotations.initMocks(this);
-        doublyLinkedList = new DoublyLinkedList<TimeSlot>();
+        MockitoAnnotations.openMocks(this);
+        //MockitoAnnotations.openMocks(this);
+        doublyLinkedList = new DoublyLinkedList<>();
         doublyLinkedList.addFront(entry4);
         doublyLinkedList.addFront(entry3);
         doublyLinkedList.addFront(entry2);

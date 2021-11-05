@@ -18,7 +18,7 @@ public class TestReverseIterator {
 
     @BeforeEach
     private void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         doublyLinkedList = new DoublyLinkedList<TimeSlot>();
         doublyLinkedList.addFront(entry4);
         doublyLinkedList.addFront(entry3);
