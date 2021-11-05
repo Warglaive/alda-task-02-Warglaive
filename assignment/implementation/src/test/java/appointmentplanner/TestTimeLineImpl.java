@@ -188,11 +188,11 @@ public class TestTimeLineImpl {
             "8,00"
     })
     public void addAppointmentLocalTime(int hours, int minutes) {
-        var localTime = LocalTime.of(hours, minutes);
-        var localDay = LocalDay.now();
+       var localTime = LocalTime.of(hours, minutes);
+       var localDay = LocalDay.now();
 
-        var appointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, TimePreference.EARLIEST_AFTER).get();
-        assertThat(this.instantiatedTimeline.findAppointments((val1 -> val1.equals(appointment))).get(0)).isEqualTo(appointment);
+       var appointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, TimePreference.EARLIEST_AFTER).get();
+       assertThat(this.instantiatedTimeline.findAppointments((val1 -> val1.equals(appointment))).get(0)).isEqualTo(appointment);
     }
 
     @Test

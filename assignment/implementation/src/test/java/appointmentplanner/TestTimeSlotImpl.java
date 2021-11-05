@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.time.Duration;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class TestTimeSlotImpl {
+    //2007-12-03T10:15:30.00Z.
     @Test
     public void constructorAssignsCorrect() {
         Instant startTime = Instant.parse("2020-09-17T10:00:00Z");
@@ -32,6 +34,7 @@ public class TestTimeSlotImpl {
             ", 2020-09-17T10:24:00Z, Null values are not being accepted!",
             "2020-09-17T10:00:00Z, , Null values are not being accepted!",
             "2020-09-17T10:24:00Z, 2020-09-17T10:00:00Z, End must lie after start",
+//            "2020-09-17T10:24:00Z, 2020-09-17T10:24:00Z, End must lie after start",
     })
     public void constructorThrowsIAException(Instant startTime, Instant endTime, String exceptionMessage) {
         ThrowableAssert.ThrowingCallable constructorCall = () -> {
