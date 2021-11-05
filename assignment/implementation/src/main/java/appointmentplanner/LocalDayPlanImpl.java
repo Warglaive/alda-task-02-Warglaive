@@ -18,10 +18,7 @@ public class LocalDayPlanImpl implements LocalDayPlan {
     }
 
     public LocalDayPlanImpl(LocalDay localDay, Instant start, Instant end) {
-        //Instant earliest = localDay.ofLocalTime(LocalTime.parse("00:00"));
-        //Instant latest = localDay.ofLocalTime(LocalTime.parse("23:59"));
-
-        if (/*start.isBefore(earliest) ||*/ start.isAfter(end) /*|| end.isAfter(latest)*/) {
+        if ( start.isAfter(end)) {
             throw new IllegalArgumentException("Start has to be before end and positive. End has to be after start and positive. End has to be before 24.");
         }
 
