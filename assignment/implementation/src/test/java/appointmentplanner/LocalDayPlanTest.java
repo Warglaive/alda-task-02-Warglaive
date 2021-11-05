@@ -17,11 +17,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 
 public class LocalDayPlanTest {
-    /**
-     * tests for different constructors
-     */
+
     @Test
-    public void constructorTest() {
+    public void constructorStandard024() {
         var timeline = mock(Timeline.class);
         var localDate = LocalDate.now();
         var zoneId = mock(ZoneId.class);
@@ -36,10 +34,11 @@ public class LocalDayPlanTest {
     }
 
     @Test
-    public void SpecifiedTimeTest() {
+    public void constructorSpecifiedTime() {
         var localDay = LocalDay.now();
         var start = localDay.ofLocalTime(LocalTime.parse("01:00"));
         var end = localDay.ofLocalTime(LocalTime.parse("02:00"));
+        var timeline = new TimeLineImpl(start, end);
 
         var localDayPlan = new LocalDayPlanImpl(localDay, start, end);
 
@@ -54,7 +53,7 @@ public class LocalDayPlanTest {
     @CsvSource({
             "00:01, 00:00",
     })
-    public void ExceptionTest(String startTime, String endTime) {
+    public void constructorThrowsExceptionFalseInstant(String startTime, String endTime) {
         var localDay = LocalDay.now();
         Instant start = localDay.ofLocalTime(LocalTime.parse(startTime));
         Instant end = localDay.ofLocalTime(LocalTime.parse(endTime));
@@ -69,6 +68,6 @@ public class LocalDayPlanTest {
 
         assertThatCode(exceptionCode)
                 .isExactlyInstanceOf(IllegalArgumentException.class)
-                .hasMessage("'Start' can not be after 'End'");
+                .hasMessage("Start has to be before end and positive. End has to be after start and positive. End has to be before 24.");
     }
 }
