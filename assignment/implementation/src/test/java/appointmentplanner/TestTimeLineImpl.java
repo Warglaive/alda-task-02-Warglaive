@@ -25,7 +25,6 @@ public class TestTimeLineImpl {
     private TimeSlot timeSlot;
 
     private Stream illegalAppointmentStream;
-    private Stream appointmentStream;
     private DoublyLinkedList<TimeSlot> appointments;
     private Instant start, end;
     private Timeline illegalInstantiatedTimeline;
@@ -39,7 +38,6 @@ public class TestTimeLineImpl {
 
     @BeforeEach
     public void setUp() {
-        //var factory = new APFactory();
         this.localDay = LocalDay.now();
         this.appointments = new DoublyLinkedList<>();
         this.start = LocalDay.now().ofLocalTime(LocalTime.parse("08:00"));

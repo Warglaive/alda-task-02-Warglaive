@@ -322,12 +322,12 @@ public class TimeLineImpl implements Timeline {
     }
 
     @Override
-    public List<AppointmentRequest> removeAppointments(Predicate<Appointment> predicate) {
+    public List<AppointmentRequest> removeAppointments(Predicate<Appointment> filter) {
         var returnList = new ArrayList();
         wholeStream()
                 .map(timeSlot -> {
                     if (!(timeSlot instanceof Appointment)) {
-                    } else if (predicate.test((Appointment) timeSlot)) {
+                    } else if (filter.test((Appointment) timeSlot)) {
                         returnList.add(((Appointment) timeSlot).getRequest());
                         var factory = new APFactory();
                         var timeSlotNode = this.appointments.searchItemNode(timeSlot);
@@ -337,12 +337,12 @@ public class TimeLineImpl implements Timeline {
                         Instant endPoint = timeSlotNode.getItem().getEnd();
                         var mergedNodes = false;
 
-                        if (/*timeSlotNodePrevious != null && */!(timeSlotNodePrevious.getItem() instanceof Appointment) && timeSlotNodePrevious.getItem() instanceof TimeSlot) {
+                        if (!(timeSlotNodePrevious.getItem() instanceof Appointment) && timeSlotNodePrevious.getItem() instanceof TimeSlot) {
                             startPoint = timeSlotNodePrevious.getItem().getStart();
                             var tempNode = this.appointments.mergeNodesPrevious(timeSlotNode, timeSlotNodePrevious, factory.between(startPoint, endPoint));
                             mergedNodes = true;
                         }
-                        if (/*timeSlotNodeNext != null &&*/ !(timeSlotNodeNext.getItem() instanceof Appointment) && timeSlotNodeNext.getItem() instanceof TimeSlot) {
+                        if (!(timeSlotNodeNext.getItem() instanceof Appointment) && timeSlotNodeNext.getItem() instanceof TimeSlot) {
                             endPoint = timeSlotNodeNext.getItem().getEnd();
                             timeSlotNode = this.appointments.mergeNodesNext(timeSlotNode, timeSlotNodeNext, factory.between(startPoint, endPoint));
                             mergedNodes = true;
@@ -414,17 +414,17 @@ public class TimeLineImpl implements Timeline {
     }
 
     @Override
-    public List<TimeSlot> getMatchingFreeSlotsOfDuration(Duration duration, List<Timeline> list) {
+    public List<TimeSlot> getMatchingFreeSlotsOfDuration(Duration minLength, List<Timeline> otherList) {
         List<TimeSlot> returnList = new ArrayList<>();
         //Map timelines and timeline gaps
         Map<Timeline, List<TimeSlot>> timeLineGapList = new HashMap();
-        for (var timeline : list) {
-            timeLineGapList.put(timeline, timeline.getGapsFitting(duration));
+        for (var timeline : otherList) {
+            timeLineGapList.put(timeline, timeline.getGapsFitting(minLength));
         }
-        timeLineGapList.put(this, this.getGapsFitting(duration));
+        timeLineGapList.put(this, this.getGapsFitting(minLength));
 
         while (true) {
-            //If any list is empty, stop
+            //If any otherList is empty, stop
             if (anyListEmpty(timeLineGapList)) {
                 break;
             }
@@ -437,9 +437,9 @@ public class TimeLineImpl implements Timeline {
 
             Instant endingEdge = endingEdge(timeLineGapList);
 
-            allViableEndingEdge(timeLineGapList, startingEdge, endingEdge, duration, returnList);
+            allViableEndingEdge(timeLineGapList, startingEdge, endingEdge, minLength, returnList);
         }
-//        returnList.removeIf(ts -> ts.duration().isZero());
+
         return returnList;
     }
 
