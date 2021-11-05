@@ -26,24 +26,12 @@ public class AppointmentDataImpl implements AppointmentData {
         this.priority = priority;
     }
 
-    public AppointmentDataImpl(Duration duration, Priority priority) throws IllegalArgumentException {
+    public AppointmentDataImpl(Duration duration, Priority priority) throws IllegalArgumentException{
         this(duration, "No description", priority);
     }
 
     public AppointmentDataImpl(Duration duration, String description) {
         this(duration, description, Priority.LOW);
-    }
-
-    public AppointmentDataImpl(String description, Duration duration) {
-        this.description = description;
-        this.duration = duration;
-        this.priority = Priority.LOW;
-    }
-
-    public AppointmentDataImpl(String description, Duration duration, Priority priority) {
-        this.description = description;
-        this.duration = duration;
-        this.priority = priority;
     }
 
     @Override
