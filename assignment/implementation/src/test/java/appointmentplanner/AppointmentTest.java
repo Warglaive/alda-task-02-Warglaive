@@ -15,16 +15,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AppointmentTest {
+
     @Test
     public void testConstructorCorrectValues() {
-        var mockedData = mock(AppointmentData.class);
-        var mockedRequest = mock(AppointmentRequest.class);
-        var mockedSlot = mock(TimeSlot.class);
+        AppointmentData mockedData = mock(AppointmentData.class);
+        AppointmentRequest mockedRequest = mock(AppointmentRequest.class);
+        TimeSlot mockedSlot = mock(TimeSlot.class);
 
         when(mockedSlot.getStart()).thenReturn(Instant.now());
         when(mockedSlot.getEnd()).thenReturn(Instant.now());
 
-        var appointment = new AppointmentImpl(
+        Appointment appointment = new AppointmentImpl(
                 mockedData, mockedRequest, mockedSlot
         );
 
@@ -60,21 +61,21 @@ public class AppointmentTest {
                 () -> new AppointmentImpl(mockedData, mockedRequest, mockedSlot);
 
         assertThatCode(constructorCall)
-                .hasMessage("Constructor args can NOT be NULL!")
+                .hasMessage("Null values are not being accepted!")
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void testAppointmentDataGetters() {
-        var mockedData = mock(AppointmentData.class);
-        var mockedRequest = mock(AppointmentRequest.class);
-        var mockedSlot = mock(TimeSlot.class);
+        AppointmentData mockedData = mock(AppointmentData.class);
+        AppointmentRequest mockedRequest = mock(AppointmentRequest.class);
+        TimeSlot mockedSlot = mock(TimeSlot.class);
 
         when(mockedData.getDuration()).thenReturn(Duration.ofMinutes(10));
         when(mockedData.getPriority()).thenReturn(Priority.LOW);
         when(mockedData.getDescription()).thenReturn("mock Description");
 
-        var appointment = new AppointmentImpl(
+        Appointment appointment = new AppointmentImpl(
                 mockedData, mockedRequest, mockedSlot
         );
 

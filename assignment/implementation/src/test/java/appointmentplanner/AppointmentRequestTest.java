@@ -1,104 +1,123 @@
 package appointmentplanner;
 
 import appointmentplanner.api.AppointmentData;
-import appointmentplanner.api.LocalDay;
+import appointmentplanner.api.AppointmentRequest;
 import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
 import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Duration;
 import java.time.LocalTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AppointmentRequestTest {
-    AppointmentRequestImpl appointmentRequest;
-    /**
-     * AppointmentData constructor arguments
-     */
-    private String description = "test";
-    private Duration duration = Duration.ofHours(2);
-    private Priority priority = Priority.HIGH;
-    /**
-     * AppointmentRequest constructor arguments
-     */
-
-    private APFactory factory;
-    private AppointmentData appData;
-    private LocalTime prefStart;
-    private TimePreference fallBack;
+    LocalTime startTime;
+    AppointmentData appointmentData;
+    TimePreference timePreference;
 
     @BeforeEach
-    void setUp() {
-        this.factory = new APFactory();
-        this.prefStart = LocalTime.of(14, 20);
-        this.fallBack = TimePreference.EARLIEST;
+    public void callSetUpBefore() {
+        setUp();
+    }
 
-        this.appData = this.factory.createAppointmentData(this.description, this.duration);
-        this.appointmentRequest = (AppointmentRequestImpl) factory.createAppointmentRequest(this.appData, this.prefStart, this.fallBack);
+    @BeforeEach
+    public void callSetUpBeforeEach() {
+        setUp();
+    }
+
+    public void setUp() {
+        startTime = LocalTime.now();
+        appointmentData = mock(AppointmentData.class);
+        timePreference = TimePreference.EARLIEST;
+
+        when(appointmentData.getDescription()).thenReturn("mock description");
+        when(appointmentData.getPriority()).thenReturn(Priority.LOW);
+        when(appointmentData.getDuration()).thenReturn(Duration.ofMinutes(10));
     }
 
     @Test
-    void fieldTest() {
-        SoftAssertions.assertSoftly(s -> {
-            assertThat(this.appointmentRequest).hasFieldOrProperty("description");
-            assertThat(this.appointmentRequest).hasFieldOrProperty("duration");
-            assertThat(this.appointmentRequest).hasFieldOrProperty("priority");
+    public void constructorCorrectValues() {
+        AppointmentRequest appointmentRequest = new AppointmentRequestImpl(
+                appointmentData, startTime, timePreference);
 
-            assertThat(this.appointmentRequest).hasFieldOrProperty("appData");
-            assertThat(this.appointmentRequest).hasFieldOrProperty("prefStart");
-            assertThat(this.appointmentRequest).hasFieldOrProperty("fallBack");
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointmentRequest.getAppointmentData()).isSameAs(appointmentData);
+            softly.assertThat(appointmentRequest.getStartTime()).isSameAs(startTime);
         });
     }
 
     @Test
-    void constructorTest() {
-        assertThat(this.appointmentRequest).isExactlyInstanceOf(AppointmentRequestImpl.class);
+    public void constructorMissingTimePreference() {
+        AppointmentRequest appointmentRequest = new AppointmentRequestImpl(
+                appointmentData, startTime, null);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointmentRequest.getAppointmentData()).isSameAs(appointmentData);
+            softly.assertThat(appointmentRequest.getStartTime()).isSameAs(startTime);
+            softly.assertThat(appointmentRequest.getTimePreference()).isSameAs(TimePreference.UNSPECIFIED);
+        });
+    }
+
+
+    @ParameterizedTest
+    @CsvSource({
+//            "true, false, false, Null values are not being accepted!",
+            "false, true, false, Null values are not being accepted!",
+//            "false, false, true, Null values are not being accepted!"
+    })
+    public void constructorThrowsIAException(boolean startTimeNull, boolean appointDataNull,
+                                             boolean timePreferenceNull, String exceptionMessage) {
+        ThrowableAssert.ThrowingCallable constructorCall;
+        AppointmentRequest appointmentRequest;
+
+        if (startTimeNull) {
+            constructorCall = () -> new AppointmentRequestImpl(
+                    appointmentData, null, timePreference);
+        } else if (appointDataNull) {
+            constructorCall = () -> new AppointmentRequestImpl(
+                    null, startTime, timePreference);
+        } else {
+            constructorCall = () -> new AppointmentRequestImpl(
+                    appointmentData, startTime, null);
+        }
+
+        assertThatCode(constructorCall)
+                .hasMessage(exceptionMessage)
+                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void getStartOnDayTest() {
-        var expected = LocalDay.now().at(14, 20);
-        assertThat(this.appointmentRequest.getStart(LocalDay.now())).isEqualTo(expected);
+    public void gettersCorrectValues() {
+        AppointmentRequest appointmentRequest = new AppointmentRequestImpl(
+                appointmentData, startTime, timePreference);
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(appointmentRequest.getDescription()).isEqualTo("mock description");
+            softly.assertThat(appointmentRequest.getPriority()).isEqualTo(Priority.LOW);
+            softly.assertThat(appointmentRequest.getDuration()).isEqualTo(Duration.ofMinutes(10));
+            softly.assertThat(appointmentRequest.getTimePreference()).isEqualTo(timePreference);
+        });
     }
 
     @Test
-    void getStartTimeTest() {
-        assertThat(this.appointmentRequest.getStartTime()).isEqualTo(LocalTime.of(14, 20));
-    }
+    public void testEqualsAndHashCode() {
+        var ref = new AppointmentRequestImpl(appointmentData, startTime, timePreference);
+        //var ref = new AppointmentRequestImpl(startTime, appointmentData, timePreference);
+        var equal = new AppointmentRequestImpl(appointmentData, startTime, timePreference);
+        //var equal = new AppointmentRequestImpl(startTime, appointmentData, timePreference);
+        var unEqualStartTime = new AppointmentRequestImpl(appointmentData, LocalTime.now().minusHours(2), timePreference);
+        var unEqualAppointmentData = new AppointmentRequestImpl(mock(AppointmentDataImpl.class), startTime, timePreference);
+        var unEqualTimePreference = new AppointmentRequestImpl(appointmentData, startTime, TimePreference.LATEST);
 
-    @Test
-    void getAppDataTest() {
-        assertThat(this.appointmentRequest.getAppointmentData()).isEqualTo(this.appointmentRequest.getAppointmentData());
-    }
-
-    @Test
-    void getTimePreference() {
-        var expectedTimePreference = TimePreference.EARLIEST;
-        assertThat(this.appointmentRequest.getTimePreference()).isEqualTo(expectedTimePreference);
-    }
-
-    @Test
-    void getDurationTest() {
-        assertThat(this.appointmentRequest.getAppointmentData().getDuration()).isEqualTo(this.duration);
-    }
-
-    @Test
-    void getDescription() {
-        assertThat(this.appointmentRequest.getAppointmentData().getDescription()).isEqualTo(this.description);
-    }
-
-    /*@Test
-    void getPriorityNull() {
-        assertThat(this.appointmentRequest.getAppointmentData().getPriority()).isNull();
-    }*/
-
-    @Test
-    void getPriorityHigh() {
-        var expectedPriority = Priority.HIGH;
-        this.appData = this.factory.createAppointmentData(this.description, this.duration, this.priority);
-        assertThat(this.appData.getPriority()).isEqualTo(expectedPriority);
+        TestUtils.verifyEqualsAndHashCode(ref, equal, unEqualStartTime, unEqualAppointmentData, unEqualTimePreference);
     }
 }
