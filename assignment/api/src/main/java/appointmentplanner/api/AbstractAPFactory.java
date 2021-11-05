@@ -1,10 +1,6 @@
 package appointmentplanner.api;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 
 /**
  * This is the interface that the user (the teachers) of your implementation use

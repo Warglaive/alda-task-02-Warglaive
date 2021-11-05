@@ -10,8 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Duration;
 
-
-import static appointmentplanner.TestUtil.*;
+import static appointmentplanner.TestUtil.verifyEqualsAndHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 

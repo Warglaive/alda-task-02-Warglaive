@@ -4,7 +4,9 @@ import appointmentplanner.api.LocalDay;
 import appointmentplanner.api.LocalDayPlan;
 import appointmentplanner.api.Timeline;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class LocalDayPlanImpl implements LocalDayPlan {
     private Timeline timeline;

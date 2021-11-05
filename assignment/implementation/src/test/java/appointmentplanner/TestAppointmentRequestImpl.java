@@ -6,7 +6,6 @@ import appointmentplanner.api.Priority;
 import appointmentplanner.api.TimePreference;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.ThrowableAssert;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

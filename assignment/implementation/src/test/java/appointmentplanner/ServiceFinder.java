@@ -1,8 +1,10 @@
 package appointmentplanner;
 
-import java.util.ServiceLoader;
 import appointmentplanner.api.AbstractAPFactory;
+
 import java.util.Optional;
+import java.util.ServiceLoader;
+
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 /**

@@ -3,20 +3,10 @@ package appointmentplanner;
 /*
  * Copyright (c) 2019 Informatics Fontys FHTenL University ofLength Applied Science Venlo
  */
-import appointmentplanner.api.AbstractAPFactory;
-import appointmentplanner.api.AppointmentData;
-import appointmentplanner.api.AppointmentRequest;
-import appointmentplanner.api.LocalDay;
-import appointmentplanner.api.LocalDayPlan;
-import appointmentplanner.api.Priority;
-import appointmentplanner.api.TimePreference;
-import appointmentplanner.api.TimeSlot;
-import appointmentplanner.api.Timeline;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+
+import appointmentplanner.api.*;
+
+import java.time.*;
 
 /**
  * Abstract factory to separate student implementations from teachers tests. The

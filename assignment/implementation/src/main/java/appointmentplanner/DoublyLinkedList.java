@@ -1,7 +1,6 @@
 package appointmentplanner;
 
 import java.util.*;
-import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

@@ -1,7 +1,6 @@
 package appointmentplanner;
 
 import appointmentplanner.api.LocalDay;
-import appointmentplanner.api.LocalDayPlan;
 import appointmentplanner.api.Timeline;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.ThrowableAssert;
