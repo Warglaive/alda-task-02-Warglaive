@@ -46,32 +46,32 @@ public class TimeLineImpl implements Timeline {
     }
 
     @Override
-    public Optional<Appointment> addAppointment(LocalDay localDay, AppointmentData appointmentData, TimePreference timePreference) {
-        return addAppointment(localDay, appointmentData, null, timePreference);
+    public Optional<Appointment> addAppointment(LocalDay localDay, AppointmentData appointmentData, TimePreference fallBack) {
+        return addAppointment(localDay, appointmentData, null, fallBack);
     }
 
     @Override
-    public Optional<Appointment> addAppointment(LocalDay localDay, AppointmentData appointmentData, LocalTime localTime) {
-        return addAppointment(localDay, appointmentData, localTime, null);
+    public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, LocalTime startTime) {
+        return addAppointment(forDay, appointment, startTime, null);
     }
 
     @Override
-    public Optional<Appointment> addAppointment(LocalDay localDay, AppointmentData appointmentData, LocalTime localTime, TimePreference timePreference) {
-        if (appointmentData == null) {
+    public Optional<Appointment> addAppointment(LocalDay forDay, AppointmentData appointment, LocalTime localTime, TimePreference fallback) {
+        if (appointment == null) {
             throw new NullPointerException("AppointmentData must not be null");
         }
-        var appointmentDuration = appointmentData.getDuration();
+        var appointmentDuration = appointment.getDuration();
         Map<String, Optional<TimeSlot>> timeSlotOptMap = new HashMap();
 
         if (localTime != null) {
-            timeSlotOptMap = this.findPreferredTimeSlot(appointmentDuration, localTime, localDay, timePreference);
+            timeSlotOptMap = this.findPreferredTimeSlot(appointmentDuration, localTime, forDay, fallback);
         }
-        if (timePreference == null) {
-            timePreference = TimePreference.UNSPECIFIED;
+        if (fallback == null) {
+            fallback = TimePreference.UNSPECIFIED;
         }
 
         if (localTime == null || timeSlotOptMap == null) {
-            switch (timePreference) {
+            switch (fallback) {
                 case LATEST:
                     timeSlotOptMap = findLastFittingTimeSlot(appointmentDuration);
                     break;
@@ -87,9 +87,9 @@ public class TimeLineImpl implements Timeline {
             if (!timeSlotOptMap.get("AppointmentSlot").isEmpty()) {
 
                 timeSlotMap.replace("AppointmentSlot", buildAppointment(
-                        appointmentData,
-                        LocalTime.ofInstant(timeSlotMap.get("AppointmentSlot").getStart(), localDay.getZone()),
-                        timePreference,
+                        appointment,
+                        LocalTime.ofInstant(timeSlotMap.get("AppointmentSlot").getStart(), forDay.getZone()),
+                        fallback,
                         timeSlotOptMap.get("AppointmentSlot").get()).get());
 
                 putAppointment(timeSlotMap);
@@ -136,7 +136,7 @@ public class TimeLineImpl implements Timeline {
         return timeSlotMap;
     }
 
-    Map<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime preferredTime, LocalDay localDay, TimePreference timePreference) {
+    Map<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime preferredTime, LocalDay forDay, TimePreference fallBack) {
         List<TimeSlot> gapsFittingList = new ArrayList();
 
         this.getGapsFitting(appointmentDuration).stream()
@@ -145,30 +145,30 @@ public class TimeLineImpl implements Timeline {
 
         var preferredSlot = gapsFittingList.stream()
                 .filter(timeSlot -> {
-                    var startTime = timeSlot.getStartTime(localDay);
-                    var endTime = timeSlot.getEndTime(localDay);
+                    var startTime = timeSlot.getStartTime(forDay);
+                    var endTime = timeSlot.getEndTime(forDay);
                     var endTimeAppointment = preferredTime.plusMinutes(appointmentDuration.toMinutes());
                     return (startTime.isBefore(preferredTime) || startTime.equals(preferredTime)) &&
                             (endTime.isAfter(endTimeAppointment) || endTime.equals(endTimeAppointment));
                 })
-                .map(timeSlot -> new TimeslotImpl(localDay.ofLocalTime(preferredTime), localDay.ofLocalTime(preferredTime.plusMinutes(appointmentDuration.toMinutes()))))
+                .map(timeSlot -> new TimeslotImpl(forDay.ofLocalTime(preferredTime), forDay.ofLocalTime(preferredTime.plusMinutes(appointmentDuration.toMinutes()))))
                 .map(TimeSlot.class::cast)
                 .findAny();
 
         if (preferredSlot.isEmpty()) {
-            if (timePreference == TimePreference.EARLIEST_AFTER) {
+            if (fallBack == TimePreference.EARLIEST_AFTER) {
                 preferredSlot = gapsFittingList.stream()
                         .filter(timeSlot ->
-                                timeSlot.getEndTime(localDay).minusMinutes(appointmentDuration.toMinutes()).isAfter(preferredTime)
+                                timeSlot.getEndTime(forDay).minusMinutes(appointmentDuration.toMinutes()).isAfter(preferredTime)
                         )
                         .map(timeSlot -> new TimeslotImpl(timeSlot.getStart(), timeSlot.getStart().plusSeconds(appointmentDuration.toSeconds())))
                         .map(TimeSlot.class::cast)
                         .findFirst();
 
-            } else if (timePreference == TimePreference.LATEST_BEFORE) {
+            } else if (fallBack == TimePreference.LATEST_BEFORE) {
                 preferredSlot = gapsFittingList.stream()
                         .filter(timeSlot ->
-                                timeSlot.getStartTime(localDay).plusMinutes(appointmentDuration.toMinutes()).isBefore(preferredTime)
+                                timeSlot.getStartTime(forDay).plusMinutes(appointmentDuration.toMinutes()).isBefore(preferredTime)
                         )
                         .map(timeSlot -> new TimeslotImpl(timeSlot.getEnd().minusSeconds(appointmentDuration.toSeconds()), timeSlot.getEnd()))
                         .map(TimeSlot.class::cast)
@@ -240,7 +240,6 @@ public class TimeLineImpl implements Timeline {
         Optional<TimeSlot> appointmentSlot = gapsFitting.stream()
                 .findFirst()
                 .stream()
-//                .map(timeSlot -> new TimeslotImpl(timeSlot.getStart(), timeSlot.getStart().plusSeconds(appointmentDuration.toSeconds())))
                 .map(appointmentMapper)
                 .map(TimeSlot.class::cast)
                 .findFirst();
@@ -250,7 +249,6 @@ public class TimeLineImpl implements Timeline {
         Optional<TimeSlot> newTimeSlot = gapsFitting.stream()
                 .findFirst()
                 .stream()
-//                .map(timeSlot -> new TimeslotImpl(appointmentSlot.get().getEnd(), timeSlot.getEnd()))
                 .map(timeSlotMapper)
                 .map(TimeSlot.class::cast)
                 .findFirst();
@@ -291,7 +289,7 @@ public class TimeLineImpl implements Timeline {
                 }
             } else {
                 originalNode.setItem(nextTimeSlot);
-                this.appointments.addBefore((Appointment) appointment, nextTimeSlot);
+                this.appointments.addBefore(appointment, nextTimeSlot);
                 if (previousTimeSlot != null) {
                     this.appointments.addBefore(previousTimeSlot, appointment);
                 }
