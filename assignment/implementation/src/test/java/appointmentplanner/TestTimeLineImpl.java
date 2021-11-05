@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TimelineTest {
+public class TestTimeLineImpl {
 
     private TimeSlot timeSlot;
 
@@ -43,7 +43,7 @@ public class TimelineTest {
         this.start = LocalDay.now().ofLocalTime(LocalTime.parse("08:00"));
         this.end = LocalDay.now().ofLocalTime(LocalTime.parse("18:00"));
 
-        this.illegalInstantiatedTimeline = new TimeLineImpl(start, end, appointments);
+        this.illegalInstantiatedTimeline = new TimeLineImpl(start,end,appointments);
 
         this.mockedAppointmentData = mock(Appointment.class);
         this.mockedAppointmentRequest = mock(AppointmentRequest.class);
@@ -63,7 +63,7 @@ public class TimelineTest {
 
         illegalAppointmentStream = illegalInstantiatedTimeline.appointmentStream();
 
-        this.instantiatedTimeline = new TimeLineImpl(start, end);
+        this.instantiatedTimeline = new TimeLineImpl(start,end);
 
     }
 
@@ -133,7 +133,6 @@ public class TimelineTest {
         });
     }
 
-
     @Test
     public void canAddAppointmentOfDuration() {
         var fits = instantiatedTimeline.canAddAppointmentOfDuration(Duration.ofMinutes(60));
@@ -161,7 +160,6 @@ public class TimelineTest {
             assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(timeSlot)))).isTrue();
         });
     }
-
     @Test
     public void putAppointmentNullAppointment() {
         var factory = new APFactory();
@@ -203,6 +201,22 @@ public class TimelineTest {
         instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(12, 0));
         instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(15, 0));
         assertThat(instantiatedTimeline.getGapsFitting(Duration.ofMinutes(60)).size()).isEqualTo(4);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "13,00,EARLIEST_AFTER",
+            "15,00,LATEST_BEFORE",
+            "8,00,LATEST_BEFORE",
+            "8,00,EARLIEST_AFTER"
+    })
+    public void addAppointmentLocalTimeNoPreferredSlot(int hours, int minutes, TimePreference timePreference) {
+        var localTime = LocalTime.of(hours, minutes);
+        var localDay = LocalDay.now();
+
+        this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, timePreference).get();
+        var appointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, timePreference).get();
+        assertThat(this.instantiatedTimeline.findAppointments((val1 -> val1.equals(appointment))).get(0)).isEqualTo(appointment);
     }
 
     @ParameterizedTest
@@ -295,7 +309,6 @@ public class TimelineTest {
         });
     }
 
-
     @Test
     public void removeAppointmentBackMultiple() {
         instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
@@ -306,6 +319,19 @@ public class TimelineTest {
         instantiatedTimeline.removeAppointment(app2);
 
         assertThat(instantiatedTimeline.getGapsFitting(mockedAppointmentData.getDuration()).size()).isEqualTo(1);
+    }
+
+    @Test
+    public void removeAppointmentMiddleMultiple() {
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+
+        instantiatedTimeline.removeAppointment(app1);
+        instantiatedTimeline.removeAppointment(app2);
+
+        assertThat(instantiatedTimeline.getGapsFitting(mockedAppointmentData.getDuration()).size()).isEqualTo(2);
     }
 
     @Test
@@ -330,7 +356,7 @@ public class TimelineTest {
 
         secondTimeLine.addAppointment(localDay, mockedAppointmentData50, TimePreference.EARLIEST);
         secondTimeLine.addAppointment(localDay, mockedGapAppointmentData10, TimePreference.EARLIEST);
-        secondTimeLine.addAppointment(localDay, mockedGapAppointmentData60, LocalTime.of(9, 30));
+        secondTimeLine.addAppointment(localDay, mockedGapAppointmentData60, LocalTime.of(9,30));
         secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
         secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
         secondTimeLine.addAppointment(localDay, mockedAppointmentData60, TimePreference.EARLIEST);
@@ -368,11 +394,11 @@ public class TimelineTest {
         var mockedAppointmentData60Duration = mock(AppointmentData.class);
         when(mockedAppointmentData60Duration.getDuration()).thenReturn(Duration.ofMinutes(60));
         var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
-        var app2 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app3 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app4 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
-        var app5 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
-        var app6 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app3 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app4 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app5 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app6 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
 
         instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app1.getEnd()));
         instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app2.getEnd()));
@@ -386,6 +412,32 @@ public class TimelineTest {
             softly.assertThat(orderList.get(0).duration()).isEqualTo(Duration.ofMinutes(120));
             softly.assertThat(orderList.get(1).duration()).isEqualTo(Duration.ofMinutes(180));
             softly.assertThat(orderList.get(2).duration()).isEqualTo(Duration.ofMinutes(180));
+        });
+    }
+
+    @Test
+    public void getGapsFittingLargestFirst() {
+        var mockedAppointmentData60Duration = mock(AppointmentData.class);
+        when(mockedAppointmentData60Duration.getDuration()).thenReturn(Duration.ofMinutes(60));
+        var app1 = instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app2 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app3 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app4 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+        var app5 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData60Duration, TimePreference.UNSPECIFIED).get();
+        var app6 =instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, TimePreference.UNSPECIFIED).get();
+
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app1.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app2.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app4.getEnd()));
+        instantiatedTimeline.removeAppointments(val1 -> val1.getEnd().equals(app6.getEnd()));
+
+        var orderList = instantiatedTimeline.getGapsFittingLargestFirst(Duration.ofMinutes(120));
+
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(orderList.get(0).duration()).isEqualTo(Duration.ofMinutes(180));
+            softly.assertThat(orderList.get(1).duration()).isEqualTo(Duration.ofMinutes(180));
+            softly.assertThat(orderList.get(2).duration()).isEqualTo(Duration.ofMinutes(120));
         });
     }
 
@@ -415,8 +467,8 @@ public class TimelineTest {
         List<TimeSlot> list = instantiatedTimeline.getMatchingFreeSlotsOfDuration(Duration.ofMinutes(120), timeLineList);
 
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(list.get(0).getStartTime(localDay)).isEqualTo(LocalTime.of(10, 0));
-            softly.assertThat(list.get(0).getEndTime(localDay)).isEqualTo(LocalTime.of(16, 0));
+            softly.assertThat(list.get(0).getStartTime(localDay)).isEqualTo(LocalTime.of(10,0));
+            softly.assertThat(list.get(0).getEndTime(localDay)).isEqualTo(LocalTime.of(16,0));
 
         });
     }
@@ -436,6 +488,7 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(0);
     }
+
     @Test
     public void matchingFreeSlotsOfDuration0DurationGap() {
         var mockedAppointmentData300Duration = mock(AppointmentData.class);
@@ -460,6 +513,7 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(1);
     }
+
     @Test
     public void matchingFreeSlotsOfDurationEdging0Gap() {
         var start0 = localDay.ofLocalTime(LocalTime.parse("18:00"));
@@ -471,6 +525,7 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(0);
     }
+
     @Test
     public void matchingFreeSlotsOfDurationNoCommonGapsMultipleGaps() {
         var secondTimeLine = new TimeLineImpl(start, end);
@@ -522,6 +577,7 @@ public class TimelineTest {
 
         assertThat(list.size()).isEqualTo(4);
     }
+
     @Test
     public void noCommonFree3() {
         var fac = new APFactory();
