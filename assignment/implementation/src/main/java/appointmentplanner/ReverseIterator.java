@@ -3,22 +3,21 @@ package appointmentplanner;
 import java.util.Iterator;
 
 public class ReverseIterator<T> implements Iterator {
-    private DoublyLinkedList.Node currentNode;
-    private DoublyLinkedList.Node head;
+    private DoublyLinkedList<T>.Node<T> head, currentNode;
 
-    public ReverseIterator(DoublyLinkedList.Node head, DoublyLinkedList.Node tail) {
+    public ReverseIterator(DoublyLinkedList<T>.Node<T> head, DoublyLinkedList<T>.Node<T> tail) {
         this.head = head;
-        this.currentNode = tail;
+        currentNode = tail;
     }
 
     @Override
     public boolean hasNext() {
-        return this.currentNode.getPrevious().equals(this.head);
+        return (currentNode.getPrevious() != head);
     }
 
     @Override
     public Object next() {
-        this.currentNode = currentNode.getPrevious();
-        return this.currentNode;
+        currentNode = currentNode.getPrevious();
+        return currentNode;
     }
 }
