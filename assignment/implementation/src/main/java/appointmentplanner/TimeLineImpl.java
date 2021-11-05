@@ -84,7 +84,7 @@ public class TimeLineImpl implements Timeline {
 
         var timeSlotMap = optionalToTimeSlot(timeSlotOptMap);
         if (timeSlotOptMap.containsKey("AppointmentSlot")) {
-            if (timeSlotOptMap.get("AppointmentSlot").isEmpty() == false) {
+            if (!timeSlotOptMap.get("AppointmentSlot").isEmpty()) {
 
                 timeSlotMap.replace("AppointmentSlot", buildAppointment(
                         appointmentData,
