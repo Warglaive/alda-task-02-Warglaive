@@ -3,22 +3,24 @@ package appointmentplanner;
 import appointmentplanner.api.AppointmentData;
 import appointmentplanner.api.Priority;
 import org.assertj.core.api.SoftAssertions;
-import org.assertj.core.api.ThrowableAssert;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.Duration;
 
+
+import static appointmentplanner.TestUtils.verifyEqualsAndHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class AppointmentDataTest {
     @ParameterizedTest
     @CsvSource({
-            "200, asd, LOW",
-            "2000, asd, MEDIUM",
-            "20000, asd, HIGH",
+            "200, blablacar, LOW",
+            "2000, blablacar, MEDIUM",
+            "20000, blablacar, HIGH",
     })
     public void constructorAssignsCorrect(int durationMinutes, String description, Priority priority) {
         Duration duration = Duration.ofMinutes(durationMinutes);
@@ -58,7 +60,7 @@ public class AppointmentDataTest {
             duration = null;
         }
 
-        ThrowableAssert.ThrowingCallable constructorCall = () -> new AppointmentDataImpl(duration, description, priority);
+        ThrowingCallable constructorCall = () -> new AppointmentDataImpl(duration, description, priority);
         assertThatCode(constructorCall)
                 .hasMessage(exceptionMessage)
                 .isExactlyInstanceOf(IllegalArgumentException.class);
@@ -66,13 +68,15 @@ public class AppointmentDataTest {
 
     @Test
     public void constructorDurationDescription() {
-        AppointmentData actual = new AppointmentDataImpl( "mock Description",Duration.ofMinutes(100));
+        AppointmentData actual = new AppointmentDataImpl(
+                Duration.ofMinutes(100), "mock Description"
+        );
 
         AppointmentData expected = new AppointmentDataImpl(
                 Duration.ofMinutes(100), "mock Description", Priority.LOW
         );
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -86,6 +90,6 @@ public class AppointmentDataTest {
         var unEqualDuration = new AppointmentDataImpl(Duration.ofSeconds(12), mockDescription, refPriority);
         var unEqualDescription = new AppointmentDataImpl(mockedDuration, "falseMock", refPriority);
         var unEqualPriority = new AppointmentDataImpl(mockedDuration, mockDescription, Priority.LOW);
-        TestUtils.verifyEqualsAndHashCode(ref,equal,unEqualDuration,unEqualDescription,unEqualPriority);
+        verifyEqualsAndHashCode(ref, equal, unEqualDuration, unEqualDescription, unEqualPriority);
     }
 }
