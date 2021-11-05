@@ -1,10 +1,11 @@
 package appointmentplanner;
 
 import java.util.*;
+import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class DoublyLinkedList<T> implements Iterable<T>{
+public class DoublyLinkedList<T> implements Iterable<T> {
     private Node<T> head, tail;
     private int size;
 

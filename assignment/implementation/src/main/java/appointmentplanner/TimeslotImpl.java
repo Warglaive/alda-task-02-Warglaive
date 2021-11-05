@@ -9,12 +9,12 @@ public class TimeslotImpl implements TimeSlot {
     private Instant startTime;
     private Instant endTime;
 
-    public TimeslotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException {
-        if (Objects.isNull(startTime) || Objects.isNull(endTime)) {
-            throw new IllegalArgumentException("Start time or End time can NOT be null.");
+    public TimeslotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException{
+        if (startTime == null || endTime == null) {
+            throw new IllegalArgumentException("Null values are not being accepted!");
         }
-        if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("End time can NOT be before start time.");
+        if (endTime.isBefore(startTime) /*|| startTime.equals(endTime)*/) {
+            throw new IllegalArgumentException("End must lie after start");
         }
 
         this.startTime = startTime;
@@ -43,16 +43,5 @@ public class TimeslotImpl implements TimeSlot {
     @Override
     public int hashCode() {
         return Objects.hash(startTime, endTime);
-    }
-
-    /**
-     * The implementer should implement a proper to string showing start instant,
-     * end instant time and duration of this slot.
-     *
-     * @return
-     */
-    @Override
-    public String toString() {
-        return "Start: " + this.getStart() + "End:  " + this.getEnd() + "Duration: " + this.duration();
     }
 }

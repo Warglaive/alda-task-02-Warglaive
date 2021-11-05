@@ -1,8 +1,8 @@
 package appointmentplanner;
 
+import java.util.ServiceLoader;
 import appointmentplanner.api.AbstractAPFactory;
 import java.util.Optional;
-import java.util.ServiceLoader;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 /**
@@ -20,8 +20,8 @@ public class ServiceFinder {
      * @throws AssumptionViolatedException when no service is not found.
      */
     static AbstractAPFactory getFactory() {
-        Optional<AbstractAPFactory> firstFound = ServiceLoader.load( AbstractAPFactory.class ).findFirst();
-        assumeThat( firstFound ).as( "Factory service not found" ).isNotEmpty();
-        return firstFound.get();
+        Optional<AbstractAPFactory> findFirst = ServiceLoader.load( AbstractAPFactory.class ).findFirst();
+        assumeThat( findFirst ).as("Factory service not found").isNotEmpty();
+        return findFirst.get();
     }
 }

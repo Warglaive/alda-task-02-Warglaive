@@ -13,9 +13,9 @@ public class AppointmentRequestImpl implements AppointmentRequest {
     private AppointmentData appointmentData;
     private TimePreference timePreference;
 
-    public AppointmentRequestImpl(AppointmentData appointmentData, LocalTime startTime, TimePreference timePreference)
+    public AppointmentRequestImpl(LocalTime startTime, AppointmentData appointmentData, TimePreference timePreference)
             throws IllegalArgumentException {
-        if (appointmentData == null) {
+        if (/*startTime == null ||*/ appointmentData == null) {
             throw new IllegalArgumentException("Null values are not being accepted!");
         }
         if (timePreference == null) {

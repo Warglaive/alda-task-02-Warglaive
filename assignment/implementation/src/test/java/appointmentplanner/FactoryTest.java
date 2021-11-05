@@ -1,35 +1,35 @@
 package appointmentplanner;
 
 import appointmentplanner.api.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import java.time.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * Example service invocation and factory test.
- *
+ * 
  * @author Pieter van den Hombergh {@code p.vandenhombergh@fontys.nl}
  */
 public class FactoryTest {
-
+    
     static AbstractAPFactory fac;
-
     @BeforeAll
-    static void assumeFactory() {
-        fac = ServiceFinder.getFactory();
+    static void assumeFactory(){
+        fac= ServiceFinder.getFactory();
+    }
+    
+    @Test
+    void factoryCreatesDayPlan(){
+        LocalDay day = LocalDay.now();
+        LocalDayPlan ldp = fac.createLocalDayPlan( day, LocalTime.parse("08:00"), LocalTime.parse("17:30"));
+        assertThat(ldp).as( fac.getClass().getName()+" returns null object").isNotNull();
     }
 
-    @Test
-    void factoryCreatesDayPlan() {
-        LocalDay day = LocalDay.now();
-        LocalDayPlan ldp = fac.createLocalDayPlan(day, LocalTime.parse("08:00"), LocalTime.parse("17:30"));
-        assertThat(ldp).as(fac.getClass().getName() + " should not return null object").isNotNull();
-    }
     @Test
     void factoryCreatesDayPlanZoneIdTimeline() {
         var timeline = mock(Timeline.class);
@@ -77,10 +77,10 @@ public class FactoryTest {
         );
 
         AppointmentRequest expected = new AppointmentRequestImpl(
-                appointmentData, startTime, timePreference
-                );
+                startTime, appointmentData, timePreference
+        );
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -89,6 +89,6 @@ public class FactoryTest {
         Instant end = Instant.now().plusSeconds(10);
         TimeSlot expected = new TimeslotImpl(start, end);
 
-        assertThat(fac.between(start, end)).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(fac.between(start, end)).isEqualToComparingFieldByField(expected);
     }
 }

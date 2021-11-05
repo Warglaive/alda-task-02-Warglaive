@@ -7,7 +7,6 @@ import java.time.Instant;
 import java.util.Objects;
 
 public class AppointmentImpl implements Appointment {
-
     private AppointmentData appointmentData;
     private AppointmentRequest appointmentRequest;
     private TimeSlot timeSlot;
@@ -16,7 +15,7 @@ public class AppointmentImpl implements Appointment {
                            AppointmentRequest appointmentRequest,
                            TimeSlot timeSlot) throws IllegalArgumentException {
         if (appointmentData == null || appointmentRequest == null || timeSlot == null) {
-            throw new IllegalArgumentException("Constructor args can NOT be NULL!");
+            throw new IllegalArgumentException("Null values are not being accepted!");
         }
         this.appointmentData = appointmentData;
         this.appointmentRequest = appointmentRequest;

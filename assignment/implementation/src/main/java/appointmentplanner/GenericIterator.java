@@ -1,25 +1,21 @@
 package appointmentplanner;
 
-import java.util.Iterator;
+public class GenericIterator<T> implements java.util.Iterator {
+    private DoublyLinkedList<T>.Node<T> tail, currentNode;
 
-public class GenericIterator<T> implements Iterator {
-
-    private DoublyLinkedList.Node currentNode;
-    private DoublyLinkedList.Node tail;
-
-    public GenericIterator(DoublyLinkedList.Node head, DoublyLinkedList.Node tail) {
-        this.currentNode = head;
+    public GenericIterator(DoublyLinkedList<T>.Node<T> head, DoublyLinkedList<T>.Node<T> tail) {
         this.tail = tail;
+        currentNode = head;
     }
 
     @Override
     public boolean hasNext() {
-        return this.currentNode.getNext().equals(this.tail);
+        return (currentNode.getNext() != tail);
     }
 
     @Override
     public Object next() {
-        this.currentNode = currentNode.getNext();
-        return this.currentNode;
+        currentNode = currentNode.getNext();
+        return currentNode;
     }
 }

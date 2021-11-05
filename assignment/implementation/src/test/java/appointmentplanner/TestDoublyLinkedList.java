@@ -6,8 +6,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -39,8 +37,6 @@ public class TestDoublyLinkedList {
     @Test
     public void testAddNote() {
         TimeSlot mockedTimeSlot = mock(TimeSlot.class);
-
-        //doublyLinkedList.addNote(mockedTimeSlot);
     }
 
     @Test
