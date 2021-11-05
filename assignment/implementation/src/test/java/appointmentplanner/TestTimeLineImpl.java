@@ -39,9 +39,9 @@ public class TestTimeLineImpl {
 
     @BeforeEach
     public void setUp() {
-        var factory = new APFactory();
+        //var factory = new APFactory();
         this.localDay = LocalDay.now();
-        this.appointments = new DoublyLinkedList<TimeSlot>();
+        this.appointments = new DoublyLinkedList<>();
         this.start = LocalDay.now().ofLocalTime(LocalTime.parse("08:00"));
         this.end = LocalDay.now().ofLocalTime(LocalTime.parse("18:00"));
 
@@ -53,17 +53,17 @@ public class TestTimeLineImpl {
 
         when(mockedAppointmentData.getDuration()).thenReturn(Duration.ofMinutes(120));
 
-        appointment = new AppointmentImpl(
+        this.appointment = new AppointmentImpl(
                 mock(AppointmentData.class),
                 mock(AppointmentRequest.class),
                 mock(TimeSlot.class));
 
-        timeSlot = new TimeslotImpl(start, end);
+        this.timeSlot = new TimeslotImpl(this.start, this.end);
 
-        this.appointments.addFront(appointment);
+        this.appointments.addFront(this.appointment);
         this.appointments.addFront(this.timeSlot);
 
-        illegalAppointmentStream = illegalInstantiatedTimeline.appointmentStream();
+        this.illegalAppointmentStream = this.illegalInstantiatedTimeline.appointmentStream();
 
         this.instantiatedTimeline = new TimeLineImpl(start,end);
 
@@ -71,7 +71,7 @@ public class TestTimeLineImpl {
 
     @Test
     public void getNrOfAppointments() {
-        assertThat(illegalInstantiatedTimeline.getNrOfAppointments()).isEqualTo(1);
+        assertThat(this.illegalInstantiatedTimeline.getNrOfAppointments()).isEqualTo(1);
     }
 
     @Test
@@ -83,12 +83,12 @@ public class TestTimeLineImpl {
 
     @Test
     public void appointmentStreamCount() {
-        assertThat(illegalAppointmentStream.count()).isEqualTo(1);
+        assertThat(this.illegalAppointmentStream.count()).isEqualTo(1);
     }
 
     @Test
     public void contains() {
-        var contains = illegalInstantiatedTimeline.contains(appointment);
+        var contains = this.illegalInstantiatedTimeline.contains(this.appointment);
         assertThat(contains).isTrue();
     }
 
@@ -97,7 +97,7 @@ public class TestTimeLineImpl {
         var contains = illegalInstantiatedTimeline.contains(new AppointmentImpl(
                 mock(AppointmentData.class),
                 mock(AppointmentRequest.class),
-                new TimeslotImpl(start, end)
+                new TimeslotImpl(this.start, this.end)
         ));
 
         assertThat(contains).isFalse();
@@ -106,29 +106,29 @@ public class TestTimeLineImpl {
     @Test
     public void getGapsFittingSimple() {
         var requiredDuration = Duration.ofMinutes(60);
-        var fittingTimeslots = instantiatedTimeline.getGapsFitting(requiredDuration);
+        var fittingTimeslots = this.instantiatedTimeline.getGapsFitting(requiredDuration);
 
         SoftAssertions.assertSoftly(softly -> {
-            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(start);
-            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(end);
+            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(this.start);
+            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(this.end);
         });
     }
 
     @Test
     public void getGapsFittingSimpleReversed() {
         var requiredDuration = Duration.ofMinutes(60);
-        var fittingTimeslots = instantiatedTimeline.getGapsFittingReversed(requiredDuration);
+        var fittingTimeslots = this.instantiatedTimeline.getGapsFittingReversed(requiredDuration);
 
         SoftAssertions.assertSoftly(softly -> {
-            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(start);
-            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(end);
+            assertThat(fittingTimeslots.get(0).getStart()).isEqualTo(this.start);
+            assertThat(fittingTimeslots.get(0).getEnd()).isEqualTo(this.end);
         });
     }
 
     @Test
     public void getGapsFittingSimpleFalse() {
         var requiredDuration = Duration.ofHours(24);
-        var fittingTimeslots = instantiatedTimeline.getGapsFitting(requiredDuration);
+        var fittingTimeslots = this.instantiatedTimeline.getGapsFitting(requiredDuration);
 
         SoftAssertions.assertSoftly(softly -> {
             assertThat(fittingTimeslots.isEmpty()).isTrue();
@@ -137,7 +137,7 @@ public class TestTimeLineImpl {
 
     @Test
     public void canAddAppointmentOfDuration() {
-        var fits = instantiatedTimeline.canAddAppointmentOfDuration(Duration.ofMinutes(60));
+        var fits = this.instantiatedTimeline.canAddAppointmentOfDuration(Duration.ofMinutes(60));
 
         assertThat(fits).isTrue();
     }
@@ -145,13 +145,13 @@ public class TestTimeLineImpl {
     @Test
     public void putAppointment() {
         var factory = new APFactory();
-        var originalTimeSlot = factory.between(start, end);
+        var originalTimeSlot = factory.between(this.start, this.end);
         var appointmentDuration = Duration.ofMinutes(120);
-        var timeSlot = factory.between(start.plusSeconds(appointmentDuration.toSeconds()), end);
+        var timeSlot = factory.between(this.start.plusSeconds(appointmentDuration.toSeconds()), this.end);
 
         var paramMap = new HashMap();
         paramMap.put("OriginalTimeSlot", originalTimeSlot);
-        paramMap.put("AppointmentSlot", appointment);
+        paramMap.put("AppointmentSlot", this.appointment);
         paramMap.put("NextTimeSlot", timeSlot);
 
         this.instantiatedTimeline.putAppointment(paramMap);
@@ -165,9 +165,9 @@ public class TestTimeLineImpl {
     @Test
     public void putAppointmentNullAppointment() {
         var factory = new APFactory();
-        var originalTimeSlot = factory.between(start, end);
+        var originalTimeSlot = factory.between(this.start, this.end);
         var appointmentDuration = Duration.ofMinutes(120);
-        var timeSlot = factory.between(start.plusSeconds(appointmentDuration.toSeconds()), end);
+        var timeSlot = factory.between(this.start.plusSeconds(appointmentDuration.toSeconds()), this.end);
         var paramMap = new HashMap();
 
         paramMap.put("OriginalTimeSlot", originalTimeSlot);
@@ -177,7 +177,7 @@ public class TestTimeLineImpl {
         this.instantiatedTimeline.putAppointment(paramMap);
         var test = this.instantiatedTimeline.gapStream().peek(System.out::println).count();
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(this.instantiatedTimeline.contains(appointment)).isFalse();
+            softly.assertThat(this.instantiatedTimeline.contains(this.appointment)).isFalse();
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(timeSlot)))).isFalse();
             softly.assertThat(this.instantiatedTimeline.gapStream().anyMatch((ts -> ts.equals(originalTimeSlot)))).isTrue();
         });
@@ -193,15 +193,15 @@ public class TestTimeLineImpl {
        var localTime = LocalTime.of(hours, minutes);
        var localDay = LocalDay.now();
 
-       var appointment = this.instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, localTime, TimePreference.EARLIEST_AFTER).get();
+       var appointment = this.instantiatedTimeline.addAppointment(localDay, this.mockedAppointmentData, localTime, TimePreference.EARLIEST_AFTER).get();
        assertThat(this.instantiatedTimeline.findAppointments((val1 -> val1.equals(appointment))).get(0)).isEqualTo(appointment);
     }
 
     @Test
     public void getGapsMultipleGaps() {
-        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(9, 0));
-        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(12, 0));
-        instantiatedTimeline.addAppointment(localDay, mockedAppointmentData, LocalTime.of(15, 0));
+        this.instantiatedTimeline.addAppointment(this.localDay, this.mockedAppointmentData, LocalTime.of(9, 0));
+        this.instantiatedTimeline.addAppointment(this.localDay, this.mockedAppointmentData, LocalTime.of(12, 0));
+        this.instantiatedTimeline.addAppointment(this.localDay, this.mockedAppointmentData, LocalTime.of(15, 0));
         assertThat(instantiatedTimeline.getGapsFitting(Duration.ofMinutes(60)).size()).isEqualTo(4);
     }
 
