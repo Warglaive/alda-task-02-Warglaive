@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestIterator {
     @Mock
-    TimeSlot entry1, entry2, entry3, entry4;
+    TimeSlot ts, ts2, ts3, ts4;
 
     private DoublyLinkedList<TimeSlot> doublyLinkedList;
     private GenericIterator iterator;
@@ -19,14 +19,13 @@ public class TestIterator {
     @BeforeEach
     private void setUp() {
         MockitoAnnotations.openMocks(this);
-        //MockitoAnnotations.openMocks(this);
-        doublyLinkedList = new DoublyLinkedList<>();
-        doublyLinkedList.addFront(entry4);
-        doublyLinkedList.addFront(entry3);
-        doublyLinkedList.addFront(entry2);
-        doublyLinkedList.addFront(entry1);
+        this.doublyLinkedList = new DoublyLinkedList<>();
+        this.doublyLinkedList.addFront(this.ts4);
+        this.doublyLinkedList.addFront(this.ts3);
+        this.doublyLinkedList.addFront(this.ts2);
+        this.doublyLinkedList.addFront(this.ts);
 
-        iterator = new GenericIterator(doublyLinkedList.getHead(), doublyLinkedList.getTail());
+        iterator = new GenericIterator(this.doublyLinkedList.getHead(), this.doublyLinkedList.getTail());
     }
 
     @Test
@@ -36,20 +35,20 @@ public class TestIterator {
 
     @Test
     public void next() {
-        var returnedNode = (DoublyLinkedList.Node) iterator.next();
-        var secondReturnedNode = (DoublyLinkedList.Node) iterator.next();
+        var returnedNode = (DoublyLinkedList.Node) this.iterator.next();
+        var secondReturnedNode = (DoublyLinkedList.Node) this.iterator.next();
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(returnedNode.getItem()).isEqualTo(entry1);
-            softly.assertThat(secondReturnedNode.getItem()).isEqualTo(entry2);
+            softly.assertThat(returnedNode.getItem()).isEqualTo(this.ts);
+            softly.assertThat(secondReturnedNode.getItem()).isEqualTo(this.ts2);
         });
     }
 
     @Test
     public void hasNextFalse() {
-        iterator.next();
-        iterator.next();
-        iterator.next();
-        iterator.next();
-        assertThat(iterator.hasNext()).isFalse();
+        this.iterator.next();
+        this.iterator.next();
+        this.iterator.next();
+        this.iterator.next();
+        assertThat(this.iterator.hasNext()).isFalse();
     }
 }
