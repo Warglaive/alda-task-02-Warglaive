@@ -12,7 +12,7 @@ public class TestNode {
 
     @BeforeEach
     private void setUp() {
-        doublyLinkedList = new DoublyLinkedList<TimeSlot>();
+        doublyLinkedList = new DoublyLinkedList<>();
     }
 
     @Test
