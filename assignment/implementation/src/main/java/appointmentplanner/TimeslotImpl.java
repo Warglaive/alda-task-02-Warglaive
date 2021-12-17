@@ -13,7 +13,7 @@ public class TimeslotImpl implements TimeSlot {
         if (startTime == null || endTime == null) {
             throw new IllegalArgumentException("Null values are not being accepted!");
         }
-        if (endTime.isBefore(startTime) /*|| startTime.equals(endTime)*/) {
+        if (endTime.isBefore(startTime)) {
             throw new IllegalArgumentException("End must lie after start");
         }
 

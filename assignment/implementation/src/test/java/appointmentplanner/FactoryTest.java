@@ -11,22 +11,23 @@ import static org.mockito.Mockito.mock;
 
 /**
  * Example service invocation and factory test.
- * 
+ *
  * @author Pieter van den Hombergh {@code p.vandenhombergh@fontys.nl}
  */
 public class FactoryTest {
-    
+
     static AbstractAPFactory fac;
+
     @BeforeAll
-    static void assumeFactory(){
-        fac= ServiceFinder.getFactory();
+    static void assumeFactory() {
+        fac = ServiceFinder.getFactory();
     }
-    
+
     @Test
-    void factoryCreatesDayPlan(){
+    void factoryCreatesDayPlan() {
         LocalDay day = LocalDay.now();
-        LocalDayPlan ldp = fac.createLocalDayPlan( day, LocalTime.parse("08:00"), LocalTime.parse("17:30"));
-        assertThat(ldp).as( fac.getClass().getName()+" returns null object").isNotNull();
+        LocalDayPlan ldp = fac.createLocalDayPlan(day, LocalTime.parse("08:00"), LocalTime.parse("17:30"));
+        assertThat(ldp).as(fac.getClass().getName() + " returns null object").isNotNull();
     }
 
     @Test

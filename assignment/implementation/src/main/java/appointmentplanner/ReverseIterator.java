@@ -7,17 +7,17 @@ public class ReverseIterator<T> implements Iterator {
 
     public ReverseIterator(DoublyLinkedList<T>.Node<T> head, DoublyLinkedList<T>.Node<T> tail) {
         this.head = head;
-        currentNode = tail;
+        this.currentNode = tail;
     }
 
     @Override
     public boolean hasNext() {
-        return (currentNode.getPrevious() != head);
+        return (this.currentNode.getPrevious() != head);
     }
 
     @Override
     public Object next() {
-        currentNode = currentNode.getPrevious();
-        return currentNode;
+        this.currentNode = this.currentNode.getPrevious();
+        return this.currentNode;
     }
 }
