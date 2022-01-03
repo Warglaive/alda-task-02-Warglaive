@@ -12,16 +12,16 @@ public class TestNode {
 
     @BeforeEach
     private void setUp() {
-        doublyLinkedList = new DoublyLinkedList<>();
+        this.doublyLinkedList = new DoublyLinkedList<>();
     }
 
     @Test
     public void testSetPrevious() {
         DoublyLinkedList.Node mockedNode = mock(DoublyLinkedList.Node.class);
 
-        doublyLinkedList.getTail().setPrevious(mockedNode);
+        this.doublyLinkedList.getTail().setPrevious(mockedNode);
 
-        assertThat(doublyLinkedList.getTail().getPrevious())
+        assertThat(this.doublyLinkedList.getTail().getPrevious())
                 .isEqualTo(mockedNode);
     }
 
@@ -29,9 +29,9 @@ public class TestNode {
     public void testSetNext() {
         DoublyLinkedList.Node mockedNode = mock(DoublyLinkedList.Node.class);
 
-        doublyLinkedList.getHead().setNext(mockedNode);
+        this.doublyLinkedList.getHead().setNext(mockedNode);
 
-        assertThat(doublyLinkedList.getHead().getNext())
+        assertThat(this.doublyLinkedList.getHead().getNext())
                 .isEqualTo(mockedNode);
     }
 
@@ -39,9 +39,9 @@ public class TestNode {
     public void replaceItem() {
         var mockedTimeSlot = mock(TimeSlot.class);
         var replacedMockedTimeSlot = mock(TimeSlot.class);
-        doublyLinkedList.addFront(mockedTimeSlot);
+        this.doublyLinkedList.addFront(mockedTimeSlot);
 
-        var node = doublyLinkedList.getHead().getNext();
+        var node = this.doublyLinkedList.getHead().getNext();
         node.setItem(replacedMockedTimeSlot);
 
         assertThat(node.getItem()).isEqualTo(replacedMockedTimeSlot);

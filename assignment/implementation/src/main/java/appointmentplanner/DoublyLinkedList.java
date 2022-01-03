@@ -9,14 +9,14 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     private int size;
 
     public DoublyLinkedList() {
-        head = new Node<T>(null);
-        tail = new Node<T>(null);
+        head = new Node<>(null);
+        tail = new Node<>(null);
 
         head.next = tail;
         tail.previous = head;
 
-        head.previous = null;
-        tail.next = null;
+     /*   head.previous = null;
+        tail.next = null;*/
 
         size = 0;
     }
@@ -30,7 +30,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     }
 
     public void addFront(T item) {
-        addAfter(item, head);
+        addAfter(item, this.head);
     }
 
     public void addEnd(T item) {
@@ -72,7 +72,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
                 if (currentNode.getItem().equals(item)) {
                     return currentNode;
                 }
-            } catch (NullPointerException npe) {
+            } catch (NullPointerException e) {
                 return null;
             }
         }
@@ -141,7 +141,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
                 iterator, Spliterator.ORDERED
         );
         return StreamSupport.stream(spliterator, false)
-                .map(node -> node.getItem());
+                .map(Node::getItem);
     }
 
     public Stream<T> stream() {

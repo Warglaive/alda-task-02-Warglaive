@@ -11,10 +11,10 @@ public class TimeslotImpl implements TimeSlot {
 
     public TimeslotImpl(Instant startTime, Instant endTime) throws IllegalArgumentException{
         if (startTime == null || endTime == null) {
-            throw new IllegalArgumentException("Null values are not being accepted!");
+            throw new IllegalArgumentException("Null values are not accepted!");
         }
         if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("End must lie after start");
+            throw new IllegalArgumentException("End must be after start");
         }
 
         this.startTime = startTime;

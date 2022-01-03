@@ -38,13 +38,11 @@ public class TestLocalDayPlanImpl {
         var localDay = LocalDay.now();
         var start = localDay.ofLocalTime(LocalTime.parse("01:00"));
         var end = localDay.ofLocalTime(LocalTime.parse("02:00"));
-        var timeline = new TimeLineImpl(start, end);
 
         var localDayPlan = new LocalDayPlanImpl(localDay, start, end);
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(localDayPlan.getDay()).isEqualTo(localDay);
-//            softly.assertThat(localDayPlan.getTimeline()).isEqualToComparingFieldByField(timeline);
             softly.assertThat(localDayPlan.earliest()).isEqualTo(start);
             softly.assertThat(localDayPlan.tooLate()).isEqualTo(end);
         });
@@ -52,10 +50,7 @@ public class TestLocalDayPlanImpl {
 
     @ParameterizedTest
     @CsvSource({
-       //     "-1, 0",
             "00:01, 00:00",
-//            "00:00, 00:00",
-            //"1, 86441"
     })
     public void constructorThrowsExceptionFalseInstant(String startTime, String endTime) {
         var localDay = LocalDay.now();

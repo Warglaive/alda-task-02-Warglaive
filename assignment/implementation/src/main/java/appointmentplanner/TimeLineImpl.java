@@ -61,7 +61,7 @@ public class TimeLineImpl implements Timeline {
             throw new NullPointerException("AppointmentData must not be null");
         }
         var appointmentDuration = appointment.getDuration();
-        Map<String, Optional<TimeSlot>> timeSlotOptMap = new HashMap();
+        Map<String, Optional<TimeSlot>> timeSlotOptMap = new HashMap<>();
 
         if (localTime != null) {
             timeSlotOptMap = this.findPreferredTimeSlot(appointmentDuration, localTime, forDay, fallback);
@@ -81,7 +81,6 @@ public class TimeLineImpl implements Timeline {
             }
         }
 
-
         var timeSlotMap = optionalToTimeSlot(timeSlotOptMap);
         if (timeSlotOptMap.containsKey("AppointmentSlot")) {
             if (!timeSlotOptMap.get("AppointmentSlot").isEmpty()) {
@@ -100,7 +99,7 @@ public class TimeLineImpl implements Timeline {
     }
 
     private Map<String, TimeSlot> optionalToTimeSlot(Map<String, Optional<TimeSlot>> timeSlotOptMap) {
-        var timeSlotMap = new HashMap();
+        var timeSlotMap = new HashMap<String, TimeSlot>();
         Optional<TimeSlot> timeSlotOpt;
 
         if (timeSlotOptMap.containsKey("NextTimeSlot")) {
@@ -137,7 +136,7 @@ public class TimeLineImpl implements Timeline {
     }
 
     Map<String, Optional<TimeSlot>> findPreferredTimeSlot(Duration appointmentDuration, LocalTime preferredTime, LocalDay forDay, TimePreference fallBack) {
-        List<TimeSlot> gapsFittingList = new ArrayList();
+        List<TimeSlot> gapsFittingList = new ArrayList<>();
 
         this.getGapsFitting(appointmentDuration).stream()
                 .filter(timeSlot -> timeSlot.fits(appointmentDuration))
@@ -178,7 +177,7 @@ public class TimeLineImpl implements Timeline {
         }
         if (!preferredSlot.isEmpty()) {
             var appointmentSlot = preferredSlot;
-            HashMap<String, Optional<TimeSlot>> returnMap = new HashMap();
+            HashMap<String, Optional<TimeSlot>> returnMap = new HashMap<>();
             returnMap.put("AppointmentSlot", preferredSlot);
             returnMap.put("OriginalTimeSlot", gapsFittingList.stream()
                     .filter(timeSlot -> (timeSlot.fits(appointmentSlot.get())))
@@ -235,7 +234,7 @@ public class TimeLineImpl implements Timeline {
             Function<TimeSlot, TimeSlot> timeSlotMapper,
             boolean last) {
 
-        var returnMap = new HashMap();
+        var returnMap = new HashMap<String, Optional<TimeSlot>>();
 
         Optional<TimeSlot> appointmentSlot = gapsFitting.stream()
                 .findFirst()
@@ -322,8 +321,8 @@ public class TimeLineImpl implements Timeline {
     @Override
     public List<AppointmentRequest> removeAppointments(Predicate<Appointment> filter) {
         var returnList = new ArrayList();
-        wholeStream()
-                .map(timeSlot -> {
+        //get all appointments as stream
+        wholeStream().map(timeSlot -> {
                     if (!(timeSlot instanceof Appointment)) {
                     } else if (filter.test((Appointment) timeSlot)) {
                         returnList.add(((Appointment) timeSlot).getRequest());
@@ -337,10 +336,12 @@ public class TimeLineImpl implements Timeline {
 
                         if (!(timeSlotNodePrevious.getItem() instanceof Appointment) && timeSlotNodePrevious.getItem() instanceof TimeSlot) {
                             startPoint = timeSlotNodePrevious.getItem().getStart();
-                            var tempNode = this.appointments.mergeNodesPrevious(timeSlotNode, timeSlotNodePrevious, factory.between(startPoint, endPoint));
+                            //
+                            this.appointments.mergeNodesPrevious(timeSlotNode, timeSlotNodePrevious, factory.between(startPoint, endPoint));
                             mergedNodes = true;
                         }
-                        if (!(timeSlotNodeNext.getItem() instanceof Appointment) && timeSlotNodeNext.getItem() instanceof TimeSlot) {
+                        if (!(timeSlotNodeNext.getItem() instanceof Appointment) &&
+                                    timeSlotNodeNext.getItem() instanceof TimeSlot) {
                             endPoint = timeSlotNodeNext.getItem().getEnd();
                             timeSlotNode = this.appointments.mergeNodesNext(timeSlotNode, timeSlotNodeNext, factory.between(startPoint, endPoint));
                             mergedNodes = true;
@@ -361,7 +362,7 @@ public class TimeLineImpl implements Timeline {
     public List<Appointment> findAppointments(Predicate<Appointment> predicate) {
         var list = new ArrayList();
         appointmentStream()
-                .filter(timeSlot -> predicate.test(timeSlot))
+                .filter(ts -> predicate.test(ts))
                 .forEach(list::add);
         return list;
     }

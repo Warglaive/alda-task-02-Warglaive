@@ -12,6 +12,9 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class TestTimeSlotImpl {
+    /**
+     * getter and setter test
+     */
     @Test
     public void constructorAssignsCorrect() {
         Instant startTime = Instant.parse("2020-09-17T10:00:00Z");
@@ -29,9 +32,9 @@ public class TestTimeSlotImpl {
 
     @ParameterizedTest
     @CsvSource({
-            ", 2020-09-17T10:24:00Z, Null values are not being accepted!",
-            "2020-09-17T10:00:00Z, , Null values are not being accepted!",
-            "2020-09-17T10:24:00Z, 2020-09-17T10:00:00Z, End must lie after start"
+            ", 2020-09-17T10:24:00Z, Null values are not accepted!",
+            "2020-09-17T10:00:00Z, , Null values are not accepted!",
+            "2020-09-17T10:24:00Z, 2020-09-17T10:00:00Z, End must be after start"
     })
     public void constructorThrowsIAException(Instant startTime, Instant endTime, String exceptionMessage) {
         ThrowableAssert.ThrowingCallable constructorCall = () -> new TimeslotImpl(startTime, endTime);

@@ -34,10 +34,10 @@ public class TestDoublyLinkedList {
         });
     }
 
-    @Test
+   /* @Test
     public void testAddNote() {
         TimeSlot mockedTimeSlot = mock(TimeSlot.class);
-    }
+    }*/
 
     @Test
     public void addFront() {
